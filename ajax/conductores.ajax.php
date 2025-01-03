@@ -7,6 +7,7 @@ use Controladores\ControladorConductores;
 class AjaxConductores
 {
     public $idConductor;
+    public $idEliminarConductor;
 
     public function ajaxEditarConductor()
     {
@@ -25,6 +26,12 @@ class AjaxConductores
     {
         $resultado = ControladorConductores::ctrEditarConductor();
     }
+
+        public function ajaxEliminarConductor()
+        {
+            $datos = $this->idEliminarConductor;
+            $resultado = ControladorConductores::ctrEliminarConductor($datos); 
+        }
 }
 
 if (isset($_POST['idConductor'])) {
@@ -41,4 +48,10 @@ if (isset($_POST['idConductorEditar'])) {
 if (isset($_POST['insertaConductor'])) {
     $objConductores = new AjaxConductores();
     $objConductores->ajaxCrearNuevoConductor();
+}
+
+if (isset($_POST['idEliminarConductor'])) {
+    $eliminar = new AjaxConductores();
+    $eliminar->idEliminarConductor = $_POST['idEliminarConductor'];
+    $eliminar->ajaxEliminarConductor();
 }

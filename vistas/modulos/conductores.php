@@ -43,7 +43,7 @@ use Controladores\Controlador;
                 <?php
                 if ($_SESSION['perfil'] == 'Administrador') {
                 ?>
-                    <button class="btn btn-success  pull-right btn-radius btn-no-user" data-toggle="modal" data-target="#modalAgregarProveedor"><i class="fas fa-plus-square"></i>Nuevo conductor <i class="fas fa-user-plus"></i>
+                    <button class="btn btn-success  pull-right btn-radius btn-no-user" data-toggle="modal" data-target="#modalAgregarConductor"><i class="fas fa-plus-square"></i>Nuevo conductor <i class="fas fa-user-plus"></i>
                     </button>
                 <?php } ?>
 
@@ -89,7 +89,7 @@ use Controladores\Controlador;
                                         <?php
                                         if ($_SESSION['perfil'] == 'Administrador') {
                                         ?>
-                                            <button class="btn btn-danger btnEliminarConductor" idProveedor="<?php echo $value['id'] ?>"><i class="fas fa-trash-alt"></i></button>
+                                            <button class="btn btn-danger btnEliminarConductor" idConductor="<?php echo $value['id'] ?>"><i class="fas fa-trash-alt"></i></button>
                                         <?php } ?>
 
                                     </div>
@@ -163,7 +163,7 @@ use Controladores\Controlador;
 
                                         <select name="nuevoTipoDoc" id="nuevoTipoDoc" class="form-control">
                                             <option value="0">SIN DOCUMENTO</option>
-                                            <option value="1">DNI</option>
+                                            <option value="1" selected>DNI</option>
                                         </select>
 
                                     </div>
@@ -311,11 +311,6 @@ use Controladores\Controlador;
                             </div>
 
                             <div class="row">
-                                <div class=" col-md-6">
-                                    <div class="form-group">
-                                        <input type="text" class="form-control " name="editarCelular" id="editarCelular" placeholder="Ingresar número de célular">
-                                    </div>
-                                </div>
                                 <div class=" col-md-6">
                                     <div class="form-group">
                                         <input type="text" class="form-control " name="editarMarcaVehiculo" id="editarMarcaVehiculo" placeholder="Ingresar Marca de vehículo">

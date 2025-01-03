@@ -32,13 +32,13 @@ class ModeloConductores
     {
         $tabla = self::$tabla;
         $stmt = Conexion::conectar()->prepare("INSERT INTO $tabla (nombres, apellidos, tipdoc, numdoc, numplaca, numbrevete, marca_vehiculo) 
-            VALUES (:nombres, :apellidos, :documento, :celular, :num_placa, :num_brevete, :marca_vehiculo)");
+            VALUES (:nombres, :apellidos, :tipdoc, :numdoc, :numplaca, :numbrevete, :marca_vehiculo)");
         $stmt->bindParam(":nombres", $datos['nombres'], PDO::PARAM_STR);
         $stmt->bindParam(":apellidos", $datos['apellidos'], PDO::PARAM_STR);
         $stmt->bindParam(":tipdoc", $datos['tipdoc'], PDO::PARAM_STR);
         $stmt->bindParam(":numdoc", $datos['numdoc'], PDO::PARAM_STR);
-        $stmt->bindParam(":numplaca", $datos['num_placa'], PDO::PARAM_STR);
-        $stmt->bindParam(":numbrevete", $datos['num_brevete'], PDO::PARAM_STR);
+        $stmt->bindParam(":numplaca", $datos['numplaca'], PDO::PARAM_STR);
+        $stmt->bindParam(":numbrevete", $datos['numbrevete'], PDO::PARAM_STR);
         $stmt->bindParam(":marca_vehiculo", $datos['marca_vehiculo'], PDO::PARAM_STR);
         if ($stmt->execute()) {
             return "ok";
@@ -51,15 +51,15 @@ class ModeloConductores
     public static function mdlEditarConductor($datos)
     {
         $tabla = self::$tabla;
-        $stmt = Conexion::conectar()->prepare("UPDATE $tabla SET nombres = :nombre, apellidos = :apellidos, documento = :documento, celular = :celular, num_placa = :num_placa, num_brevete = :num_brevete, marca_vehiculo = :marca_vehiculo WHERE id = :id");
+        $stmt = Conexion::conectar()->prepare("UPDATE $tabla SET nombres = :nombres, apellidos = :apellidos, tipdoc = :tipdoc, numdoc = :numdoc, numplaca = :numplaca, numbrevete = :numbrevete, marca_vehiculo = :marca_vehiculo WHERE id = :id");
 
         $stmt->bindParam(":id", $datos['id'], PDO::PARAM_INT);
         $stmt->bindParam(":nombres", $datos['nombres'], PDO::PARAM_STR);
         $stmt->bindParam(":apellidos", $datos['apellidos'], PDO::PARAM_STR);
         $stmt->bindParam(":tipdoc", $datos['tipdoc'], PDO::PARAM_STR);
         $stmt->bindParam(":numdoc", $datos['numdoc'], PDO::PARAM_STR);
-        $stmt->bindParam(":numplaca", $datos['num_placa'], PDO::PARAM_STR);
-        $stmt->bindParam(":numbrevete", $datos['num_brevete'], PDO::PARAM_STR);
+        $stmt->bindParam(":numplaca", $datos['numplaca'], PDO::PARAM_STR);
+        $stmt->bindParam(":numbrevete", $datos['numbrevete'], PDO::PARAM_STR);
         $stmt->bindParam(":marca_vehiculo", $datos['marca_vehiculo'], PDO::PARAM_STR);
         if ($stmt->execute()) {
             return "ok";
@@ -77,5 +77,19 @@ class ModeloConductores
         $parametros = array(':valor' => '%' . $valor . '%');
         $stmt->execute($parametros);
         return $stmt->fetchall();
+    }
+
+    public static function mdlEliminarConductor($datos)
+    {
+        $tabla = self::$tabla;
+        $stmt = Conexion::conectar()->prepare("DELETE FROM $tabla  WHERE id=:id");
+        $stmt->bindParam(":id", $datos, PDO::PARAM_INT);
+        if ($stmt->execute()) {
+            return 'ok';
+        } else {
+            return 'error';
+        }
+        $stmt->close();
+        $stmt = null;
     }
 }

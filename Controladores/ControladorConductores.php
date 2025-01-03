@@ -23,8 +23,8 @@ class ControladorConductores
       if (!empty($_POST['nuevoDNI'])) {
          date_default_timezone_set('America/Lima');
          $datos = array(
-            'tipdopc' => $_POST['nuevoTipoDoc'],
-            "numedoc" => $_POST['nuevoDNI'],
+            'tipdoc' => $_POST['nuevoTipoDoc'],
+            "numdoc" => $_POST['nuevoDNI'],
             "nombres"   => mb_strtoupper($_POST['nuevoNombre'], 'UTF-8'),
             "apellidos" => mb_strtoupper($_POST['nuevoApellidos'], 'UTF-8'),
             "numbrevete" => $_POST['nuevoNumBrevete'],
@@ -64,12 +64,12 @@ class ControladorConductores
          date_default_timezone_set('America/Lima');
          $datos = array(
             "id" => $_POST['idConductorEditar'],
-            "documento" => $_POST['editarDNI'],
+            'tipdoc' => $_POST['editarTipoDoc'],
+            "numdoc" => $_POST['editarDNI'],
             "nombres"   => mb_strtoupper($_POST['editarNombre'], 'UTF-8'),
             "apellidos" => mb_strtoupper($_POST['editarApellidos'], 'UTF-8'),
-            "num_brevete" => $_POST['editarNumBrevete'],
-            'num_placa' => $_POST['editarNumPlaca'],
-            'celular' => $_POST['editarCelular'],
+            "numbrevete" => $_POST['editarNumBrevete'],
+            'numplaca' => $_POST['editarNumPlaca'],
             'marca_vehiculo' => $_POST['editarMarcaVehiculo']
          );
          $respuesta = ModeloConductores::mdlEditarConductor($datos);
@@ -88,7 +88,7 @@ class ControladorConductores
                       confirmButtonText: 'Cerrar'
                     }).then((result) => {
                       if (result.isConfirmed) {
-                        window.location = 'proveedores';
+                        window.location = 'conductores';
                       }
                       if(window.history.replaceState){
                         window.history.replaceState(null,null, window.location.href);
@@ -102,5 +102,17 @@ class ControladorConductores
    {
       $respuesta = ModeloConductores::mdlBuscarConductor($valor);
       return $respuesta;
+   }
+
+   public static function ctrEliminarConductor($datos)
+   {
+      if (isset($datos)) {
+         $respuesta = ModeloConductores::mdlEliminarConductor($datos);
+         if ($respuesta == 'ok') {
+            echo "success";
+         } else {
+            echo "error";
+         }
+      }
    }
 }

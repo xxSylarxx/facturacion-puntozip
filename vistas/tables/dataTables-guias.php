@@ -142,6 +142,7 @@ class DataTablesGuias
                 ' . $botonEstado . '
                </div>
                </td>
+               <td>Button option</td>
                 </tr>';
       }
     }
