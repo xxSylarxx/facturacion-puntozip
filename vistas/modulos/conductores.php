@@ -58,11 +58,10 @@ use Controladores\Controlador;
                             <th style="width:10px;">#</th>
                             <th>RUC/DNI</th>
                             <th>APELLIDOS Y NOMBRES</th>
-                            <th>N° CELULAR</th>
                             <th>N° BREVETE</th>
                             <th>COD. PLACA</th>
                             <th>MARCA VEHÍCULO</th>
-                            <th>Acciones</th>
+                            <th>ACCIONES</th>
                         </tr>
                     </thead>
 
@@ -73,25 +72,24 @@ use Controladores\Controlador;
                         $conductores = ControladorConductores::ctrMostrarConductores($item, $valor);
 
                         foreach ($conductores as $key => $value) :
-                            $rucdni = $value['ruc'] != null ? $value['ruc'] : $value['documento'];
+                            $rucdni = $value['numdoc'];
                             $nombreComp = $value['apellidos'] . ', ' . $value['nombres'];
                         ?>
                             <tr>
                                 <td><?php echo ++$key; ?></td>
                                 <td><?php echo $rucdni; ?></td>
                                 <td><?php echo $nombreComp; ?></td>
-                                <td><?php echo $value['celular']; ?></td>
-                                <td><?php echo $value['num_brevete']; ?></td>
-                                <td><?php echo $value['num_placa']; ?></td>
+                                <td><?php echo $value['numbrevete']; ?></td>
+                                <td><?php echo $value['numplaca']; ?></td>
                                 <td><?php echo $value['marca_vehiculo']; ?></td>
                                 <td>
                                     <div class="btn-group">
 
-                                        <button class="btn btn-warning btnEditarProveedorItem" idProveedor="<?php echo $value['id'] ?>" data-toggle="modal" data-target="#modalEditarProveedor"><i class="fas fa-user-edit"></i></button>
+                                        <button class="btn btn-warning btnEditarConductorItem" idConductor="<?php echo $value['id'] ?>" data-toggle="modal" data-target="#modalEditarConductor"><i class="fas fa-user-edit"></i></button>
                                         <?php
                                         if ($_SESSION['perfil'] == 'Administrador') {
                                         ?>
-                                            <button class="btn btn-danger btnEliminarProveedor" idProveedor="<?php echo $value['id'] ?>"><i class="fas fa-trash-alt"></i></button>
+                                            <button class="btn btn-danger btnEliminarConductor" idProveedor="<?php echo $value['id'] ?>"><i class="fas fa-trash-alt"></i></button>
                                         <?php } ?>
 
                                     </div>
@@ -118,7 +116,7 @@ use Controladores\Controlador;
         <!-- BOX FIN -->
         <!-- /.box-footer -->
     </section>
-    <div class="resultadoCrearProveedor"></div>
+    <div class="resultadoCrearConductor"></div>
     <?php  ?>
     <!-- <button type="button" class="btn btn-primary printsave">Print</button>
 <div class="printerhere" width="100%" style=""></div> -->
@@ -128,7 +126,7 @@ use Controladores\Controlador;
 
 <!-- MODAL AGREGAR PROVEEDOR -->
 <!-- Modal -->
-<div id="modalAgregarProveedor" class="modal fade modal-forms" role="dialog">
+<div id="modalAgregarConductor" class="modal fade modal-forms" role="dialog">
     <div class="modal-dialog">
 
         <!-- Modal content-->
@@ -136,7 +134,7 @@ use Controladores\Controlador;
 
 
             <form role="form" id="formNuevoConductor" class="">
-                <input type="hidden" id="insertaConductor" name="inseraConductor" value="insertaConductor">
+                <input type="hidden" id="insertaConductor" name="insertaConductor" value="insertaConductor">
 
                 <!--=====================================
         CABEZA DEL MODAL
@@ -163,8 +161,8 @@ use Controladores\Controlador;
 
                                     <div class="form-group">
 
-                                        <select name="nuevotipodoc" id="nuevotipodoc" class="form-control">
-                                            <option value="6">RUC</option>
+                                        <select name="nuevoTipoDoc" id="nuevoTipoDoc" class="form-control">
+                                            <option value="0">SIN DOCUMENTO</option>
                                             <option value="1">DNI</option>
                                         </select>
 
@@ -174,7 +172,7 @@ use Controladores\Controlador;
 
                                     <div class="form-group">
 
-                                        <input type="text" class="form-control " name="nuevoRuc" id="nuevoRuc" placeholder="Ingresar R.U.C." required>
+                                        <input type="text" class="form-control " name="nuevoDNI" id="nuevoDNI" placeholder="Ingresar D.N.I" required>
 
                                     </div>
                                 </div>
@@ -193,22 +191,17 @@ use Controladores\Controlador;
                             <div class="row">
                                 <div class=" col-md-6">
                                     <div class="form-group">
-                                        <input type="text" class="form-control " name="nuevoNumBrevete" id="nuevoNumBrevete" placeholder="Ingresar Num. brevete">
+                                        <input type="text" class="form-control " name="nuevoNumBrevete" id="nuevoNumBrevete" placeholder="Ingresar Num. brevete" required>
                                     </div>
                                 </div>
                                 <div class=" col-md-6">
                                     <div class="form-group">
-                                        <input type="text" class="form-control " name="nuevoNumPlaca" id="nuevoNumPlaca" placeholder="Ingresar Num. placa">
+                                        <input type="text" class="form-control " name="nuevoNumPlaca" id="nuevoNumPlaca" placeholder="Ingresar Num. placa" required>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="row">
-                                <div class=" col-md-6">
-                                    <div class="form-group">
-                                        <input type="text" class="form-control " name="nuevoCelular" id="nuevoCelular" placeholder="Ingresar número de célular">
-                                    </div>
-                                </div>
                                 <div class=" col-md-6">
                                     <div class="form-group">
                                         <input type="text" class="form-control " name="nuevoMarcaVehiculo" id="nuevoMarcaVehiculo" placeholder="Ingresar Marca de vehículo">
@@ -229,7 +222,7 @@ use Controladores\Controlador;
 
                     <button type="button" class="btn btn-danger pull-left" data-dismiss="modal"><i class="far fa-times-circle fa-lg"></i> Salir</button>
 
-                    <button class="btn btn-primary btn-agm btnCrearConductor">Guardar</button>
+                    <button type="submit" class="btn btn-primary btn-agm btnCrearConductor">Guardar</button>
 
                 </div>
 
@@ -243,14 +236,14 @@ use Controladores\Controlador;
 </div>
 
 <!-- MODAL EDITAR PROVEEDOR -->
-<div id="modalEditarProveedor" class="modal fade modal-forms" role="dialog">
+<div id="modalEditarConductor" class="modal fade modal-forms" role="dialog">
 
     <div class="modal-dialog">
 
         <div class="modal-content">
 
-            <form role="form" id="formEditarProveedor">
-                <input type="hidden" name="idProveedorEditar" id="idProveedorEditar">
+            <form role="form" id="formEditarConductor">
+                <input type="hidden" name="idConductorEditar" id="idConductorEditar">
 
                 <!--=====================================
         CABEZA DEL MODAL
@@ -272,93 +265,87 @@ use Controladores\Controlador;
 
                     <div class="box-body">
                         <div class="col-md-12">
-                            <!-- ENTRADA PARA EL NOMBRE -->
-
-                            <div class="form-group">
-
-                                <input type="text" class="form-control " name="editarRuc" id="editarRuc" placeholder="Ingresar R.U.C." required>
-
-                            </div>
-                            <div class="form-group">
-
-                                <input type="text" class="form-control " name="editarRazon" id="editarRazon" placeholder="Ingresar Razón Social" required>
-
-                            </div>
-                            <div class="form-group">
-
-                                <input type="text" class="form-control " name="editarDireccion" id="editarDireccion" placeholder="Ingresar dirección" required>
-
-                            </div>
-
-                            <div class="form-group">
-
-                                <input type="text" class="form-control " name="editarEmail" id="editarEmail" placeholder="Ingresar correo electrónico">
-
-                            </div>
-
-
                             <div class="row">
                                 <div class="col-md-6">
+
                                     <div class="form-group">
 
-                                        <!-- <input type="text" class="form-control " name="editarUbigeo" id="editarUbigeo" placeholder="Ingresar Ubigeo"> -->
-                                        <select class="form-control select2" style="width: 100%;" name="editarUbigeo" id="editarUbigeo" ">
-                                    <option value="">BUSCAR UBIGEO</option>
-                                    <?php
+                                        <select name="editarTipoDoc" id="editarTipoDoc" class="form-control">
+                                            <option value="0">SIN DOCUMENTO</option>
+                                            <option value="1">DNI</option>
+                                        </select>
 
-                                    $ubigeos = ControladorClientes::ctrBuscarUbigeo();
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
 
-                                    foreach ($ubigeos as $k => $v) {
+                                    <div class="form-group">
 
-                                        echo '<option value="' . $v['ubigeo'] . '">' . $v['ubigeo'] . ' ' . $v['nombre_distrito'] . ' - ' . $v['nombre_provincia'] . ' - ' . $v['name'] . '</option>
-                                                        ';
-                                    }
+                                        <input type="text" class="form-control " name="editarDNI" id="editarDNI" placeholder="Ingresar D.N.I" required>
 
-                                    ?>
-                                  </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
 
+                                <input type="text" class="form-control " name="editarNombre" id="editarNombre" placeholder="Ingresar Nombres" required>
+
+                            </div>
+                            <div class="form-group">
+
+                                <input type="text" class="form-control " name="editarApellidos" id="editarApellidos" placeholder="Ingresar Apellidos" required>
+
+                            </div>
+
+                            <div class="row">
+                                <div class=" col-md-6">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control " name="editarNumBrevete" id="editarNumBrevete" placeholder="Ingresar Num. brevete" required>
                                     </div>
                                 </div>
                                 <div class=" col-md-6">
-                                            <!-- ENTRADA PARA LA CONTRASEÑA -->
-                                            <div class="form-group">
-
-                                                <input type="text" class="form-control " name="editarTelefono" id="editarTelefono" placeholder="Ingresar Celular">
-
-                                            </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control " name="editarNumPlaca" id="editarNumPlaca" placeholder="Ingresar Num. placa" required>
                                     </div>
-                                </div>
-
-                                <!-- ENTRADA PARA SELECCIONAR SU PERFIL -->
-
-                                <div class="form-group">
-
-
                                 </div>
                             </div>
 
+                            <div class="row">
+                                <div class=" col-md-6">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control " name="editarCelular" id="editarCelular" placeholder="Ingresar número de célular">
+                                    </div>
+                                </div>
+                                <div class=" col-md-6">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control " name="editarMarcaVehiculo" id="editarMarcaVehiculo" placeholder="Ingresar Marca de vehículo">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                     </div>
 
-                    <!--=====================================
+                </div>
+
+                <!--=====================================
         PIE DEL MODAL
         ======================================-->
 
-                    <div class="modal-footer">
+                <div class="modal-footer">
 
-                        <button type="button" class="btn btn-danger pull-left" data-dismiss="modal"><i class="far fa-times-circle fa-lg"></i> Salir</button>
+                    <button type="button" class="btn btn-danger pull-left" data-dismiss="modal"><i class="far fa-times-circle fa-lg"></i> Salir</button>
 
-                        <button type="submit" class="btn btn-primary btn-agm btnEditarConductor">Modificar Conductor</button>
+                    <button type="submit" class="btn btn-primary btn-agm btnEditarConductor">Modificar Conductor</button>
 
-                    </div>
+                </div>
 
-                    <?php
+                <?php
 
-                    // $editarUsuario = new ControladorUsuarios();
-                    // $editarUsuario->ctrEditarUsuario();
+                // $editarUsuario = new ControladorUsuarios();
+                // $editarUsuario->ctrEditarUsuario();
 
-                    ?>
+                ?>
 
             </form>
 

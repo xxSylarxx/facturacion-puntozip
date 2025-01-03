@@ -566,6 +566,7 @@ $(document).on("click", ".btn-add", function (e) {
         $("#razon_social").val(respuesta["nombre"]);
         $("#docIdentidad").val(respuesta["documento"]);
         $("#direccion").val(respuesta["direccion"]);
+        $("#direccionLlegada").val(respuesta["direccion"]);
         $("#ubigeo").val(respuesta["ubigeo"]);
         $("#celular").val(respuesta["telefono"]);
         $("#email").val(respuesta["email"]);
@@ -577,6 +578,7 @@ $(document).on("click", ".btn-add", function (e) {
         $("#razon_social").val(respuesta["razon_social"]);
         $("#docIdentidad").val(respuesta["ruc"]);
         $("#direccion").val(respuesta["direccion"]);
+        $("#direccionLlegada").val(respuesta["direccion"]);
         $("#ubigeo").val(respuesta["ubigeo"]);
         $("#celular").val(respuesta["telefono"]);
         $("#email").val(respuesta["email"]);

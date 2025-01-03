@@ -221,8 +221,12 @@
         </a>
       </li>
 
-
-
+      <li class="">
+        <a href="conductores">
+          <i class="fas fa-users fa-lg"></i> <span class="mg-menu">Conductores</span>
+        </a>
+      </li>
+      
       <li class="">
         <a href="consulta-comprobante">
           <i class="fas fa-file-invoice-dollar fa-lg"></i> <span class="mg-menu">Consultar comprobantes</span>

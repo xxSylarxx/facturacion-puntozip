@@ -50,7 +50,7 @@ $id_sucursal = isset($_POST['idSucursal']) ? $_POST['idSucursal']
             $valor = null;
             $sucursal = ControladorSucursal::ctrMostrarSucursalTotal($item, $valor);
             foreach ($sucursal as $k => $v) {
-              echo '<option value="' . $v['id'] . '">' . $v['nombre_sucursal'] . ' - Sede: ' . $v['direccion'] . '</option>';
+              echo '<option value="' . $v['id'] . '" data-direccion="' . $v['direccion'] . '">' . $v['nombre_sucursal'] . ' - Sede: ' . $v['direccion'] . '</option>';
             }
 
             echo '</select>';
@@ -192,7 +192,7 @@ $id_sucursal = isset($_POST['idSucursal']) ? $_POST['idSucursal']
                         <div class="form-group">
                           <div class="input-group-adddon">
                             <label for="" class="tipoDocTransporte">Nombre o RS <span style="color:red; border-style: none !important; font-size:20px;">*</span> </label>
-                            <input type="text" class="form-control" id="razon_social"" name=" razon_social" placeholder="Ingrese nombre o razón social...">
+                            <input type="text" class="form-control" id="razon_social" name=" razon_social" placeholder="Ingrese nombre o razón social...">
                             <!-- <span class="input-group-addon"></span>  -->
                           </div>
                         </div>
@@ -257,12 +257,12 @@ $id_sucursal = isset($_POST['idSucursal']) ? $_POST['idSucursal']
                             <label for="">Tipo de vehículo <span style="color:white; border-style: none !important; font-size:20px;">*</span></label>
                             <select class="form-control" name="tipoVehiculo" id="tipoVehiculo">
                               <option value="">-Seleccione-</option>
-                              <?php 
+                              <?php
 
                               $tabla = 'tipo_vehiculo';
                               $item = null;
                               $valor = null;
-                              $tipoVehiculo = ControladorGuiaRemision::ctrMostrarTraslado($tabla, $item, $valor);
+                              $tipoVehiculo = ControladorGuiaRemision::ctrMostrarTiposVehiculo($tabla, $item, $valor);
                               foreach ($tipoVehiculo as $key => $value) {
                                 echo '<option value=' . $value['id'] . '>' . $value['descripcion'] . '</option>';
                               }
@@ -470,7 +470,7 @@ $id_sucursal = isset($_POST['idSucursal']) ? $_POST['idSucursal']
                                 <div class="form-group busca-pro-kardex select">
                                   <label for="" class="placa">Ubigeo de partida<span style="color:red; border-style: none !important; font-size: 20px;">*</span> </label>
                                   <!-- <label>BUSCAR EL PRODUCTO</label> -->
-                                  <select class="form-control select2" style="width: 100%;" name="ubigeoPartida" id="ubigeoPartida" ">
+                                  <select class="form-control select2" style="width: 100%;" name="ubigeoPartida" id="ubigeoPartida">
                                     <option value="">BUSCAR EL UBIGEO PARTIDA</option>
 
                                     </option>
@@ -492,36 +492,36 @@ $id_sucursal = isset($_POST['idSucursal']) ? $_POST['idSucursal']
                                     <input type="text" class="form-control" id="ubigeoPartida" name="ubigeoPartida">
 
                                     <div class="resultado-ubigeos-partida"></div> -->
-                                </div>
+                            </div>
+
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-md-6">
+                        <legend class="text-bold" style="margin-left:15px; font-size:1.3em; letter-spacing: 1px;"><label class="number-guiar">
+                            <h3>5</h3>
+                          </label> Punto de LLegada:</legend>
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="form-group">
+                              <div class="input-group-">
+
+                                <label for="" class="placa">Dirección <span style="color:red; border-style: none !important; font-size: 20px;">*</span> </label>
+                                <input type="text" class="form-control" id="direccionLlegada" name="direccionLlegada" placeholder="Dirección de LLegada">
 
                               </div>
                             </div>
                           </div>
-
-                          <div class="col-md-6">
-                            <legend class="text-bold" style="margin-left:15px; font-size:1.3em; letter-spacing: 1px;"><label class="number-guiar">
-                                <h3>5</h3>
-                              </label> Punto de LLegada:</legend>
-                            <div class="row">
-                              <div class="col-md-12">
-                                <div class="form-group">
-                                  <div class="input-group-">
-
-                                    <label for="" class="placa">Dirección <span style="color:red; border-style: none !important; font-size: 20px;">*</span> </label>
-                                    <input type="text" class="form-control" id="direccionLlegada" name="direccionLlegada" placeholder="Dirección de LLegada">
-
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="row">
-                              <div class="col-md-12">
-                                <div class="form-group">
-                                  <div class="kardex-contenedor">
-                                    <div class="form-group busca-pro-kardex select">
-                                      <label for="" class="placa">Ubigeo de llegada<span style="color:red; border-style: none !important; font-size: 20px;">*</span> </label>
-                                      <!-- <label>BUSCAR EL PRODUCTO</label> -->
-                                      <select class="form-control select2" style="width: 100%;" name="ubigeoLlegada" id="ubigeoLlegada" ">
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="form-group">
+                              <div class="kardex-contenedor">
+                                <div class="form-group busca-pro-kardex select">
+                                  <label for="" class="placa">Ubigeo de llegada<span style="color:red; border-style: none !important; font-size: 20px;">*</span> </label>
+                                  <!-- <label>BUSCAR EL PRODUCTO</label> -->
+                                  <select class="form-control select2" style="width: 100%;" name="ubigeoLlegada" id="ubigeoLlegada" ">
                                     <option value="">BUSCAR EL UBIGEO LLEGADA</option>
 
                                     </option>
@@ -541,138 +541,138 @@ $id_sucursal = isset($_POST['idSucursal']) ? $_POST['idSucursal']
                               </div>
 
                               <!-- <input type=" text" class="form-control" id="ubigeoLlegada" name="ubigeoLlegada">
-                                        <div class="resultado-ubigeos-llegada"></div> -->
+                                    <div class="resultado-ubigeos-llegada"></div> -->
 
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="row">
-                              <legend class="text-bold" style="margin-left:15px; font-size:1.3em; letter-spacing: 1px;"><label class="number-guiar">
-                                  <h3>6</h3>
-                                </label> Documento de referencia:</legend>
-
-                              <div class="col-md-4">
-                                <div class="form-group">
-                                  <div class="input-group">
-                                    <label for="">Serie Correlativo (F001-2)</label>
-                                    <input type="text" class="form-control" name="serieCorrelativoReferencial" id="serieCorrelativoReferencial">
-                                    <div class="resultado-serie"></div>
-
-
-                                  </div>
                                 </div>
                               </div>
                             </div>
                           </div>
-                          <!-- FIN ENTRADA PARA ENVÍO DE EMAIL =============== -->
-                          <!-- ENTRADA PARA AGREGAR PRODUCTOS -->
-                          <div class="col-lg-12 col-xs-12">
-                            <div class="row nuevoProducto">
+                        </div>
+                        <div class="row">
+                          <legend class="text-bold" style="margin-left:15px; font-size:1.3em; letter-spacing: 1px;"><label class="number-guiar">
+                              <h3>6</h3>
+                            </label> Documento de referencia:</legend>
 
-                              <div class="flex">
-                                <button type="button" class="btn btn-primary pull-right btn-agregar-carrito" data-toggle="modal" data-target="#modalProductosGuia"><i class="fas fa-cart-plus fa-lg"></i> Agregar Productos o Servicios</button>
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <div class="input-group">
+                                <label for="">Serie Correlativo (F001-2)</label>
+                                <input type="text" class="form-control" name="serieCorrelativoReferencial" id="serieCorrelativoReferencial">
+                                <div class="resultado-serie"></div>
+
 
                               </div>
-                              <div class="table-responsive items-c">
-                                <!-- BOTÓN PARA AGREGAR PRODUCTO-->
-                                <table class="table tabla-items">
-                                  <thead>
-                                    <tr>
-                                      <th>Código</th>
-                                      <th>Cantidad</th>
-                                      <th>Uni/medida</th>
-                                      <th>Descripción</th>
-                                      <th></th>
-                                    </tr>
-                                  </thead>
-                                  <tbody id="itemsPG">
-                                    <tr>
-                                      <td>
-                                        <?php
-                                        echo "<div class='resubi'></div>";
-                                        // $item = 'nombre_distrito';
-                                        // $valor = 'RIOJA';
-                                        // $respuesta = ControladorGuiaRemision::ctrMostrarUbigeo($item, $valor);
-                                        // var_dump($respuesta);
-                                        ?>
-                                      </td>
-                                    </tr>
-                                  </tbody>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- FIN ENTRADA PARA ENVÍO DE EMAIL =============== -->
+                      <!-- ENTRADA PARA AGREGAR PRODUCTOS -->
+                      <div class="col-lg-12 col-xs-12">
+                        <div class="row nuevoProducto">
 
-                                </table>
-                              </div>
-                              <!-- FIN ENTRADA AGREGAR PRODUCTOS  -->
+                          <div class="flex">
+                            <button type="button" class="btn btn-primary pull-right btn-agregar-carrito" data-toggle="modal" data-target="#modalProductosGuia"><i class="fas fa-cart-plus fa-lg"></i> Agregar Productos o Servicios</button>
 
+                          </div>
+                          <div class="table-responsive items-c">
+                            <!-- BOTÓN PARA AGREGAR PRODUCTO-->
+                            <table class="table tabla-items">
+                              <thead>
+                                <tr>
+                                  <th>Código</th>
+                                  <th>Cantidad</th>
+                                  <th>Uni/medida</th>
+                                  <th>Descripción</th>
+                                  <th></th>
+                                </tr>
+                              </thead>
+                              <tbody id="itemsPG">
+                                <tr>
+                                  <td>
+                                    <?php
+                                    echo "<div class='resubi'></div>";
+                                    // $item = 'nombre_distrito';
+                                    // $valor = 'RIOJA';
+                                    // $respuesta = ControladorGuiaRemision::ctrMostrarUbigeo($item, $valor);
+                                    // var_dump($respuesta);
+                                    ?>
+                                  </td>
+                                </tr>
+                              </tbody>
 
-                              <div class="box">
-
-                                <!-- DESCUENTO GLOBAL| -->
-                                <div class="col-md-12 col-sm-12">
-                                  <table class="table" style="border:0px">
-                                    <thead>
-
-                                    </thead>
-                                    <tbody>
-
-                                      <!-- MÉTODO DE PAGO ========] -->
-
-                                      <!-- FIN MÉTODO DE PAGO ======== -->
-                                      <!-- COMENTARIO=========== -->
-                                      <tr>
-                                        <th>SERIES DE LOS PRODUCTOS</th>
-                                      </tr>
-                                      <tr>
-                                        <td colspan="2">
-                                          <div>
-                                            <div class="table-responsive">
-                                              <!-- table-bordered table-striped  -->
-                                              <table class="table  dt-responsive tablaSeries tbl-t" width="100%">
-                                                <thead>
-                                                  <tr>
-                                                    <th>COD. PRODUCTO</th>
-                                                    <th>SERIE</th>
-                                                  </tr>
-                                                </thead>
-                                                <tbody  class="series-guia">
-                                                  
-                                                </tbody>
-                                              </table>
-                                            </div>
-                                          </div>
-                                        </td>
-                                      </tr>
-                                      <tr>
-                                        <th> Información adicional para SUNAT</th>
-                                      </tr>
-                                      <tr>
-                                        <td colspan="2">
-                                          <div class="form-group">
-                                            <div class="input-group">
-                                              <span class="input-group-addon"><i class="far fa-comment-dots"></i></span>
-                                              <textarea class="form-control" name="comentario" id="comentario" cols="50" rows="4" placeholder="Escribe aquí una observacion" maxlength="250"></textarea>
-                                            </div>
-                                          </div>
-                                        </td>
-                                      </tr>
+                            </table>
+                          </div>
+                          <!-- FIN ENTRADA AGREGAR PRODUCTOS  -->
 
 
-                                      <!-- FIN COMENTARIO======= -->
-                                    </tbody>
+                          <div class="box">
 
-                                  </table>
+                            <!-- DESCUENTO GLOBAL| -->
+                            <div class="col-md-12 col-sm-12">
+                              <table class="table" style="border:0px">
+                                <thead>
+
+                                </thead>
+                                <tbody>
+
+                                  <!-- MÉTODO DE PAGO ========] -->
+
+                                  <!-- FIN MÉTODO DE PAGO ======== -->
+                                  <!-- COMENTARIO=========== -->
+                                  <tr>
+                                    <th>SERIES DE LOS PRODUCTOS</th>
+                                  </tr>
+                                  <tr>
+                                    <td colspan="2">
+                                      <div>
+                                        <div class="table-responsive">
+                                          <!-- table-bordered table-striped  -->
+                                          <table class="table  dt-responsive tablaSeries tbl-t" width="100%">
+                                            <thead>
+                                              <tr>
+                                                <th>COD. PRODUCTO</th>
+                                                <th>SERIE</th>
+                                              </tr>
+                                            </thead>
+                                            <tbody class="series-guia">
+
+                                            </tbody>
+                                          </table>
+                                        </div>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <th> Información adicional para SUNAT</th>
+                                  </tr>
+                                  <tr>
+                                    <td colspan="2">
+                                      <div class="form-group">
+                                        <div class="input-group">
+                                          <span class="input-group-addon"><i class="far fa-comment-dots"></i></span>
+                                          <textarea class="form-control" name="comentario" id="comentario" cols="50" rows="4" placeholder="Escribe aquí una observacion" maxlength="250"></textarea>
+                                        </div>
+                                      </div>
+                                    </td>
+                                  </tr>
 
 
-                                </div>
-                                <!-- FIN DESCUENTO GLOBAL -->
+                                  <!-- FIN COMENTARIO======= -->
+                                </tbody>
+
+                              </table>
+
+
+                            </div>
+                            <!-- FIN DESCUENTO GLOBAL -->
 
 
 
-                                <hr>
+                            <hr>
 
-                                <!-- MÉTODO DE PAGO -->
-                                <!-- <div class="row">
+                            <!-- MÉTODO DE PAGO -->
+                            <!-- <div class="row">
                                   <div class="col-xs-6">
                                   <div class="input-group">
                                     <select class="form-control rounded" id="nuevoMetodoPago" name="nuevoMetodoPago">
@@ -683,7 +683,7 @@ $id_sucursal = isset($_POST['idSucursal']) ? $_POST['idSucursal']
                                     </select>
                                 </div>
                                   </div> -->
-                                <!-- 
+                            <!-- 
                                   <div class="col-xs-6">
                                   <div class="input-group">
                                   <input type="text" class="form-control " id="nuevoCodigoTransaccion" name="nuevoCodigoTransaccion" placeholder="Código transacción">
@@ -691,38 +691,38 @@ $id_sucursal = isset($_POST['idSucursal']) ? $_POST['idSucursal']
                                 </div>
                                   </div> -->
 
-                                <!-- </div> -->
+                            <!-- </div> -->
 
 
-                              </div>
+                          </div>
 
-                            </div>
-                            <div class="box">
-                              <div class="col-xs-12 radio-envio">
-                                <!-- <div class="col-md-4 col-xs-12">
+                        </div>
+                        <div class="box">
+                          <div class="col-xs-12 radio-envio">
+                            <!-- <div class="col-md-4 col-xs-12">
                       <input type="radio" name="envioSunat" id="firmar" value="firmar" checked>
                       <label for="firmar">Solo Firmar e Imprimir</label>
                     </div> -->
-                                <div class="col-md-4 col-xs-12">
-                                  <input type="radio" name="envioSunat" id="enviar" value="enviar" checked>
-                                  <label for="enviar">Eviar a SUNAT ahora mismo</label>
-                                </div>
-                                <!-- <div class="col-md-4  col-xs-12">
+                            <div class="col-md-4 col-xs-12">
+                              <input type="radio" name="envioSunat" id="enviar" value="enviar" checked>
+                              <label for="enviar">Eviar a SUNAT ahora mismo</label>
+                            </div>
+                            <!-- <div class="col-md-4  col-xs-12">
                       <input type="radio"  name="envioSunat" id="no" value="no" >
                       <label for="no">Solo Guardar Venta</label>
                     </div> -->
-                              </div>
+                          </div>
 
-                            </div>
+                        </div>
 
 
-                            <div class="box-footer contenedor-btns-carrito">
+                        <div class="box-footer contenedor-btns-carrito">
 
-                              <button type="button" class="btnGuardarGuia"><i class="far fa-save"></i></button>
-                              <div class='muestras'></div>
-                              <!-- BOTÓN PARA ELIMINAR CARRO-->
-                              <button type="button" class="btnEliminarCarro"><i class="fas fa-trash-alt"></i></button>
-                            </div>
+                          <button type="button" class="btnGuardarGuia"><i class="far fa-save"></i></button>
+                          <div class='muestras'></div>
+                          <!-- BOTÓN PARA ELIMINAR CARRO-->
+                          <button type="button" class="btnEliminarCarro"><i class="fas fa-trash-alt"></i></button>
+                        </div>
 
 
               </form>

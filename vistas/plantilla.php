@@ -192,7 +192,7 @@ $tiem = time();
     MENU
     =============================================*/
 
-      include "modulos/menu.php";
+      include_once "modulos/menu.php";
 
       /*=============================================
     CONTENIDO

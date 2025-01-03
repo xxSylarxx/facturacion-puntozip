@@ -14,6 +14,9 @@ function loadProductosG(page) {
   let searchProductoG = $("#searchProductoG").val();
   let selectnum = $("#selectnum").val();
   let selectSucursal = $("#idcSucursal").val();
+  let direccionSucursal = $("#idcSucursal").find('option:selected').data('direccion');
+  $("#ubigeoPartida").val('130106').trigger('change');
+  $("#direccionPartida").val(direccionSucursal);
   let parametros = {
     action: "ajax",
     page: page,

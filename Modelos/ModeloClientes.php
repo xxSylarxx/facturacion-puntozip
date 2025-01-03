@@ -206,7 +206,6 @@ class ModeloClientes
                     'apellidos' => $empresa->apellidos
 
                 );
-
                 echo json_encode($datos);
             } else {
                 echo json_encode('error');
