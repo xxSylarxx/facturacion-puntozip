@@ -63,18 +63,31 @@ class ControladorGuiaRemision
     // LLENAR CARRITO DE COMPRAS
     public static function ctrLlenarCarritoGuia($carritoG)
     {
+        /* 
+        echo "<td>" . $v['codigo'] . "</td>
+                <td>" . $v['cantidad'] . "</td>
+                <td>" . $v['unidad'] . "</td>
+                <td>" . $v['descripcion'] . "<br/>
+        */
 
         foreach ($carritoG as $k => $v) {
 
 
             echo "<tr class='id-eliminar" . $k . "'>";
-            echo "<td>" . $v['codigo'] . "</td><td>" . $v['cantidad'] . "</td><td>" . $v['unidad'] . "</td><td>" . $v['descripcion'] . "<br/>
-            <input type='text' class='datos-adicionales-item-guia' id='descripcion' name='descripcion[]' placeholder='DATOS ADICIONALES' onkeyup='this.value = this.value.toUpperCase();'>
-            </td>
-            <td><button type='button' class='btn btn-danger btn-xs btnEliminarItemCarroG' itemEliminar='" . $k . "'><i class='fas fa-trash-alt'></i></button>
-            <button type='button' class='btn btn-primary btn-xs btnAgregarSerieG' idProductoG='" . $v['id'] . "'><i class='fa fa-barcode'  data-toggle='modal' data-target='#modalEditarProductoSeries'></i></button>
-				
-            </td>";
+            echo "<td>" . $v['codigo'] . "</td>
+                <td>" . $v['descripcion'] . "<br/>
+                    <input type='text' class='datos-adicionales-item-guia' id='descripcion' name='descripcion[]' placeholder='DATOS ADICIONALES' onkeyup='this.value = this.value.toUpperCase();'>
+                </td>
+                <td><input type='text' class='form-control' placeholder='Color'></td>
+                <td>" . $v['unidad'] . "</td>
+                <td><input type='text' class='form-control' placeholder='P.O'></td>
+                <td><input type='text' class='form-control' placeholder='Partida'></td>
+                <td><input type='text' class='form-control' placeholder='Cantidad' value='". $v['cantidad'] ."'></td>
+                <td><input type='text' class='form-control' placeholder='Bultos'></td>
+                <td><input type='text' class='form-control' placeholder='Peso'></td>
+                <td><button type='button' class='btn btn-danger btn-xs btnEliminarItemCarroG' itemEliminar='" . $k . "'><i class='fas fa-trash-alt'></i></button>
+                    <button type='button' class='btn btn-primary btn-xs btnAgregarSerieG' idProductoG='" . $v['id'] . "'><i class='fa fa-barcode'  data-toggle='modal' data-target='#modalEditarProductoSeries'></i></button>
+                </td>";
             echo  "</tr>";
         }
     }
@@ -87,10 +100,10 @@ class ControladorGuiaRemision
     }
     public static function ctrCrearGuia($datosForm)
     {
-        
+
         $emisor = ControladorEmpresa::ctrEmisor();
         $sucursal = ControladorSucursal::ctrSucursal();
-//  var_dump($emisor);
+        //  var_dump($emisor);
         $item = 'id';
         $valor = $datosForm['serie'];
         $seriex = ControladorSunat::ctrMostrarCorrelativo($item, $valor);
@@ -103,11 +116,11 @@ class ControladorGuiaRemision
         if (isset($datosForm['descripcion'])) {
             @$descItem = array_map('strtoupper', $datosForm['descripcion']);
         }
-         if (isset($datosForm['idserie'])) {
+        if (isset($datosForm['idserie'])) {
             @$seriesP = $datosForm['idserie'];
         }
         $descripcion = isset($datosForm['descripcion']) ? json_encode($descItem, JSON_UNESCAPED_UNICODE) : null;
-        
+
         $seriesProductos = isset($datosForm['idserie']) ? json_encode($seriesP, JSON_UNESCAPED_UNICODE) : null;
         $guia = array(
             'serie' => $seriex['serie'],
@@ -126,10 +139,10 @@ class ControladorGuiaRemision
             'tipoDoc' => ''
         );
         $tipocomp = substr($datosForm['serieCorrelativoReferencial'], 0, 1);
-        if($tipocomp == 'F'){
+        if ($tipocomp == 'F') {
             $seriecomp = '01';
         }
-         if($tipocomp == 'B'){
+        if ($tipocomp == 'B') {
             $seriecomp = '03';
         }
         $relDoc = array(

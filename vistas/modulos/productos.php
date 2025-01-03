@@ -340,63 +340,7 @@ $sucursal = ControladorSucursal::ctrSucursal();
                 </div>
               </div>
               <!-- ENTRADA PARA PRECIO VENTA-->
-              <div class="row">
-                <div class="col-md-6" style="">
-                  <div class="form-group">
-
-
-                    <input type="text" class="form-control" name="nuevoPrecioUnitario" id="nuevoPrecioUnitario" placeholder="Ingresar precio unitario" step="any" required>
-
-                  </div>
-                </div>
-
-                <!-- ENTRADA PARA PRECIO COMPRA -->
-                <div class="col-md-6">
-
-                  <div class="form-group">
-
-
-                    <input type="text" class="form-control" name="nuevoValorUnitario" id="nuevoValorUnitario" placeholder="Valor unitario" step="any" readonly required>
-
-                  </div>
-                </div>
-              </div>
-
               <!-- CHECKBOX PARA PORCENTAJE -->
-              <div class="row">
-                <div class="col-md-4">
-
-                  <div class="form-group">
-
-
-                    <input type="text" class="form-control" name="nuevoigv" id="nuevoigv" placeholder="IGV 18%" readonly>
-
-
-                  </div>
-                </div>
-                <div class="col-md-4">
-
-                  <div class="form-group">
-
-
-                    <input type="number" class="form-control" name="nuevoPrecioMayor" id="nuevoPrecioMayor" placeholder="Precio por mayor">
-
-
-                  </div>
-                </div>
-
-                <!-- ENTRADA IGV  -->
-                <div class="col-md-4">
-                  <div class="form-group">
-
-
-                    <input type="number" class="form-control" name="nuevoPrecioCompra" id="nuevoPrecioCompra" placeholder="Precio compra">
-
-
-                  </div>
-                </div>
-              </div>
-
             </div>
             <div class="col-md-4">
 

@@ -10,7 +10,6 @@ use Controladores\ControladorEmpresa;
 use Controladores\ControladorSucursal;
 use api\ApiFacturacion;
 
-
 class AjaxGuia
 {
     public function ajaxBuscarUbigeoPartida()

@@ -15,7 +15,8 @@ function loadProductosG(page) {
   let selectnum = $("#selectnum").val();
   let selectSucursal = $("#idcSucursal").val();
   let direccionSucursal = $("#idcSucursal").find('option:selected').data('direccion');
-  $("#ubigeoPartida").val('130106').trigger('change');
+  let ubigeoSucursal = $("#idcSucursal").find('option:selected').data('ubigeo');
+  $("#ubigeoPartida").val(ubigeoSucursal).trigger('change');
   $("#direccionPartida").val(direccionSucursal);
   let parametros = {
     action: "ajax",
@@ -89,6 +90,18 @@ $(document).on("click", "button.agregarProductoGuia", function () {
       $(".tablaVentas thead").fadeIn(200);
     },
   });
+});
+
+// MOSTRAR DATOS DEL CONDUCTOR
+$('#listConductores').change(function () {
+  let conductorNombres = $("#listConductores").find('option:selected').data('nombre');
+  let conductorApellidos = $("#listConductores").find('option:selected').data('apellidos');
+  let conductorBrevete = $("#listConductores").find('option:selected').data('brevete');
+  let conductorPlaca = $("#listConductores").find('option:selected').data('placa');
+  $("#nombreRazon").val(conductorNombres);
+  $("#apellidosRazon").val(conductorApellidos);
+  $("#placa").val(conductorPlaca);
+  $("#numBrevete").val(conductorBrevete);
 });
 
 // ELIMINAR ITEM DEL CARRO
@@ -239,7 +252,7 @@ $(document).on("keyup", "#ubigeoPartida", function (e) {
     method: "POST",
     url: "ajax/crear-guia.ajax.php",
     data: datos,
-    beforeSend: function () {},
+    beforeSend: function () { },
     success: function (data) {
       if (ubigeopartida == "") {
         $(".resultado-ubigeos-partida").hide();
@@ -256,7 +269,7 @@ $(document).on("keyup", "#ubigeoLlegada", function (e) {
     method: "POST",
     url: "ajax/crear-guia.ajax.php",
     data: datos,
-    beforeSend: function () {},
+    beforeSend: function () { },
     success: function (data) {
       if (ubigeollegada == "") {
         $(".resultado-ubigeos-llegada").hide();
@@ -275,7 +288,7 @@ $(document).on("click", ".btn-ubigeo-partida", function (e) {
     url: "ajax/crear-guia.ajax.php",
     data: datos,
     dataType: "json",
-    beforeSend: function () {},
+    beforeSend: function () { },
     success: function (data) {
       $("#ubigeoPartida").val(data["id"]);
       $(".resultado-ubigeos-partida").hide();
@@ -291,7 +304,7 @@ $(document).on("click", ".btn-ubigeo-llegada", function (e) {
     url: "ajax/crear-guia.ajax.php",
     data: datos,
     dataType: "json",
-    beforeSend: function () {},
+    beforeSend: function () { },
     success: function (data) {
       $("#ubigeoLlegada").val(data["id"]);
       $(".resultado-ubigeos-llegada").hide();
@@ -348,7 +361,7 @@ $(document).on("keyup", "#serieCorrelativoReferencial", function (e) {
     method: "POST",
     url: "ajax/crear-guia.ajax.php",
     data: datos,
-    beforeSend: function () {},
+    beforeSend: function () { },
     success: function (respuesta) {
       $(".resultado-serie").show().html(respuesta);
     },
@@ -362,7 +375,7 @@ $(document).on("click", ".btn-serie-correlativo", function (e) {
     method: "POST",
     url: "ajax/crear-guia.ajax.php",
     data: datos,
-    beforeSend: function () {},
+    beforeSend: function () { },
     success: function (respuesta) {
       $(".nuevoProducto .table #itemsPG").html(respuesta);
       $(".resultado-serie").hide();
@@ -566,7 +579,7 @@ $(document).on("click", ".btnAgregarSerieG", function (e) {
 // AGREGAR PRODUCTOS AL CARRO
 $(document).on("click", ".btn-add-serie-guia", function () {
   let idserie = $(this).attr("idSerie");
-  let serie = $("#serieG" +idserie).val();
+  let serie = $("#serieG" + idserie).val();
   let codproducto = $("#codproducto").val();
   let idproductoS = $(this).attr("idProducto");
   plus2++;
@@ -585,30 +598,30 @@ $(document).on("click", ".btn-add-serie-guia", function () {
     `);
 
 
-   
-      var activoserie = "n";
-    
-    var data = { idSerie: idserie, activoserie: activoserie };
-    $.ajax({
-      method: "POST",
-      url: "ajax/productos.ajax.php",
-      data: data,
-      success: function (datos) {
-        if(datos == 'ok'){
-    var data = { idproductoS: idproductoS };
-    $.ajax({
-      method: "POST",
-      url: "vistas/modulos/productos-guias-series.php",
-      data: data,
-      success: function (datos) {
-        $(".contenido-inputs-guias").html(datos);
-        $("#idproductoS").val(idproductoS);
-      },
+
+  var activoserie = "n";
+
+  var data = { idSerie: idserie, activoserie: activoserie };
+  $.ajax({
+    method: "POST",
+    url: "ajax/productos.ajax.php",
+    data: data,
+    success: function (datos) {
+      if (datos == 'ok') {
+        var data = { idproductoS: idproductoS };
+        $.ajax({
+          method: "POST",
+          url: "vistas/modulos/productos-guias-series.php",
+          data: data,
+          success: function (datos) {
+            $(".contenido-inputs-guias").html(datos);
+            $("#idproductoS").val(idproductoS);
+          },
         });
       }
-     
-}
-});
+
+    }
+  });
 });
 
 $(document).on("click", ".btn-remove-add-serie-agregar", function (e) {
@@ -621,17 +634,17 @@ $(document).on("click", ".btn-remove-add-serie-agregar", function (e) {
 
 
   var activoserie = "s";
-    
+
   var data = { idSerie: idserie, activoserie: activoserie };
   $.ajax({
     method: "POST",
     url: "ajax/productos.ajax.php",
     data: data,
     success: function (datos) {
-      if(datos == 'ok'){
+      if (datos == 'ok') {
 
       }
     }
 
-});
+  });
 });
