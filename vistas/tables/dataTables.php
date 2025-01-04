@@ -214,7 +214,7 @@ class DataTables
         $valor = $value['id_categoria'];
         $categoria = ControladorCategorias::ctrMostrarCategorias($item, $valor);
         $stockalert = $value['stock'] <= 20 ? 'style="background:#dd4b39"' : '';
-        echo '<td>' . $categoria['categoria'] . '</td>
+        echo '<td>' . (isset($categoria['categoria']) ? $categoria['categoria'] : '') . '</td>
     <td> <button class="btn btn-primary btn-stock" idProducto="' . $value["id"] . '" ' . $stockalert . '>' . $value['stock'] . '</button></td>
     <td> ' . $value['precio_unitario'] . '</td>
     <td> ' . date_format(date_create($value['fecha_c']), 'd/m/Y H:i:s') . '</td>

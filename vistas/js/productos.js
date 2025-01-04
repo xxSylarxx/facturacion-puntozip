@@ -267,6 +267,9 @@ $(document).on("click", ".btnEditarProducto", function () {
       $("#editarPrecioMayor").val(respuesta["precio_pormayor"]);
       $("#editarigv").val(respuesta["igv"]);
       $("#editarSucursal").val(respuesta["id_sucursal"]);
+      if (respuesta['id_proveedor']) {
+        $("#itemEditarProveedor").val(respuesta["id_proveedor"]).trigger('change');
+      }
       let combo = document.getElementById("editarSucursal");
       let idubigeo = combo.options[combo.selectedIndex].text;
       $("#select2-editarSucursal-container").html(idubigeo);
@@ -449,7 +452,7 @@ $(document).on("click", ".siu", function () {
     method: "POST",
     url: "ajax/productos.ajax.php",
     data: datos,
-    beforeSend: function () {},
+    beforeSend: function () { },
     success: function (respuesta) {
       if (modo == "s") {
         $(".unidad-me #sie" + id).addClass("unidadsi");
@@ -470,7 +473,7 @@ $(document).on("click", ".nou", function () {
     method: "POST",
     url: "ajax/productos.ajax.php",
     data: datos,
-    beforeSend: function () {},
+    beforeSend: function () { },
     success: function (respuesta) {
       if (modo == "n") {
         $(".unidad-me #noe" + id).addClass("unidadno");
@@ -508,87 +511,87 @@ $(document).on("change keyup", ".cantidad-stock", function () {
   let cantidad = $(this).val();
   let idProducto = $(this).attr("idProducto");
   var ruta = $('#ruta_comprobante').val();
-  if(ruta != 'crear-cotizacion'){
-  let datos = { idProducto: idProducto };
-  $.ajax({
-    method: "POST",
-    url: "ajax/productos.ajax.php",
-    data: datos,
-    dataType: "json",
-    beforeSend: function () {},
-    success: function (respuesta) {
-      let stockProducto = respuesta["stock"];
-      let totalStock = stockProducto - cantidad;
-      $(".stock" + idProducto).html(totalStock);
+  if (ruta != 'crear-cotizacion') {
+    let datos = { idProducto: idProducto };
+    $.ajax({
+      method: "POST",
+      url: "ajax/productos.ajax.php",
+      data: datos,
+      dataType: "json",
+      beforeSend: function () { },
+      success: function (respuesta) {
+        let stockProducto = respuesta["stock"];
+        let totalStock = stockProducto - cantidad;
+        $(".stock" + idProducto).html(totalStock);
 
-      if (Number(totalStock) <= 20) {
-        $(".stock" + idProducto)
-          .removeClass("btn-primary")
-          .addClass("btn-dangerstock");
+        if (Number(totalStock) <= 20) {
+          $(".stock" + idProducto)
+            .removeClass("btn-primary")
+            .addClass("btn-dangerstock");
 
-        const Toast = Swal.mixin({
-          toast: true,
-          position: "top-end",
-          // width: 600,
-          // padding: '3em',
-          showConfirmButton: false,
-          timer: 6000,
-          timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.addEventListener("mouseenter", Swal.stopTimer);
-            toast.addEventListener("mouseleave", Swal.resumeTimer);
-          },
-        });
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            // width: 600,
+            // padding: '3em',
+            showConfirmButton: false,
+            timer: 6000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener("mouseenter", Swal.stopTimer);
+              toast.addEventListener("mouseleave", Swal.resumeTimer);
+            },
+          });
 
-        Toast.fire({
-          icon: "warning",
-          title: `<h4>El stock de este producto está llegando a su límite</h4>`,
-        });
-      } else {
-        $(".stock" + idProducto)
-          .removeClass("btn-dangerstock")
-          .addClass("btn-primary");
-      }
-      if (Number(totalStock) == 0 || cantidad >= Number(stockProducto)) {
-        $("#cantidad" + idProducto).val(stockProducto);
-        $(".stock" + idProducto).html(0);
+          Toast.fire({
+            icon: "warning",
+            title: `<h4>El stock de este producto está llegando a su límite</h4>`,
+          });
+        } else {
+          $(".stock" + idProducto)
+            .removeClass("btn-dangerstock")
+            .addClass("btn-primary");
+        }
+        if (Number(totalStock) == 0 || cantidad >= Number(stockProducto)) {
+          $("#cantidad" + idProducto).val(stockProducto);
+          $(".stock" + idProducto).html(0);
 
-        const Toast = Swal.mixin({
-          toast: true,
-          position: "top-end",
-          // width: 600,
-          // padding: '3em',
-          showConfirmButton: false,
-          timer: 6000,
-          timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.addEventListener("mouseenter", Swal.stopTimer);
-            toast.addEventListener("mouseleave", Swal.resumeTimer);
-          },
-        });
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            // width: 600,
+            // padding: '3em',
+            showConfirmButton: false,
+            timer: 6000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener("mouseenter", Swal.stopTimer);
+              toast.addEventListener("mouseleave", Swal.resumeTimer);
+            },
+          });
 
-        Toast.fire({
-          icon: "warning",
-          title: `<h4>El stock de este producto llegó a su límite</h4>`,
-        });
-      }
-      // if(cantidad < 1 || cantidad == ''){
-      //     $("#cantidad"+idProducto).val(1);
-      // }
-    },
-  });
-}
+          Toast.fire({
+            icon: "warning",
+            title: `<h4>El stock de este producto llegó a su límite</h4>`,
+          });
+        }
+        // if(cantidad < 1 || cantidad == ''){
+        //     $("#cantidad"+idProducto).val(1);
+        // }
+      },
+    });
+  }
 });
 
 function validarStock(idProducto, cantidad) {
   let datos = { idProducto: idProducto };
-  
+
   $.ajax({
     method: "POST",
     url: "ajax/productos.ajax.php",
     data: datos,
     dataType: "json",
-    beforeSend: function () {},
+    beforeSend: function () { },
     success: function (respuesta) {
       let stockProducto = respuesta["stock"];
 
@@ -625,7 +628,7 @@ function validarStockPos(idProducto, cantidad) {
     url: "ajax/productos.ajax.php",
     data: datos,
     dataType: "json",
-    beforeSend: function () {},
+    beforeSend: function () { },
     success: function (respuesta) {
       let stockProducto = respuesta["stock"];
 
@@ -681,7 +684,7 @@ $(document).on("click", ".btnCodigoBarra", function (e) {
     method: "POST",
     url: "ajax/barcode.ajax.php",
     data: datos,
-    beforeSend: function () {},
+    beforeSend: function () { },
     success: function (respuesta) {
       $(".reload-all").hide();
       Swal.fire({
@@ -814,19 +817,19 @@ $(document).on("click", ".btnActualizarSeries", function (e) {
 });
 
 $(document).on("click", ".btn-nueva-serie", function (e) {
-e.preventDefault();
-var idproductoS = $("#idproductoSnuevo").val();
+  e.preventDefault();
+  var idproductoS = $("#idproductoSnuevo").val();
   var data = $("#aSeries").serialize();
   $.ajax({
     method: "POST",
     url: "ajax/productos.ajax.php",
     data: data,
     success: function (datos) {
-     if(datos != 'error'){
-      $(".eliminar_item").remove();
-      $('#aSeries').each(function(){
-				this.reset();
-      });
+      if (datos != 'error') {
+        $(".eliminar_item").remove();
+        $('#aSeries').each(function () {
+          this.reset();
+        });
         const Toast = Swal.mixin({
           toast: true,
           position: "top-end",
@@ -847,35 +850,35 @@ var idproductoS = $("#idproductoSnuevo").val();
           html: ``,
         });
         var data = { idproductoS: idproductoS };
-      $.ajax({
-        method: "POST",
-        url: "vistas/modulos/productos-series.php",
-        data: data,
-        success: function (datos) {
-          $(".contenido-inputs").html(datos);
-        },
-      });
-    }else{
-      const Toast = Swal.mixin({
-        toast: true,
-        position: "top-end",
-        // width: 600,
-        // padding: '3em',
-        showConfirmButton: false,
-        timer: 2500,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-          toast.addEventListener("mouseenter", Swal.stopTimer);
-          toast.addEventListener("mouseleave", Swal.resumeTimer);
-        },
-      });
+        $.ajax({
+          method: "POST",
+          url: "vistas/modulos/productos-series.php",
+          data: data,
+          success: function (datos) {
+            $(".contenido-inputs").html(datos);
+          },
+        });
+      } else {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          // width: 600,
+          // padding: '3em',
+          showConfirmButton: false,
+          timer: 2500,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener("mouseenter", Swal.stopTimer);
+            toast.addEventListener("mouseleave", Swal.resumeTimer);
+          },
+        });
 
-      Toast.fire({
-        icon: "error",
-        title: `<div style="font-size: 1.5em; color: #2B5DD2;">LLENE LAS SERIES</div`,
-        html: ``,
-      });
-    }
+        Toast.fire({
+          icon: "error",
+          title: `<div style="font-size: 1.5em; color: #2B5DD2;">LLENE LAS SERIES</div`,
+          html: ``,
+        });
+      }
     },
   });
 });
@@ -895,17 +898,17 @@ $(document).on("change", "#Seriesdisponibles", function () {
     url: "ajax/productos.ajax.php",
     data: data,
     success: function (datos) {
-      if(datos == 'ok'){
-      var data = { idproductoS: idproductoS };
-      $.ajax({
-        method: "POST",
-        url: "vistas/modulos/productos-series.php",
-        data: data,
-        success: function (datos) {
-          $(".contenido-inputs").html(datos);
-        },
-      });
-    }
+      if (datos == 'ok') {
+        var data = { idproductoS: idproductoS };
+        $.ajax({
+          method: "POST",
+          url: "vistas/modulos/productos-series.php",
+          data: data,
+          success: function (datos) {
+            $(".contenido-inputs").html(datos);
+          },
+        });
+      }
     },
   });
 });
@@ -914,14 +917,14 @@ $(document).on("change", "#Seriesdisponibles", function () {
 $(document).on("change", "#serieA", function () {
   var idSerie = $(this).attr("idSerie");
   var numserie = $(this).val();
- 
+
   var data = { idSerie: idSerie, numserie: numserie };
   $.ajax({
     method: "POST",
     url: "ajax/productos.ajax.php",
     data: data,
     success: function (datos) {
-      if(datos == 'ok'){
+      if (datos == 'ok') {
         const Toast = Swal.mixin({
           toast: true,
           position: "top-end",
@@ -941,23 +944,23 @@ $(document).on("change", "#serieA", function () {
           title: `<div style="font-size: 1.5em; color: #2B5DD2;">LA SERIE FUE ACTUALIZADA</div`,
           html: ``,
         });
-    }
+      }
     },
   });
 });
 
-$(document).on('click', '.btn-eliminar-serie-bd', function(e){
+$(document).on('click', '.btn-eliminar-serie-bd', function (e) {
   e.preventDefault();
   var idSerieEliminar = $(this).attr('idSerie');
-  var data ={idSerieEliminar:idSerieEliminar};
+  var data = { idSerieEliminar: idSerieEliminar };
   $.ajax({
     method: "POST",
     url: "ajax/productos.ajax.php",
     data: data,
     success: function (datos) {
-      if(datos == 'ok'){
-         $("#eliminar_seccion_serie"+idSerieEliminar).fadeOut(500);
-         const Toast = Swal.mixin({
+      if (datos == 'ok') {
+        $("#eliminar_seccion_serie" + idSerieEliminar).fadeOut(500);
+        const Toast = Swal.mixin({
           toast: true,
           position: "top-end",
           // width: 600,

@@ -122,6 +122,17 @@ class AjaxGuia
 
         $respuesta = ControladorGuiaRemision::ctrLlenarCarritoGuia($carritoG);
     }
+    
+    public function ajaxActualizarCarroGuia() {
+        $postColor = '';
+        $postPartida = '';
+        $postCantidad = '';
+        $postBultos = '';
+        $postPeso = '';
+        $idProducto = $_POST['idProducto'];
+        $idsucursal = $_POST['idSucursal'];
+    }
+
     public function ajaxLlenaCarroGuia()
     {
         $series = '';
@@ -297,9 +308,12 @@ if (isset($_POST['numCorrelativo'])) {
     $objSerieNota->ajaxLlenarGuia();
 }
 if (isset($_POST['idProducto'])) {
-
     $objSerieNota = new AjaxGuia();
     $objSerieNota->ajaxLlenaCarroGuia();
+}
+if (isset($_POST['idProducto_update'])) {
+    $objSerieNota = new AjaxGuia();
+    $objSerieNota->ajaxActualizarCarroGuia();
 }
 if (isset($_POST['serieCorrelativo'])) {
     $objSerieNota = new AjaxGuia();

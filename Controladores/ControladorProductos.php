@@ -69,14 +69,7 @@ class ControladorProductos
             if (isset($productos['nuevaDescripcion'])) {
 
                 if (isset($productos['nuevoCodigo']) && strlen($productos['nuevoCodigo']) > 4) {
-                    if (
-                        preg_match('/^[0-9.]+$/', $productos['nuevoPrecioCompra']) &&
-                        preg_match('/^[0-9.]+$/', $productos['nuevoPrecioUnitario']) && !empty($productos['nuevaCategoria'])
-                    ) {
-
-
-
-
+                    if (!empty($productos['nuevaCategoria'])) {
                         //  VALIDAR IMAGEN   
                         $rutabd = "vistas/img/productos/default/anonymous.png";
                         if (isset($file["nuevaImagen"]["tmp_name"]) && !empty($file["nuevaImagen"]["tmp_name"])) {
@@ -127,13 +120,9 @@ class ControladorProductos
                             "descripcion" => $productos['nuevaDescripcion'],
                             "stock" => $productos['nuevoStock'],
                             "tipo_precio" => '01',
-                            "valor_unitario" => $productos['nuevoValorUnitario'],
-                            "precio_unitario" => $productos['nuevoPrecioUnitario'],
-                            "precio_compra" => $productos['nuevoPrecioCompra'],
-                            "precio_pormayor" => $_POST['nuevoPrecioMayor'],
-                            "igv" => $productos['nuevoigv'],
                             "imagen" => $rutabd,
-                            "id_sucursal" => $productos['nuevaSucursal']
+                            "id_sucursal"  => $productos['nuevaSucursal'],
+                            'id_proveedor' => isset($productos['itemProveedor']) ? $productos['itemProveedor'] : null
                         );
 
                         $respuesta = ModeloProductos::mdlCrearProducto($tabla, $datos);
@@ -234,17 +223,13 @@ class ControladorProductos
             $datos = array(
                 "id" => $_POST['editarid'],
                 "id_categoria" => $_POST['editarCategoria'],
+                "id_proveedor" => $_POST['itemEditarProveedor'],
                 "codigo" => $_POST['editarCodigo'],
                 "serie" => $_POST['editarSerie'],
                 "codigoafectacion" => $_POST['editarAfectacion'],
                 "unidad" => $_POST['editarUnidadMedida'],
                 "descripcion" => $_POST['editarDescripcion'],
                 "stock" => $_POST['editarStock'],
-                "valor_unitario" => $_POST['editarValorUnitario'],
-                "precio_unitario" => $_POST['editarPrecioUnitario'],
-                "precio_compra" => $_POST['editarPrecioCompra'],
-                "precio_pormayor" => $_POST['editarPrecioMayor'],
-                "igv" => $_POST['editarigv'],
                 "imagen" => $ruta,
                 "id_sucursal" => $_POST['editarSucursal']
             );

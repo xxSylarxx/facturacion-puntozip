@@ -156,22 +156,23 @@ class ModeloProductos
         $item = null;
         $valor = null;
         $respuesta = ControladorSucursal::ctrSucursalPrincipal($item, $valor);
-        $stmt = Conexion::conectar()->prepare("INSERT INTO $tabla(id_categoria, id_sucursal, codigo, serie, descripcion, imagen, stock, tipo_precio, valor_unitario, precio_pormayor,  precio_unitario, precio_compra, igv, codigoafectacion, codunidad) VALUES (:id_categoria, :id_sucursal, :codigo, :serie, :descripcion, :imagen, :stock, :tipo_precio, :valor_unitario, :precio_pormayor,  :precio_unitario, :precio_compra, :igv,  :codigoafectacion, :codunidad)");
+        $stmt = Conexion::conectar()->prepare("INSERT INTO $tabla(id_categoria, id_sucursal, id_proveedor, codigo, serie, descripcion, imagen, stock, codigoafectacion, codunidad) VALUES (:id_categoria, :id_sucursal, :id_proveedor, :codigo, :serie, :descripcion, :imagen, :stock, :codigoafectacion, :codunidad)");
 
         if (isset($datos['id_sucursal']) && $datos['id_sucursal']  != 'todos') {
             $stmt->bindParam(":id_categoria", $datos['id_categoria'], PDO::PARAM_INT);
             $stmt->bindParam(":id_sucursal", $datos['id_sucursal'], PDO::PARAM_INT);
+            $stmt->bindParam(":id_proveedor", $datos['id_proveedor'], PDO::PARAM_INT);
             $stmt->bindParam(":codigo", $datos['codigo'], PDO::PARAM_STR);
             $stmt->bindParam(":serie", $datos['serie'], PDO::PARAM_STR);
             $stmt->bindParam(":descripcion", $datos['descripcion'], PDO::PARAM_STR);
             $stmt->bindParam(":imagen", $datos['imagen'], PDO::PARAM_STR);
             $stmt->bindParam(":stock", $datos['stock'], PDO::PARAM_STR);
-            $stmt->bindParam(":tipo_precio", $datos['tipo_precio'], PDO::PARAM_STR);
+            /* $stmt->bindParam(":tipo_precio", $datos['tipo_precio'], PDO::PARAM_STR);
             $stmt->bindParam(":valor_unitario", $datos['valor_unitario'], PDO::PARAM_STR);
             $stmt->bindParam(":precio_pormayor", $datos['precio_pormayor'], PDO::PARAM_STR);
             $stmt->bindParam(":precio_unitario", $datos['precio_unitario'], PDO::PARAM_STR);
-            $stmt->bindParam(":precio_compra", $datos['precio_compra'], PDO::PARAM_STR);
-            $stmt->bindParam(":igv", $datos['igv'], PDO::PARAM_STR);
+            $stmt->bindParam(":precio_compra", $datos['precio_compra'], PDO::PARAM_STR); 
+            $stmt->bindParam(":igv", $datos['igv'], PDO::PARAM_STR); */
             $stmt->bindParam(":codigoafectacion", $datos['codigoafectacion'], PDO::PARAM_STR);
             $stmt->bindParam(":codunidad", $datos['unidad'], PDO::PARAM_STR);
 
@@ -187,17 +188,18 @@ class ModeloProductos
             foreach ($respuesta as $k => $value) {
                 $stmt->bindParam(":id_categoria", $datos['id_categoria'], PDO::PARAM_INT);
                 $stmt->bindParam(":id_sucursal", $value['id'], PDO::PARAM_INT);
+                $stmt->bindParam(":id_proveedor", $datos['proveedor'], PDO::PARAM_INT);
                 $stmt->bindParam(":codigo", $datos['codigo'], PDO::PARAM_STR);
                 $stmt->bindParam(":serie", $datos['serie'], PDO::PARAM_STR);
                 $stmt->bindParam(":descripcion", $datos['descripcion'], PDO::PARAM_STR);
                 $stmt->bindParam(":imagen", $datos['imagen'], PDO::PARAM_STR);
                 $stmt->bindParam(":stock", $datos['stock'], PDO::PARAM_STR);
-                $stmt->bindParam(":tipo_precio", $datos['tipo_precio'], PDO::PARAM_STR);
+                /* $stmt->bindParam(":tipo_precio", $datos['tipo_precio'], PDO::PARAM_STR);
                 $stmt->bindParam(":valor_unitario", $datos['valor_unitario'], PDO::PARAM_STR);
                 $stmt->bindParam(":precio_pormayor", $datos['precio_pormayor'], PDO::PARAM_STR);
                 $stmt->bindParam(":precio_unitario", $datos['precio_unitario'], PDO::PARAM_STR);
                 $stmt->bindParam(":precio_compra", $datos['precio_compra'], PDO::PARAM_STR);
-                $stmt->bindParam(":igv", $datos['igv'], PDO::PARAM_STR);
+                $stmt->bindParam(":igv", $datos['igv'], PDO::PARAM_STR); */
                 $stmt->bindParam(":codigoafectacion", $datos['codigoafectacion'], PDO::PARAM_STR);
                 $stmt->bindParam(":codunidad", $datos['unidad'], PDO::PARAM_STR);
 
@@ -210,23 +212,19 @@ class ModeloProductos
     public static function mdlEditarProducto($tabla, $datos)
     {
 
-        $stmt = Conexion::conectar()->prepare("UPDATE $tabla set id = :id, id_categoria = :id_categoria, id_sucursal=:id_sucursal, codigo=:codigo, serie = :serie, descripcion = :descripcion, imagen = :imagen, stock = :stock, precio_compra = :precio_compra,  precio_unitario =  :precio_unitario, valor_unitario = :valor_unitario, precio_pormayor = :precio_pormayor, igv = :igv, codigoafectacion = :codigoafectacion, codunidad = :codunidad WHERE id = :id");
+        $stmt = Conexion::conectar()->prepare("UPDATE $tabla set id = :id, id_categoria = :id_categoria, id_proveedor = :id_proveedor, id_sucursal=:id_sucursal, codigo=:codigo, serie = :serie, descripcion = :descripcion, imagen = :imagen, stock = :stock, codigoafectacion = :codigoafectacion, codunidad = :codunidad WHERE id = :id");
 
         $stmt->bindParam(":id", $datos['id'], PDO::PARAM_INT);
         $stmt->bindParam(":id_categoria", $datos['id_categoria'], PDO::PARAM_INT);
         $stmt->bindParam(":id_sucursal", $datos['id_sucursal'], PDO::PARAM_INT);
+        $stmt->bindParam(":id_proveedor", $datos['id_proveedor'], PDO::PARAM_INT);
         $stmt->bindParam(":serie", $datos['serie'], PDO::PARAM_STR);
         $stmt->bindParam(":codigo", $datos['codigo'], PDO::PARAM_STR);
         $stmt->bindParam(":descripcion", $datos['descripcion'], PDO::PARAM_STR);
         $stmt->bindParam(":imagen", $datos['imagen'], PDO::PARAM_STR);
         $stmt->bindParam(":stock", $datos['stock'], PDO::PARAM_STR);
-        $stmt->bindParam(":precio_compra", $datos['precio_compra'], PDO::PARAM_STR);
-        $stmt->bindParam(":precio_unitario", $datos['precio_unitario'], PDO::PARAM_STR);
-        $stmt->bindParam(":valor_unitario", $datos['valor_unitario'], PDO::PARAM_STR);
-        $stmt->bindParam(":precio_pormayor", $datos['precio_pormayor'], PDO::PARAM_STR);
         $stmt->bindParam(":codigoafectacion", $datos['codigoafectacion'], PDO::PARAM_STR);
         $stmt->bindParam(":codunidad", $datos['unidad'], PDO::PARAM_STR);
-        $stmt->bindParam(":igv", $datos['igv'], PDO::PARAM_STR);
 
         if ($stmt->execute()) {
             return   'ok';
@@ -505,8 +503,7 @@ class ModeloProductos
     
                 $stmt->execute();
                 return $stmt->fetchAll();
-            }
-    
+            }    
             $stmt->close();
             $stmt = null;
         }

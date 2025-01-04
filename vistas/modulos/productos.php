@@ -4,6 +4,7 @@ use Controladores\ControladorEmpresa;
 use Controladores\ControladorSucursal;
 use Controladores\ControladorProductos;
 use Controladores\ControladorCategorias;
+use Controladores\ControladorProveedores;
 use Controladores\ControladorSunat;
 
 $empresa_igv = ControladorEmpresa::ctrEmisor();
@@ -320,6 +321,27 @@ $sucursal = ControladorSucursal::ctrSucursal();
 
               </div>
 
+              <!-- ENTRADA PARA PROVEEDORES -->
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <div class="kardex-contenedor">
+                      <div class="form-group busca-pro-kardex select">
+                        <select class="form-control select2" style="width: 100%;" name="itemProveedores" id="itemProveedores">
+                          <option value="">-SELECCIONAR PROVEEDOR-</option>
+                          <?php
+                          $proveedores = ControladorProveedores::ctrMostrarProveedores(null, null);
+                          foreach ($proveedores as $v) {
+                            echo '<option value="' . $v['id'] . '">' . ($v['nombre'] . $v['razon_social']) . '</option>';
+                          }
+                          ?>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               <!-- ENTRADA PARA LA DESCRIPCIÓN -->
               <div class="row">
                 <div class="col-md-9">
@@ -543,64 +565,26 @@ $sucursal = ControladorSucursal::ctrSucursal();
                 <!-- ENTRADA PARA STOCK -->
                 <div class="col-md-3">
                   <div class="form-group">
-
                     <input type="number" class="form-control " min="0" name="editarStock" id="editarStock" required>
-
                   </div>
                 </div>
               </div>
-              <!-- ENTRADA PARA PRECIO VENTA-->
               <div class="row">
-                <div class="col-md-6">
-                  <div class="form-group">
-
-
-                    <input type="text" class="form-control" name="editarPrecioUnitario" id="editarPrecioUnitario" placeholder="Ingresar precio de venta" step="any" required>
-
-                  </div>
-                </div>
-
-                <!-- ENTRADA PARA PRECIO COMPRA -->
-                <div class="col-md-6">
-
-                  <div class="form-group">
-
-
-                    <input type="text" class="form-control" name="editarValorUnitario" id="editarValorUnitario" placeholder="Valor unitario" step="any" readonly required>
-
+                <div class="col-md-12">
+                  <label for="">PROVEEDOR:</label>
+                  <div class="form-group select">
+                    <select class="form-control select2" style="width: 100%;" name="itemEditarProveedor" id="itemEditarProveedor">
+                      <option value="">-SELECCIONAR PROVEEDOR-</option>
+                      <?php
+                      $proveedores = ControladorProveedores::ctrMostrarProveedores(null, null);
+                      foreach ($proveedores as $v) {
+                        echo '<option value="' . $v['id'] . '">' . ($v['nombre'] . $v['razon_social'])  . '</option>';
+                      }
+                      ?>
+                    </select>
                   </div>
                 </div>
               </div>
-
-              <!-- CHECKBOX PARA PORCENTAJE -->
-              <div class="row">
-                <div class="col-md-4">
-
-                  <div class="form-group">
-
-                    <input type="text" class="form-control" name="editarigv" id="editarigv" placeholder="Ingresar IGV" readonly>
-
-                  </div>
-                </div>
-
-                <!-- ENTRADA IGV  -->
-                <div class="col-md-4">
-                  <div class="form-group">
-
-                    <input type="number" class="form-control" name="editarPrecioMayor" id="editarPrecioMayor" placeholder="Precio compra" step="0.01" min="0">
-
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="form-group">
-
-                    <input type="number" class="form-control" name="editarPrecioCompra" id="editarPrecioCompra" placeholder="Precio compra" step="0.01" min="0">
-
-                  </div>
-                </div>
-                <!-- ENTRADA PARA SUBIR FOTO -->
-              </div>
-
               <div class="row">
                 <!-- ENTRADA PARA SELECCIONAR SU PERFIL -->
                 <div class="col-md-12">
@@ -716,7 +700,7 @@ $sucursal = ControladorSucursal::ctrSucursal();
               </div>
               <div role="tabpanel" class="tab-pane" id="profile">
                 <form action="" id="aSeries" name="aSeries">
-                <input type="hidden" id="idproductoSnuevo" name="idproductoSnuevo">
+                  <input type="hidden" id="idproductoSnuevo" name="idproductoSnuevo">
                   <div class="series-productos-agregar">
                     <div class="input-group" style="margin: 0 auto;">
                       <input type="text" class="form-control" name="seriepn[]" id="seriepn" placeholder="INGRESE NUEVA SERIE">
