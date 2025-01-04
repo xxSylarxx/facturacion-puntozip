@@ -983,3 +983,63 @@ $(document).on('click', '.btn-eliminar-serie-bd', function (e) {
     }
   })
 })
+
+
+function calcularPesoTotal() {
+  let suma = 0;
+  $('.tabla-items .input-peso').each(function () {
+    let valor = parseFloat($(this).val());
+    if (!isNaN(valor)) {
+      suma += valor;
+    }
+  });
+  $('#pesoBruto').val(suma);
+}
+
+function calcularBultosTotal() {
+  let suma = 0;
+  $('.tabla-items .input-bultos').each(function () {
+    let valor = parseFloat($(this).val());
+    if (!isNaN(valor)) {
+      suma += valor;
+    }
+  });
+  $('#numeroBultos').val(suma);
+}
+
+function actualizarGuiaProductos(idProducto_update, campo, valor) {
+  let data = {
+    idProducto_update,
+    campo,
+    valor
+  }
+  $.ajax({
+    method: "POST",
+    url: "ajax/crear-guia.ajax.php",
+    data: data,
+    success: function (datos) {
+      console.log(datos);
+    }
+  });
+}
+
+$('body').on('keyup change', '.input-peso', function () {
+  const idProducto = $(this).attr('cod');
+  const valor = $(this).val();
+  calcularPesoTotal();
+  actualizarGuiaProductos(idProducto, 'peso', valor);
+});
+
+$('body').on('keyup change', '.input-bultos', function () {
+  const idProducto = $(this).attr('cod');
+  const valor = $(this).val();
+  calcularBultosTotal();
+  actualizarGuiaProductos(idProducto, 'bultos', valor);
+});
+
+$('body').on('change', '.input-prod', function () {
+  const idProducto = $(this).attr('cod');
+  const campo = $(this).attr('campo');
+  const valor = $(this).val();
+  actualizarGuiaProductos(idProducto, campo, valor);
+});

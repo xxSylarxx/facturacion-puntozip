@@ -336,9 +336,10 @@ $id_sucursal = isset($_POST['idSucursal']) ? $_POST['idSucursal']
                           <h3>3</h3>
                         </label> Datos del transporte:</legend>
 
-                      <div class="col-md-6">
+                      <div class="col-md-3">
                         <div class="form-group">
                           <div class="kardex-contenedor">
+                            <input type="hidden" name="tipoDocTransporte" id="tipoDocTransporte" value="1">
                             <div class="form-group busca-pro-kardex select">
                               <label for="">Conductor encargado:</label>
                               <select class="form-control select2" style="width: 100%;" name="listConductores" id="listConductores">
@@ -346,11 +347,19 @@ $id_sucursal = isset($_POST['idSucursal']) ? $_POST['idSucursal']
                                 <?php
                                 $conductores = ControladorConductores::ctrMostrarConductores(null, null);
                                 foreach ($conductores as $v) {
-                                  echo '<option value="' . $v['id'] . '" data-nombre="' . $v['nombres'] . '" data-apellidos="' . $v['apellidos'] . '" data-placa="' . $v['numplaca'] . '" data-brevete="' . $v['numbrevete'] . '">' . $v['numdoc'] . ' - ' . $v['apellidos'] . ', ' . $v['nombres'] . '</option>';
+                                  echo '<option value="' . $v['id'] . '" data-nombre="' . $v['nombres'] . '" data-apellidos="' . $v['apellidos'] . '" data-placa="' . $v['numplaca'] . '" data-brevete="' . $v['numbrevete'] . '" data-numdoc="' . $v['numdoc'] .'">' . $v['numdoc'] . ' - ' . $v['apellidos'] . ', ' . $v['nombres'] . '</option>';
                                 }
                                 ?>
                               </select>
                             </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <div class="input-group-">
+                            <label for="" class="nombreRazon">N° DNI del conductor <span style="color:red; border-style: none !important; font-size:20px;">*</span> </label>
+                            <input type="text" class="form-control" id="docTransporte" name="docTransporte" placeholder="Ingrese número de documento...">
                           </div>
                         </div>
                       </div>
@@ -569,14 +578,14 @@ $id_sucursal = isset($_POST['idSucursal']) ? $_POST['idSucursal']
                             <tr>
                               <th>Código</th>
                               <th>Descripción</th>
-                              <th style="max-width: 140px; width: 140px;">Color</th>
-                              <th>UND</th>
+                              <th style="max-width: 130px; width: 130px;">Color</th>
+                              <th style="max-width: 150px; width: 150px;">UND.M</th>
                               <th style="max-width: 120px; width: 120px;">P.O</th>
                               <th>Partida</th>
-                              <th style="max-width: 110px; width: 110px;">Cantidad</th>
-                              <th>Bultos</th>
+                              <th style="max-width: 100px; width: 100px;">Cantidad</th>
+                              <th style="max-width: 130px; width: 130px;">Bultos</th>
                               <th style="max-width: 130px; width: 130px;">Peso</th>
-                              <th style="max-width: 130px; width: 130px;">Opciones</th>
+                              <th style="max-width: 110px; width: 110px;">Opciones</th>
                             </tr>
                           </thead>
                           <tbody id="itemsPG">

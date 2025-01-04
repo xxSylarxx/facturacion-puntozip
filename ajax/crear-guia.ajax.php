@@ -122,21 +122,33 @@ class AjaxGuia
 
         $respuesta = ControladorGuiaRemision::ctrLlenarCarritoGuia($carritoG);
     }
-    
-    public function ajaxActualizarCarroGuia() {
-        $postColor = '';
-        $postPartida = '';
-        $postCantidad = '';
-        $postBultos = '';
-        $postPeso = '';
-        $idProducto = $_POST['idProducto'];
-        $idsucursal = $_POST['idSucursal'];
+
+    public function ajaxActualizarCarroGuia()
+    {
+        if (isset($_POST['idProducto_update'])) {
+            $idProducto = $_POST['idProducto_update'];
+            $campo = $_POST['campo'];
+            $carritoG = $_SESSION['carritoG'];
+            $item = count($carritoG) + 1;
+            foreach ($carritoG as $k => $v) {
+                if ($v['codigo'] == $idProducto) {
+                    $item = $k;
+                    break;
+                }
+            }
+            $carritoG[$item][$campo] = $_POST['valor'];
+            $_SESSION['carritoG'] = $carritoG;
+            echo 'OK';
+        } else {
+            echo 'ERROR';
+        }
+        die();
     }
 
     public function ajaxLlenaCarroGuia()
     {
         $series = '';
-        if(isset($_POST['serieG'])){
+        if (isset($_POST['serieG'])) {
             $series = $_POST['serieG'];
         }
         $idProducto = $_POST['idProducto'];
@@ -163,15 +175,17 @@ class AjaxGuia
                 }
             }
 
-
-
             $carritoG[$item] = array(
                 'id' => $producto['id'],
                 'codigo' => $producto['codigo'],
                 'descripcion' => $producto['descripcion'],
                 'unidad' => $producto['codunidad'],
                 'cantidad' => $cantidad,
-
+                'peso' => '0',
+                'bultos' => '0',
+                'color' => '',
+                'PO' => '',
+                'partida' => ''
             );
         }
 
@@ -282,7 +296,6 @@ class AjaxGuia
         // var_dump($codigosSunat);
         $guiaActualizar = ControladorGuiaRemision::ctrActualizarCDR($idGuia, $codigosSunat);
     }
-
 }
 
 if (isset($_POST['modalidadTraslado'])) {

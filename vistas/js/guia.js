@@ -98,10 +98,12 @@ $('#listConductores').change(function () {
   let conductorApellidos = $("#listConductores").find('option:selected').data('apellidos');
   let conductorBrevete = $("#listConductores").find('option:selected').data('brevete');
   let conductorPlaca = $("#listConductores").find('option:selected').data('placa');
+  let conductorDoc = $("#listConductores").find('option:selected').data('numdoc');
   $("#nombreRazon").val(conductorNombres);
   $("#apellidosRazon").val(conductorApellidos);
   $("#placa").val(conductorPlaca);
   $("#numBrevete").val(conductorBrevete);
+  $("#docTransporte").val(conductorDoc);
 });
 
 // ELIMINAR ITEM DEL CARRO

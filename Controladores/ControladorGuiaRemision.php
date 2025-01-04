@@ -9,6 +9,7 @@ use Modelos\ModeloProductos;
 use Modelos\ModeloClientes;
 use Controladores\ControladorEmpresa;
 use Controladores\ControladorSucursal;
+use Controladores\ControladorSunat;
 use api\GeneradorXML;
 use api\ApiFacturacion;
 
@@ -63,31 +64,32 @@ class ControladorGuiaRemision
     // LLENAR CARRITO DE COMPRAS
     public static function ctrLlenarCarritoGuia($carritoG)
     {
-        /* 
-        echo "<td>" . $v['codigo'] . "</td>
-                <td>" . $v['cantidad'] . "</td>
-                <td>" . $v['unidad'] . "</td>
-                <td>" . $v['descripcion'] . "<br/>
-        */
-
+        $unidad_medida = ControladorSunat::ctrMostrarUnidadMedida(null, null);
         foreach ($carritoG as $k => $v) {
-
-
             echo "<tr class='id-eliminar" . $k . "'>";
-            echo "<td>" . $v['codigo'] . "</td>
+            $response =  "<td>" . $v['codigo'] . "</td>
                 <td>" . $v['descripcion'] . "<br/>
                     <input type='text' class='datos-adicionales-item-guia' id='descripcion' name='descripcion[]' placeholder='DATOS ADICIONALES' onkeyup='this.value = this.value.toUpperCase();'>
                 </td>
-                <td><input type='text' class='form-control' placeholder='Color'></td>
-                <td>" . $v['unidad'] . "</td>
-                <td><input type='text' class='form-control' placeholder='P.O'></td>
-                <td><input type='text' class='form-control' placeholder='Partida'></td>
-                <td><input type='text' class='form-control' placeholder='Cantidad' value='". $v['cantidad'] ."'></td>
-                <td><input type='text' class='form-control' placeholder='Bultos'></td>
-                <td><input type='text' class='form-control' placeholder='Peso'></td>
+                <td><input type='text' class='form-control input-prod' cod='" . $v['codigo'] . "' campo='color' placeholder='Color' value='". $v['color'] ."'></td>
+                <td>
+                    <select class='form-control input-prod'> cod='" . $v['codigo'] . "' campo='unidad'";
+            $undHtml = '';
+            foreach ($unidad_medida as $m) {
+                $undHtml .= '<option value="' . $m['codigo'] . '" ' . ($v['unidad'] == $m['codigo'] ? 'selected' : '') . '>' . $m['descripcion'] . '</option>';
+            }
+            $response .= $undHtml;
+            $response .=  "</select>
+                </td>
+                <td><input type='text' class='form-control input-prod' cod='" . $v['codigo'] . "' campo='PO' value='". $v['PO'] ."' placeholder='P.O'></td>
+                <td><input type='text' class='form-control input-prod' cod='" . $v['codigo'] . "' campo='partida' value='". $v['partida'] ."' placeholder='Partida'></td>
+                <td><input type='text' class='form-control input-prod' cod='" . $v['codigo'] . "' campo='cantidad' placeholder='Cantidad' value='" . $v['cantidad'] . "'></td>
+                <td><input type='number' class='form-control input-bultos' cod='" . $v['codigo'] . "' campo='bultos' value='". $v['bultos'] ."' placeholder='Bultos'></td>
+                <td><input type='number' class='form-control input-peso' cod='" . $v['codigo'] . "' campo='peso' value='". $v['peso'] ."' placeholder='Peso'></td>
                 <td><button type='button' class='btn btn-danger btn-xs btnEliminarItemCarroG' itemEliminar='" . $k . "'><i class='fas fa-trash-alt'></i></button>
                     <button type='button' class='btn btn-primary btn-xs btnAgregarSerieG' idProductoG='" . $v['id'] . "'><i class='fa fa-barcode'  data-toggle='modal' data-target='#modalEditarProductoSeries'></i></button>
                 </td>";
+            echo $response;
             echo  "</tr>";
         }
     }
@@ -98,6 +100,13 @@ class ControladorGuiaRemision
         $respuesta = ModeloGuiaRemision::mdlGuardarGuia($id_sucursal, $datosGuia, $codigosSunat, $ticket);
         return $respuesta;
     }
+
+    public static function ctrGuardarGuiaSinSunat($id_sucursal, $datosGuia)
+    {
+        $respuesta = ModeloGuiaRemision::mdlGuardarGuiaSinEnviarSunat($id_sucursal, $datosGuia);
+        return $respuesta;
+    }
+
     public static function ctrCrearGuia($datosForm)
     {
 
@@ -335,16 +344,22 @@ class ControladorGuiaRemision
                             );
                         }
                     }
+                    $datos = array(
+                        'id' => $datosForm['serie'],
+                        'correlativo' => $datosGuia['guia']['correlativo'],
+                    );
+                    $id_sucursal = $datosForm['idSucursal'];
+                    $actualizarSerie = ControladorSunat::ctrActualizarCorrelativo($datos);
+                    $guardarGuia = ControladorGuiaRemision::ctrGuardarGuia($id_sucursal, $datosGuia, $codigosSunat, $ticket);
+                } else {
+                    $datos = array(
+                        'id' => $datosForm['serie'],
+                        'correlativo' => $datosGuia['guia']['correlativo'],
+                    );
+                    $id_sucursal = $datosForm['idSucursal'];
+                    $actualizarSerie = ControladorSunat::ctrActualizarCorrelativo($datos);
+                    $guardarGuia = ControladorGuiaRemision::ctrGuardarGuiaSinSunat($id_sucursal, $datosGuia);
                 }
-
-
-                $datos = array(
-                    'id' => $datosForm['serie'],
-                    'correlativo' => $datosGuia['guia']['correlativo'],
-                );
-                $id_sucursal = $datosForm['idSucursal'];
-                $actualizarSerie = ControladorSunat::ctrActualizarCorrelativo($datos);
-                $guardarGuia = ControladorGuiaRemision::ctrGuardarGuia($id_sucursal, $datosGuia, $codigosSunat, $ticket);
                 $guiaid = ModeloGuiaRemision::mdlObtenerUltimoComprobanteIdGuia();
                 $idGuia = $guiaid['id'];
 
