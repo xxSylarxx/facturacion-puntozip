@@ -117,22 +117,25 @@ class ModeloGuiaRemision
     // GUARDAR DETALLES VENTA CARRITO EN LA BD
     public static function mdlInsertarDetallesGuia($idGuia, $detalle)
     {
-
-        $stmt = Conexion::conectar()->prepare("INSERT INTO guia_detalle(id_guia, indexg, id_producto, codSunat, cantidad)
-        VALUES (:id_guia, :indexg, :id_producto, :codSunat, :cantidad)");
+        $stmt = Conexion::conectar()->prepare("INSERT INTO guia_detalle(id_guia, indexg, id_producto, codSunat, cantidad, peso, bultos, PO, color, partida)
+        VALUES (:id_guia, :indexg, :id_producto, :codSunat, :cantidad, :peso, :bultos, :PO, :color, :partida)");
         foreach ($detalle as $k => $v) {
             $stmt->bindParam(":id_guia", $idGuia, PDO::PARAM_INT);
             $stmt->bindParam(":indexg", $v['index'], PDO::PARAM_INT);
             $stmt->bindParam(":id_producto", $v['id_producto'], PDO::PARAM_INT);
             $stmt->bindParam(":codSunat", $v['codProdSunat'], PDO::PARAM_STR);
             $stmt->bindParam(":cantidad", $v['cantidad'], PDO::PARAM_STR);
-
+            $stmt->bindParam(":peso", $v['peso'], PDO::PARAM_STR);
+            $stmt->bindParam(":bultos", $v['bultos'], PDO::PARAM_STR);
+            $stmt->bindParam(":PO", $v['PO'], PDO::PARAM_STR);
+            $stmt->bindParam(":color", $v['color'], PDO::PARAM_STR);
+            $stmt->bindParam(":partida", $v['partida'], PDO::PARAM_STR);
             $stmt->execute();
         }
     }
     public static function mdlGuardarGuia($id_sucursal, $datosGuia, $codigosSunat, $ticket)
     {
-        $stmt = Conexion::conectar()->prepare("INSERT INTO guia(id, id_sucursal, id_cliente, cli_tipodoc, tipodoc, serie, correlativo, fecha_emision, hora, comp_ref, baja_numdoc, baja_tipodoc, rel_numdoc, rel_tipodoc, terceros_tipodoc, terceros_numdoc, terceros_nombrerazon, cod_traslado, uniPeso, pesoTotal, numBultos, indTransbordo, modTraslado, fechaTraslado, transp_tipoDoc, transp_numDoc, transp_nombreRazon, transp_placa, tipoDocChofer, numDocChofer, observacion, ubigeoPartida, direccionPartida, ubigeoLlegada, direccionLlegada, feestado, fecodigoerror, femensajesunat, nombrexml, xmlbase64, cdrbase64, tipovehiculo, descripcion, ticket, series) VALUES (NULL, :id_sucursal, :id_cliente, :cli_tipodoc, :tipodoc, :serie, :correlativo, :fecha_emision, :hora, :comp_ref, :baja_numdoc, :baja_tipodoc, :rel_numdoc, :rel_tipodoc, :terceros_tipodoc, :terceros_numdoc, :terceros_nombrerazon, :cod_traslado, :uniPeso, :pesoTotal, :numBultos, :indTransbordo, :modTraslado, :fechaTraslado, :transp_tipoDoc, :transp_numDoc, :transp_nombreRazon, :transp_placa, :tipoDocChofer, :numDocChofer, :observacion, :ubigeoPartida, :direccionPartida, :ubigeoLlegada, :direccionLlegada, :feestado, :fecodigoerror, :femensajesunat, :nombrexml, :xmlbase64, :cdrbase64, :tipovehiculo, :descripcion, :ticket, :series)");
+        $stmt = Conexion::conectar()->prepare("INSERT INTO guia(id, id_sucursal, id_cliente, cli_tipodoc, tipodoc, serie, correlativo, fecha_emision, hora, comp_ref, baja_numdoc, baja_tipodoc, rel_numdoc, rel_tipodoc, terceros_tipodoc, terceros_numdoc, terceros_nombrerazon, cod_traslado, uniPeso, pesoTotal, numBultos, indTransbordo, modTraslado, fechaTraslado, transp_tipoDoc, transp_numDoc, transp_nombreRazon, transp_placa, tipoDocChofer, numDocChofer, observacion, ubigeoPartida, direccionPartida, ubigeoLlegada, direccionLlegada, feestado, fecodigoerror, femensajesunat, nombrexml, xmlbase64, cdrbase64, tipovehiculo, descripcion, ticket, series, borrador) VALUES (NULL, :id_sucursal, :id_cliente, :cli_tipodoc, :tipodoc, :serie, :correlativo, :fecha_emision, :hora, :comp_ref, :baja_numdoc, :baja_tipodoc, :rel_numdoc, :rel_tipodoc, :terceros_tipodoc, :terceros_numdoc, :terceros_nombrerazon, :cod_traslado, :uniPeso, :pesoTotal, :numBultos, :indTransbordo, :modTraslado, :fechaTraslado, :transp_tipoDoc, :transp_numDoc, :transp_nombreRazon, :transp_placa, :tipoDocChofer, :numDocChofer, :observacion, :ubigeoPartida, :direccionPartida, :ubigeoLlegada, :direccionLlegada, :feestado, :fecodigoerror, :femensajesunat, :nombrexml, :xmlbase64, :cdrbase64, :tipovehiculo, :descripcion, :ticket, :series, :borrador)");
 
         $stmt->bindParam(":id_sucursal", $id_sucursal, PDO::PARAM_INT);
         $stmt->bindParam(":id_cliente", $datosGuia['id_cliente'], PDO::PARAM_INT);
@@ -179,6 +182,7 @@ class ModeloGuiaRemision
         $stmt->bindParam(":descripcion", $datosGuia['guia']['descripcion'], PDO::PARAM_STR);
         $stmt->bindParam(":ticket", $ticket, PDO::PARAM_STR);
         $stmt->bindParam(":series", $datosGuia['guia']['series'], PDO::PARAM_STR);
+        $stmt->bindParam(":borrador", $datosGuia['borrador'], PDO::PARAM_STR);
 
         if ($stmt->execute()) {
             return   'ok';

@@ -14,7 +14,7 @@ unset($_SESSION['carritoG']);
 
 
 
-
+$valor_sucursal = '';
 if (isset($_SESSION["iniciarSesion"]) && $_SESSION["iniciarSesion"] == "ok") {
   $item = 'id';
   $valor = $_SESSION['id_sucursal'];
