@@ -142,7 +142,7 @@ class DataTablesGuias
                 ' . $botonEstado . '
                </div>
                </td>
-               <td>Button option</td>
+               <td><a href="crear-guia?id='. $v['id'] .'" class="btn btn-primary">Editar</a></td>
                 </tr>';
       }
     }

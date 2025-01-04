@@ -704,13 +704,13 @@ $id_sucursal = isset($_POST['idSucursal']) ? $_POST['idSucursal']
                       <input type="radio" name="envioSunat" id="firmar" value="firmar" checked>
                       <label for="firmar">Solo Firmar e Imprimir</label>
                     </div> -->
-                        <div class="col-md-4  col-xs-12">
+                       <div class="col-md-4  col-xs-12">
                           <input type="radio" name="envioSunat" id="no" value="no" checked>
-                          <label for="no">Solo Guardar Comprobante</label>
+                          <label for="no">Solo Guardar Guía</label>
                         </div>
                         <div class="col-md-4 col-xs-12">
                           <input type="radio" name="envioSunat" id="enviar" value="enviar">
-                          <label for="enviar">Eviar a SUNAT ahora mismo</label>
+                          <label for="enviar">Enviar a SUNAT ahora mismo</label>
                         </div>
                       </div>
 
