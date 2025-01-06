@@ -1,10 +1,5 @@
 {
     "name": "gvi/sistemafacturacion2",
-    "autoload": {
-        "psr-4": {
-            "Gvi\\Sistemafacturacion2\\": "src/"
-        }
-    },
     "authors": [
         {
             "name": "codigo1105",
@@ -16,11 +11,11 @@
             "Conect\\":"Conect",
             "Controladores\\":"Controladores",
             "Modelos\\":"Modelos",
-            "api\\":"api"
-
-
+            "api\\":"api",
+            "Gvi\\Sistemafacturacion2\\": "src/"
         }
-
     },
-    "require": {}
+    "require": {
+        "tecnickcom/tcpdf": "^6.8"
+    }
 }

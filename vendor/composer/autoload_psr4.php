@@ -8,6 +8,7 @@ $baseDir = dirname($vendorDir);
 return array(
     'api\\' => array($baseDir . '/api'),
     'Modelos\\' => array($baseDir . '/Modelos'),
+    'Gvi\\Sistemafacturacion2\\' => array($baseDir . '/src'),
     'Controladores\\' => array($baseDir . '/Controladores'),
     'Conect\\' => array($baseDir . '/Conect'),
 );
