@@ -169,7 +169,7 @@ class ControladorGuiaRemision
         );
 
         $destinatario = array(
-            'tipoDoc' => $datosForm['tipoDoc'],
+            'tipoDoc' => isset($datosForm['tipoDoc']) ? $datosForm['tipoDoc'] : '6',
             'numDoc' => $datosForm['docIdentidad'],
             'nombreRazon' => $datosForm['razon_social']
 
@@ -369,7 +369,7 @@ class ControladorGuiaRemision
                 $insertarDetalles = ModeloGuiaRemision::mdlInsertarDetallesGuia($idGuia, $detalle);
                 if ($guardarGuia == 'ok') {
                     $valor = null;
-                    $actualizarStock = ControladorProductos::ctrActualizarStock($detalle, $valor);
+                    /* $actualizarStock = ControladorProductos::ctrActualizarStock($detalle, $valor); */
                     if (empty($datosForm['serieCorrelativoReferencial'])) {
                         //INVENTARIO====================================================
                         $id_sucursal = $sucursal['id'];

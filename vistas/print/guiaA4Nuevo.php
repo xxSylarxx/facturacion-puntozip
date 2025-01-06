@@ -3,10 +3,17 @@
 use Controladores\ControladorProductos;
 use Controladores\ControladorClientes;
 use Controladores\ControladorConductores;
+use Controladores\ControladorGuiaRemision;
 
 $dataCliente = ControladorClientes::ctrBucarClienteId($guia['id_cliente']);
-
-
+$tipoVehiculo = ControladorGuiaRemision::ctrMostrarTiposVehiculo('tipo_vehiculo', null, null);
+$tipoVehiculoDes = '';
+foreach ($tipoVehiculo as $value) {
+    if ($value['id'] == $guia['tipovehiculo']) {
+        $tipoVehiculoDes = $value['descripcion'];
+        break;
+    }
+}
 ?>
 <style>
     #tabla-fechas,
@@ -166,7 +173,7 @@ $dataCliente = ControladorClientes::ctrBucarClienteId($guia['id_cliente']);
                     N° RUC: <b><?php echo $dataCliente['ruc'] ?></b>
                 </td>
                 <td width="203">
-                    TIPO VEHICULO Y PLACA: <b><?php echo 'OTROS / ' . $guia['transp_placa'] ?></b><br>
+                    TIPO VEHICULO Y PLACA: <b><?php echo $tipoVehiculoDes . ' / ' . $guia['transp_placa'] ?></b><br>
                     LICENCIA DE CONDUCIR: <b><?php echo '4242344554' ?></b>
                 </td>
                 <td width="203">
@@ -260,7 +267,7 @@ $dataCliente = ControladorClientes::ctrBucarClienteId($guia['id_cliente']);
         <br><br><br><br>
         <div id="pie">
             <div class="bar-code">
-                <qrcode class="barcode" value="./vistas/print/printguia/?idCo=<?php echo $guia['id'] ?>" style="width: 26mm; background-color: white; color: #000; border: none; padding:none"></qrcode>
+                <qrcode class="barcode" value="https://puntozip.riaac.com/vistas/print/printguia/?idCo=<?php echo $guia['id'] ?>" style="width: 26mm; background-color: white; color: #000; border: none; padding:none"></qrcode>
             </div>
             <div style="font-size: 10px; text-align: center;">
                 <p style="line-height: 12px;">

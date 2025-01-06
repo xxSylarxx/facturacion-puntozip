@@ -157,7 +157,7 @@ $id_sucursal = isset($_POST['idSucursal']) ? $_POST['idSucursal'] : $sucursal['i
                                 <?php
                                 $clientes = ControladorClientes::ctrMostrarClientes(null, null);
                                 foreach ($clientes as $v) {
-                                  echo '<option value="' . $v['id'] . '" data-ruc="' . $v['ruc'] . '" data-razonsocial="' . $v['razon_social'] . '">' . $v['ruc'] . ' - ' . $v['razon_social'] . '</option>';
+                                  echo '<option value="' . $v['id'] . '" data-ruc="' . $v['ruc'] . '" data-razonsocial="' . $v['razon_social'] . '" data-direccion="' . $v['direccion'] . '">' . $v['ruc'] . ' - ' . $v['razon_social'] . '</option>';
                                 }
                                 ?>
                               </select>

@@ -190,14 +190,6 @@ $(document).on("change", "#tipoDocTransporte", function () {
     );
   }
 });
-$(document).on("change", "#tipoVehiculo", function () {
-  tipoVehiculo = $(this).val();
-  if (tipoVehiculo != "otros") {
-    $(".datos-del-transporte").hide();
-  } else {
-    $(".datos-del-transporte").show();
-  }
-});
 $(document).on("click", ".btnGuardarGuia", function (e) {
   // let dataForm = $("#formGuia").serialize();
   var idSucursal = $("#idcSucursal").val();
@@ -655,7 +647,9 @@ $('#listaClientes').change(function () {
   let idcliente = $("#listaClientes").val();
   let clienteRuc = $("#listaClientes").find('option:selected').data('ruc');
   let clienteNombre = $("#listaClientes").find('option:selected').data('razonsocial');
+  let clienteDireccion = $("#listaClientes").find('option:selected').data('direccion');
   $("#idCliente").val(idcliente);
   $("#docIdentidad").val(clienteRuc);
   $("#razon_social").val(clienteNombre);
+  $("#direccionLlegada").val(clienteDireccion);
 });
