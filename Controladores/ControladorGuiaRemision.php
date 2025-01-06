@@ -78,6 +78,7 @@ class ControladorGuiaRemision
                     <select class='form-control input-prod'> cod='" . $v['codigo'] . "' campo='unidad'";
             $undHtml = '';
             foreach ($unidad_medida as $m) {
+                if ($m['activo'] != 's') continue;
                 $undHtml .= '<option value="' . $m['codigo'] . '" ' . ($v['unidad'] == $m['codigo'] ? 'selected' : '') . '>' . $m['descripcion'] . '</option>';
             }
             $response .= $undHtml;
@@ -85,7 +86,7 @@ class ControladorGuiaRemision
                 </td>
                 <td><input type='text' class='form-control input-prod' cod='" . $v['codigo'] . "' campo='PO' value='" . $v['PO'] . "' placeholder='P.O'></td>
                 <td><input type='text' class='form-control input-prod' cod='" . $v['codigo'] . "' campo='partida' value='" . $v['partida'] . "' placeholder='Partida'></td>
-                <td><input type='text' class='form-control input-prod' cod='" . $v['codigo'] . "' campo='cantidad' placeholder='Cantidad' value='" . $v['cantidad'] . "'></td>
+                <td><input type='number' class='form-control input-prod' cod='" . $v['codigo'] . "' campo='cantidad' placeholder='Cantidad' value='" . $v['cantidad'] . "'></td>
                 <td><input type='number' class='form-control input-bultos' cod='" . $v['codigo'] . "' campo='bultos' value='" . $v['bultos'] . "' placeholder='Bultos'></td>
                 <td><input type='number' class='form-control input-peso' cod='" . $v['codigo'] . "' campo='peso' value='" . $v['peso'] . "' placeholder='Peso'></td>
                 <td><button type='button' class='btn btn-danger btn-xs btnEliminarItemCarroG' itemEliminar='" . $k . "'><i class='fas fa-trash-alt'></i></button>
@@ -118,7 +119,7 @@ class ControladorGuiaRemision
         $item = 'id';
         $valor = $datosForm['serie'];
         $seriex = ControladorSunat::ctrMostrarCorrelativo($item, $valor);
-        self::$esBorrador = $_POST['esBorrador'] == 'S';
+        self::$esBorrador = isset($_POST['esBorrador']) ? $_POST['esBorrador'] == 'S' : false;
         if (isset($datosForm))
             $fecha = $_POST['fechaEmision'];
         $fecha2 = str_replace('/', '-', $fecha);
@@ -454,6 +455,12 @@ class ControladorGuiaRemision
     {
 
         $respuesta = ModeloGuiaRemision::mdlActualizarcdr($idGuia, $codigosSunat);
+        return $respuesta;
+    }
+
+    public static function ctrObtenerGuia($idGuia)
+    {
+        $respuesta = ModeloGuiaRemision::mdlMostrar('guia', 'id', $idGuia);
         return $respuesta;
     }
 }

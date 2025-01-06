@@ -70,10 +70,9 @@ $ruc = $emisor['ruc'];
 $serie = $guia['serie'];
 $correlativo = $guia['correlativo'];
 
-
 ob_start();
 // if($tipoPrint == 'A4'){
-require_once("../guiaA4.php");
+require_once("../guiaA4Nuevo.php");
 $nombrexml = $ruc . '-' . '09' . '-' . $serie . '-' . $correlativo;
 $html = ob_get_clean();
 $html2pdf = new Html2Pdf('P', 'a4', 'fr', true, 'UTF-8', 0);

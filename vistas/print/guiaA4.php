@@ -297,7 +297,7 @@ $nombre_comprobante = 'GUÍA DE REMISIÓN REMITENTE ELECTRÓNICA';
             <!-- LOGO================== -->
             <td class="v25"><img src="<?php
 
-                                        $logo =  (isset($emisor['logo'])) ? dirname(__FILE__) . '/../img/logo/' . $emisor['logo'] : '';
+                                        $logo =  (isset($emisor['logo'])) ? dirname(__FILE__) . '/../img/logo/puntozipsac.png' : '';
                                         echo $logo;
                                         ?>" class="v100"></td>
             <!--FIN LOGO================== -->
@@ -489,7 +489,6 @@ $series = array();
         if ($emisor['modo'] == 'n') {
             echo "<p>COMPROBANTE DE PRUEBA, NO TIENE NINGÚNA VALIDEZ</p>";
         }
-
         ?>
     </div>
 </page>

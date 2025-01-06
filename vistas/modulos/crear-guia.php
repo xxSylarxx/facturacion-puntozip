@@ -9,6 +9,17 @@ use Controladores\ControladorSucursal;
 $sucursal = ControladorSucursal::ctrSucursal();
 $id_sucursal = isset($_POST['idSucursal']) ? $_POST['idSucursal']
   : $sucursal['id'];
+echo '<pre>';
+print_r($_GET);
+die(); 
+define('GUIA_BORRADOR', isset($_GET['id']) ? $_GET['id'] : null);
+$borradorGuia = [];
+if (GUIA_BORRADOR) {
+  $borradorGuia = ControladorGuiaRemision::ctrObtenerGuia(GUIA_BORRADOR);
+  echo '<pre>';
+  print_r($borradorGuia);
+  die();
+}
 ?>
 <div class="content-wrapper panel-medio-principal">
   <?php
@@ -347,7 +358,7 @@ $id_sucursal = isset($_POST['idSucursal']) ? $_POST['idSucursal']
                                 <?php
                                 $conductores = ControladorConductores::ctrMostrarConductores(null, null);
                                 foreach ($conductores as $v) {
-                                  echo '<option value="' . $v['id'] . '" data-nombre="' . $v['nombres'] . '" data-apellidos="' . $v['apellidos'] . '" data-placa="' . $v['numplaca'] . '" data-brevete="' . $v['numbrevete'] . '" data-numdoc="' . $v['numdoc'] .'">' . $v['numdoc'] . ' - ' . $v['apellidos'] . ', ' . $v['nombres'] . '</option>';
+                                  echo '<option value="' . $v['id'] . '" data-nombre="' . $v['nombres'] . '" data-apellidos="' . $v['apellidos'] . '" data-placa="' . $v['numplaca'] . '" data-brevete="' . $v['numbrevete'] . '" data-numdoc="' . $v['numdoc'] . '">' . $v['numdoc'] . ' - ' . $v['apellidos'] . ', ' . $v['nombres'] . '</option>';
                                 }
                                 ?>
                               </select>
@@ -704,7 +715,7 @@ $id_sucursal = isset($_POST['idSucursal']) ? $_POST['idSucursal']
                       <input type="radio" name="envioSunat" id="firmar" value="firmar" checked>
                       <label for="firmar">Solo Firmar e Imprimir</label>
                     </div> -->
-                       <div class="col-md-4  col-xs-12">
+                        <div class="col-md-4  col-xs-12">
                           <input type="radio" name="envioSunat" id="no" value="no" checked>
                           <label for="no">Solo Guardar Guía</label>
                         </div>

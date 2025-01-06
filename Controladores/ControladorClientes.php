@@ -272,6 +272,13 @@ class ControladorClientes
         return $respuesta;
     }
 
+    public static function ctrBucarClienteId($valor)
+    {
+        $tabla = "clientes";
+        $respuesta = ModeloClientes::mdlBuscarClienteId($tabla, $valor);
+        return $respuesta;
+    }
+
     public static function ctrBuscarUbigeo()
     {
         $respuesta = ModeloClientes::mdlBuscarUbigeo();

@@ -272,4 +272,11 @@ class ModeloClientes
         $stmt->close();
         $stmt = null;
     }
+
+    public static function mdlBuscarClienteId($tabla, $valor)
+    {
+        $stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla WHERE id = " . $valor);
+        $stmt->execute();
+        return $stmt->fetch();
+    }
 }

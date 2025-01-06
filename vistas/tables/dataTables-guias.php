@@ -112,7 +112,7 @@ class DataTablesGuias
         if ($v['feestado'] == '') {
           $botonEstado = "<button class='s-getcdr' id='getcdr-guia' idGuia='" . $v['id'] . "'></button>";
         }
-        echo '<tr>
+        $tablaGuias = '<tr>
                 <td>' . ++$k . '</td>
                 <td>' . $v['fecha_emision'] . '</td>
                 <td>' . $v['serie'] . '-' . $v['correlativo'] . '</td>
@@ -120,14 +120,14 @@ class DataTablesGuias
                 <td>' . $v['comp_ref'] . '</td>
                 <td>
                 <div class="contenedor-print-comprobantes">
-                <form id="printC" name="printC" method="post" action="vistas/print/printguia/" target="_blank">
-              
-               <input type="hidden" id="idCo" name="idCo" value="' . $v['id'] . '">
-                <button class="printA4"  id="printA4" idComp="' . $v['id'] . '" ></button>
-                
-                </form></div>
-                </td>
-
+                  <form id="printC" name="printC" method="post" action="vistas/print/printguia/" target="_blank">
+                    <input type="hidden" id="idCo" name="idCo" value="' . $v['id'] . '">
+                    <button class="printA4"  id="printA4" idComp="' . $v['id'] . '" ></button>
+                  </form>
+                </div>
+                </td>';
+        if ($v['borrador'] == 'N') {
+          $tablaGuias .= '
                 <td>
                 <div class="contenedor-print-comprobantes" estadocdr' . $v['id'] . '>
                 ' . $btnXml . '
@@ -137,13 +137,16 @@ class DataTablesGuias
                 ' . $botonEstadoCdr . '
                </div>
                </td>
-                <td>
-                <div class="contenedor-print-comprobantes" estadocdr' . $v['id'] . '>
-                ' . $botonEstado . '
-               </div>
-               </td>
-               <td><a href="crear-guia?id='. $v['id'] .'" class="btn btn-primary">Editar</a></td>
-                </tr>';
+                <td><div class="contenedor-print-comprobantes" estadocdr' . $v['id'] . '> ' . $botonEstado . ' </div></td>';
+        } else {
+          $tablaGuias .= '
+          <td class="text-center">-</td>
+          <td class="text-center">-</td>
+          <td class="text-center">-</td>
+          ';
+          $tablaGuias .= '<td><a href="crear-guia?id=' . $v['id'] . '" class="btn btn-primary">Editar</a></td></tr>';
+        }
+        echo $tablaGuias;
       }
     }
     $paginador = new Paginacion();

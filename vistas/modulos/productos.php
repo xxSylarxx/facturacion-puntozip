@@ -320,44 +320,18 @@ $sucursal = ControladorSucursal::ctrSucursal();
                 </div>
 
               </div>
-
-              <!-- ENTRADA PARA PROVEEDORES -->
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="form-group">
-                    <div class="kardex-contenedor">
-                      <div class="form-group busca-pro-kardex select">
-                        <select class="form-control select2" style="width: 100%;" name="itemProveedores" id="itemProveedores">
-                          <option value="">-SELECCIONAR PROVEEDOR-</option>
-                          <?php
-                          $proveedores = ControladorProveedores::ctrMostrarProveedores(null, null);
-                          foreach ($proveedores as $v) {
-                            echo '<option value="' . $v['id'] . '">' . ($v['nombre'] . $v['razon_social']) . '</option>';
-                          }
-                          ?>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
               <!-- ENTRADA PARA LA DESCRIPCIÓN -->
               <div class="row">
                 <div class="col-md-9">
                   <div class="form-group">
-
                     <input type="text" class="form-control" name="nuevaDescripcion" id="nuevaDescripcion" placeholder="Ingresar descripción" required>
-
                   </div>
                 </div>
 
                 <!-- ENTRADA PARA STOCK -->
                 <div class="col-md-3">
                   <div class="form-group">
-
                     <input type="number" class="form-control" min="0" name="nuevoStock" id="nuevoStock" placeholder="Ingresar stock" required>
-
                   </div>
                 </div>
               </div>
@@ -533,15 +507,12 @@ $sucursal = ControladorSucursal::ctrSucursal();
                   <div class="form-group">
 
                     <select class="form-control" name="editarUnidadMedida" id="editarUnidadMedida">
-
                       <?php
                       $item = null;
                       $valor = null;
                       $unidad_medida = ControladorSunat::ctrMostrarUnidadMedida($item, $valor);
                       foreach ($unidad_medida as $k => $value) {
-
                         if ($value['activo'] == 's') {
-
                           echo "<option value='" . $value['codigo'] . "'>" . $value['descripcion'] . "</option>";
                         }
                       }
@@ -566,22 +537,6 @@ $sucursal = ControladorSucursal::ctrSucursal();
                 <div class="col-md-3">
                   <div class="form-group">
                     <input type="number" class="form-control " min="0" name="editarStock" id="editarStock" required>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-12">
-                  <label for="">PROVEEDOR:</label>
-                  <div class="form-group select">
-                    <select class="form-control select2" style="width: 100%;" name="itemEditarProveedor" id="itemEditarProveedor">
-                      <option value="">-SELECCIONAR PROVEEDOR-</option>
-                      <?php
-                      $proveedores = ControladorProveedores::ctrMostrarProveedores(null, null);
-                      foreach ($proveedores as $v) {
-                        echo '<option value="' . $v['id'] . '">' . ($v['nombre'] . $v['razon_social'])  . '</option>';
-                      }
-                      ?>
-                    </select>
                   </div>
                 </div>
               </div>

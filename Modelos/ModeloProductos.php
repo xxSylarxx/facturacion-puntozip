@@ -72,6 +72,7 @@ class ModeloProductos
         $stmt->close();
         $stmt = null;
     }
+
     public static function mdlMostrarProductosUnidades($tabla, $item, $valor)
     {
 
@@ -93,6 +94,7 @@ class ModeloProductos
         $stmt->close();
         $stmt = null;
     }
+
     public static function mdlMostrarProductosTotal($tabla, $item, $valor, $query)
     {
 
@@ -114,6 +116,7 @@ class ModeloProductos
         $stmt->close();
         $stmt = null;
     }
+
     public static function mdlMostrarProductosMasVendidos($tabla, $item, $valor, $orden)
     {
 
@@ -135,6 +138,7 @@ class ModeloProductos
         $stmt->close();
         $stmt = null;
     }
+
     public static function mdlMostrarProductosStock($tabla, $item, $valor)
     {
 
@@ -156,12 +160,11 @@ class ModeloProductos
         $item = null;
         $valor = null;
         $respuesta = ControladorSucursal::ctrSucursalPrincipal($item, $valor);
-        $stmt = Conexion::conectar()->prepare("INSERT INTO $tabla(id_categoria, id_sucursal, id_proveedor, codigo, serie, descripcion, imagen, stock, codigoafectacion, codunidad) VALUES (:id_categoria, :id_sucursal, :id_proveedor, :codigo, :serie, :descripcion, :imagen, :stock, :codigoafectacion, :codunidad)");
+        $stmt = Conexion::conectar()->prepare("INSERT INTO $tabla(id_categoria, id_sucursal, codigo, serie, descripcion, imagen, stock, codigoafectacion, codunidad) VALUES (:id_categoria, :id_sucursal, :codigo, :serie, :descripcion, :imagen, :stock, :codigoafectacion, :codunidad)");
 
         if (isset($datos['id_sucursal']) && $datos['id_sucursal']  != 'todos') {
             $stmt->bindParam(":id_categoria", $datos['id_categoria'], PDO::PARAM_INT);
             $stmt->bindParam(":id_sucursal", $datos['id_sucursal'], PDO::PARAM_INT);
-            $stmt->bindParam(":id_proveedor", $datos['id_proveedor'], PDO::PARAM_INT);
             $stmt->bindParam(":codigo", $datos['codigo'], PDO::PARAM_STR);
             $stmt->bindParam(":serie", $datos['serie'], PDO::PARAM_STR);
             $stmt->bindParam(":descripcion", $datos['descripcion'], PDO::PARAM_STR);
@@ -188,7 +191,6 @@ class ModeloProductos
             foreach ($respuesta as $k => $value) {
                 $stmt->bindParam(":id_categoria", $datos['id_categoria'], PDO::PARAM_INT);
                 $stmt->bindParam(":id_sucursal", $value['id'], PDO::PARAM_INT);
-                $stmt->bindParam(":id_proveedor", $datos['proveedor'], PDO::PARAM_INT);
                 $stmt->bindParam(":codigo", $datos['codigo'], PDO::PARAM_STR);
                 $stmt->bindParam(":serie", $datos['serie'], PDO::PARAM_STR);
                 $stmt->bindParam(":descripcion", $datos['descripcion'], PDO::PARAM_STR);
@@ -211,13 +213,10 @@ class ModeloProductos
     // EDITAR PRODUCTO
     public static function mdlEditarProducto($tabla, $datos)
     {
-
-        $stmt = Conexion::conectar()->prepare("UPDATE $tabla set id = :id, id_categoria = :id_categoria, id_proveedor = :id_proveedor, id_sucursal=:id_sucursal, codigo=:codigo, serie = :serie, descripcion = :descripcion, imagen = :imagen, stock = :stock, codigoafectacion = :codigoafectacion, codunidad = :codunidad WHERE id = :id");
-
+        $stmt = Conexion::conectar()->prepare("UPDATE $tabla set id = :id, id_categoria = :id_categoria, id_sucursal=:id_sucursal, codigo=:codigo, serie = :serie, descripcion = :descripcion, imagen = :imagen, stock = :stock, codigoafectacion = :codigoafectacion, codunidad = :codunidad WHERE id = :id");
         $stmt->bindParam(":id", $datos['id'], PDO::PARAM_INT);
         $stmt->bindParam(":id_categoria", $datos['id_categoria'], PDO::PARAM_INT);
         $stmt->bindParam(":id_sucursal", $datos['id_sucursal'], PDO::PARAM_INT);
-        $stmt->bindParam(":id_proveedor", $datos['id_proveedor'], PDO::PARAM_INT);
         $stmt->bindParam(":serie", $datos['serie'], PDO::PARAM_STR);
         $stmt->bindParam(":codigo", $datos['codigo'], PDO::PARAM_STR);
         $stmt->bindParam(":descripcion", $datos['descripcion'], PDO::PARAM_STR);
@@ -225,62 +224,47 @@ class ModeloProductos
         $stmt->bindParam(":stock", $datos['stock'], PDO::PARAM_STR);
         $stmt->bindParam(":codigoafectacion", $datos['codigoafectacion'], PDO::PARAM_STR);
         $stmt->bindParam(":codunidad", $datos['unidad'], PDO::PARAM_STR);
-
         if ($stmt->execute()) {
             return   'ok';
         } else {
             return  'error';
         }
-
         $stmt->close();
         $stmt = null;
     }
     // EDITAR PRODUCTO
     public static function mdlActivaDesactivaUnidadMedida($tabla, $datos)
     {
-
         $stmt = Conexion::conectar()->prepare("UPDATE $tabla set activo = :activo WHERE id = :id");
-
         $stmt->bindParam(":id", $datos['id'], PDO::PARAM_INT);
         $stmt->bindParam(":activo", $datos['modo'], PDO::PARAM_STR);
-
-
         if ($stmt->execute()) {
             return   'ok';
         } else {
             return  'error';
         }
-
         $stmt->close();
         $stmt = null;
     }
     public static function mdlActivaDesactivaProducto($tabla, $datos)
     {
-
         $stmt = Conexion::conectar()->prepare("UPDATE $tabla set activo = :activo WHERE id = :id");
-
         $stmt->bindParam(":id", $datos['id'], PDO::PARAM_INT);
         $stmt->bindParam(":activo", $datos['modo'], PDO::PARAM_STR);
-
-
         $stmt->execute();
     }
     // EDITAR PRODUCTO
     public static function mdlActualizarStock($tabla, $detalle, $valor)
     {
-
         if ($valor == null) {
             $stmt = Conexion::conectar()->prepare("UPDATE $tabla set stock = :stock WHERE id = :id");
-
             foreach ($detalle as $k => $v) {
                 if (!empty($v['id'])) {
                     $tabla = 'productos';
                     $item = 'id';
                     $valor = $v['id'];
                     $productos = ModeloProductos::mdlMostrarProductosStock($tabla, $item, $valor);
-
                     // foreach ($productos as $i => $prod){
-
                     $cantidad = $productos['stock'] - $v['cantidad'];
 
                     $stmt->bindParam(":id", $v['id'], PDO::PARAM_INT);

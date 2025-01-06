@@ -259,7 +259,7 @@ class ModeloGuiaRemision
     {
 
 
-        $stmt = Conexion::conectar()->prepare("SELECT t1.id_producto, t1.cantidad, t2.descripcion, t2.id, t2.codunidad, t2.codigo, t2.id  FROM guia_detalle t1 INNER JOIN productos t2 ON t1.id_producto=t2.id  WHERE $item=:$item");
+        $stmt = Conexion::conectar()->prepare("SELECT t1.id_producto, t1.cantidad, t2.descripcion, t2.id, t2.codunidad, t2.codigo, t2.id, t1.cantidad, t1.peso, t1.bultos, t1.color, t1.PO, t1.partida FROM guia_detalle t1 INNER JOIN productos t2 ON t1.id_producto=t2.id  WHERE $item=:$item");
         $stmt->bindParam(":" . $item, $valor, PDO::PARAM_STR);
         $stmt->execute();
         return $stmt->fetchall();

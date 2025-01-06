@@ -69,9 +69,6 @@ $valor = $venta['metodopago'];
 $metodo_pago = ControladorSunat::ctrMostrarMetodoPago($item, $valor);
 //Consultar los datos necesarios para mostrar en el PDF - INICIO
 
-
-
-
 ob_start();
 if ($tipoPrint == 'A4') {
     require_once("invoiceA4.php");

@@ -121,8 +121,7 @@ class ControladorProductos
                             "stock" => $productos['nuevoStock'],
                             "tipo_precio" => '01',
                             "imagen" => $rutabd,
-                            "id_sucursal"  => $productos['nuevaSucursal'],
-                            'id_proveedor' => isset($productos['itemProveedor']) ? $productos['itemProveedor'] : null
+                            "id_sucursal"  => $productos['nuevaSucursal']
                         );
 
                         $respuesta = ModeloProductos::mdlCrearProducto($tabla, $datos);
@@ -223,7 +222,6 @@ class ControladorProductos
             $datos = array(
                 "id" => $_POST['editarid'],
                 "id_categoria" => $_POST['editarCategoria'],
-                "id_proveedor" => $_POST['itemEditarProveedor'],
                 "codigo" => $_POST['editarCodigo'],
                 "serie" => $_POST['editarSerie'],
                 "codigoafectacion" => $_POST['editarAfectacion'],
