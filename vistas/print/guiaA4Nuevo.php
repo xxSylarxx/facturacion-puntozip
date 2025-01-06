@@ -144,32 +144,32 @@ $dataCliente = ControladorClientes::ctrBucarClienteId($guia['id_cliente']);
         <br>
         <table id="tabla-llegada">
             <tr>
-                <th style="width: 250px;">DIRECCIÓN DE PARTIDA</th>
-                <th style="width: 250px;">DIRECCIÓN DE LLEGADA</th>
+                <th width="322">DIRECCIÓN DE PARTIDA</th>
+                <th width="322">DIRECCIÓN DE LLEGADA</th>
             </tr>
             <tr>
-                <td style="word-wrap: break-word;"><?php echo $guia['direccionPartida'] ?></td>
-                <td><?php echo $guia['direccionLlegada'] ?></td>
+                <td width="322"><?php echo $guia['direccionPartida'] ?></td>
+                <td width="322"><?php echo $guia['direccionLlegada'] ?></td>
             </tr>
         </table>
         <br>
         <table id="tabla-destinatario">
             <tr>
-                <th style="width: 250px;">DESTINATARIO</th>
-                <th style="width: 250px;">UNIDAD DE TRANSPORTE Y CONDUCTOR</th>
-                <th style="width: 250px;">TRANSPORTISTA</th>
+                <th width="203">DESTINATARIO</th>
+                <th width="203">UNIDAD DE TRANSPORTE Y CONDUCTOR</th>
+                <th width="203">TRANSPORTISTA</th>
             </tr>
             <tr>
-                <td style="word-wrap: break-word;">
+                <td width="203">
                     NOMBRE: <b><?php echo $dataCliente['razon_social'] ?></b><br>
                     DIRECCIÓN: <b><?php echo $dataCliente['direccion'] ?></b><br>
                     N° RUC: <b><?php echo $dataCliente['ruc'] ?></b>
                 </td>
-                <td>
+                <td width="203">
                     TIPO VEHICULO Y PLACA: <b><?php echo 'OTROS / ' . $guia['transp_placa'] ?></b><br>
                     LICENCIA DE CONDUCIR: <b><?php echo '4242344554' ?></b>
                 </td>
-                <td>
+                <td width="203">
                     NOMBRE O RAZON SOCIAL <b><?php echo $guia['transp_nombreRazon'] ?></b><br>
                     N° R.U.C.: <b><?php echo $guia['transp_numDoc'] ?></b><br>
                     CHOFER: <b><?php echo $guia['transp_nombreRazon'] ?></b>
@@ -177,7 +177,7 @@ $dataCliente = ControladorClientes::ctrBucarClienteId($guia['id_cliente']);
             </tr>
         </table>
         <p style="font-size: 11px;"><b>MOTIVO DE TRASLADO:</b> 17 TRASLADO DE BIENES PARA TRANSFORMACIÓN</p>
-        <div style="width: 79%; border-radius: 4px; border: 1px solid black; padding: 6px; font-size: 9px;">
+        <div style="width: 100%; border-radius: 4px; border: 1px solid black; padding: 6px; font-size: 9px;">
             <table>
                 <tr>
                     <td>01 Venta</td>
@@ -205,10 +205,10 @@ $dataCliente = ControladorClientes::ctrBucarClienteId($guia['id_cliente']);
         <div>
             <table id="tabla-productos">
                 <tr>
-                    <th>CÓDIGO</th>
-                    <th>CANTIDAD</th>
-                    <th>UNIDAD</th>
-                    <th style="width: 480px;">PRODUCTO</th>
+                    <th width="50" style="text-align: center;">CÓDIGO</th>
+                    <th width="40" style="text-align: center;">CANTIDAD</th>
+                    <th width="40" style="text-align: center;">UNIDAD</th>
+                    <th width="445" style="text-align: center;">PRODUCTO</th>
                 </tr>
                 <?php
                 $series = array();
@@ -218,23 +218,23 @@ $dataCliente = ControladorClientes::ctrBucarClienteId($guia['id_cliente']);
                     $idSeries = json_decode($guia['series']); */
                 ?>
                     <tr>
-                        <td><?php echo $fila['codigo']; ?></td>
-                        <td><?php echo $fila['cantidad']; ?></td>
-                        <td><?php echo $fila['codunidad']; ?></td>
-                        <td><?php echo $fila['descripcion'] . ' COLOR: ' . $fila['color'] . ' - PESO: ' . $fila['peso'] . ' - BULTOS: ' . $fila['bultos'] . ' - PARTIDA: ' . $fila['partida']; ?></td>
+                        <td width="50" style="text-align: center; vertical-align: middle;"><?php echo $fila['codigo']; ?></td>
+                        <td width="40" style="text-align: center; vertical-align: middle;"><?php echo $fila['cantidad']; ?></td>
+                        <td width="40" style="text-align: center; vertical-align: middle;"><?php echo $fila['codunidad']; ?></td>
+                        <td width="445"><?php echo $fila['descripcion'] . ' COLOR: ' . $fila['color'] . ' - PESO: ' . $fila['peso'] . ' - BULTOS: ' . $fila['bultos'] . ' - PARTIDA: ' . $fila['partida']; ?></td>
                     </tr>
                 <?php } ?>
                 <tr>
                     <td colspan="4">Peso Bruto (KGM): <?php echo $guia['pesoTotal'] ?></td>
                 </tr>
                 <tr>
-                    <td colspan="4">Numero de Bultos: <?php echo $guia['pesoTotal'] ?></td>
+                    <td colspan="4">Numero de Bultos: <?php echo $guia['numBultos'] ?></td>
                 </tr>
             </table>
         </div>
         <p style="font-size: 11px; margin-bottom: 5px;"><b>INFORMACIÓN ADICIONAL</b></p>
-        <div style="width: 79%; border-radius: 3px; border: 1px solid black; padding: 6px; font-size: 11px;">
-            Test comentario adicional
+        <div style="width: 100%; border-radius: 3px; border: 1px solid black; padding: 6px; font-size: 11px;">
+            <?php echo $guia['observacion'] ?>
         </div>
         <br>
         <br><br>
@@ -260,7 +260,7 @@ $dataCliente = ControladorClientes::ctrBucarClienteId($guia['id_cliente']);
         <br><br><br><br>
         <div id="pie">
             <div class="bar-code">
-                <qrcode class="barcode" value="https://sistema.techmultiserv.com/vistas/print/printguia/" style="width: 26mm; background-color: white; color: #000; border: none; padding:none"></qrcode>
+                <qrcode class="barcode" value="./vistas/print/printguia/?idCo=<?php echo $guia['id'] ?>" style="width: 26mm; background-color: white; color: #000; border: none; padding:none"></qrcode>
             </div>
             <div style="font-size: 10px; text-align: center;">
                 <p style="line-height: 12px;">

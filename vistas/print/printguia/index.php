@@ -20,15 +20,16 @@ use Controladores\ControladorUsuarios;
 use Spipu\Html2Pdf\Html2Pdf;
 
 
-
-
 $emisor = ControladorEmpresa::ctrEmisor();
 $tabla = "guia";
 $item = "id";
 $valor = $_REQUEST["idCo"];
 $guia = ControladorGuiaRemision::ctrMostrar($tabla, $item, $valor);
 
-
+if (empty($guia)) {
+    die('Guia no encontrada.');
+    exit;
+}
 
 $item = "id";
 $valor = $guia['id_sucursal'];
@@ -63,7 +64,7 @@ $detalle = ControladorGuiaRemision::ctrMostrarDetallesProductosGuia($item, $valo
 
 //Consultar los datos necesarios para mostrar en el PDF - INICIO
 $item = 'id';
-$valor = $_SESSION['id'];
+$valor = isset($_SESSION['id']) ? $_SESSION['id'] : 23;
 $vendedor = ControladorUsuarios::ctrMostrarUsuarios($item, $valor);
 
 $ruc = $emisor['ruc'];
@@ -75,7 +76,7 @@ ob_start();
 require_once("../guiaA4Nuevo.php");
 $nombrexml = $ruc . '-' . '09' . '-' . $serie . '-' . $correlativo;
 $html = ob_get_clean();
-$html2pdf = new Html2Pdf('P', 'a4', 'fr', true, 'UTF-8', 0);
+$html2pdf = new Html2Pdf('P', 'A4', 'es', true, 'UTF-8', 0);
 // }
 // if($tipoPrint == 'TK'){
 // require_once("../guia-ticket.php");

@@ -49,13 +49,12 @@
         </ul>
       </li>
 
-
+<!-- 
       <li class="">
         <a href="pos" class="btn-gopos">
           <i class="fas fa-file-invoice-dollar fa-lg"></i>
           <span class="mg-menu">Venta POS</span>
           <span class="pull-right-container">
-            <!-- <small class="label pull-right bg-blue">Nuevo</small> -->
           </span>
 
         </a>
@@ -99,7 +98,7 @@
           <li><a href="resumen-diario"><i class="fa fa-file-invoice"></i> Ver resúmenes de boletas</a></li>
 
         </ul>
-      </li>
+      </li> -->
 
 
       <li class="treeview">
@@ -120,13 +119,13 @@
 
         </ul>
       </li>
-      <li class="treeview">
+      <!-- <li class="treeview">
         <a href="#">
           <i class="fas fa-file-invoice fa-lg"></i>
           <span class="mg-menu">Cotizaciones</span>
-          <!-- <span class="pull-right-container">
+          <span class="pull-right-container">
               <small class="label pull-right bg-green">new</small>
-            </span> -->
+            </span>
           <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>
           </span>
@@ -154,7 +153,7 @@
           <li><a href="gastos"><i class="fa fa-cash-register"></i> Gastos</a></li>
 
         </ul>
-      </li>
+      </li> -->
 
       <li class="treeview">
         <a href="#">
@@ -175,7 +174,7 @@
 
 
 
-      <li class="treeview">
+      <!-- <li class="treeview">
         <a href="#">
           <i class="fas fa-file-invoice-dollar fa-lg"></i>
           <span class="mg-menu">Reportes</span>
@@ -187,7 +186,7 @@
           <li><a href="reporte-ventas"><i class="fa fa-file-invoice"></i> Reporte de ventas</a></li>
           <li><a href="reporte-compras"><i class="fa fa-file-invoice"></i> Reporte de compras</a></li>
         </ul>
-      </li>
+      </li> -->
 
       <li class="">
         <a href="proveedores">
@@ -198,7 +197,7 @@
         </a>
       </li>
 
-      <li class="treeview">
+      <!-- <li class="treeview">
         <a href="#">
           <i class="fas fa-shopping-cart fa-lg"></i>
           <span class="mg-menu">Compras</span>
@@ -210,7 +209,7 @@
           <li><a href="nueva-compra"><i class="fa fa-file-invoice"></i> Nueva compra</a></li>
 
         </ul>
-      </li>
+      </li> -->
 
       <li class="">
         <a href="clientes">
@@ -227,12 +226,12 @@
         </a>
       </li>
       
-      <li class="">
+      <!-- <li class="">
         <a href="consulta-comprobante">
           <i class="fas fa-file-invoice-dollar fa-lg"></i> <span class="mg-menu">Consultar comprobantes</span>
 
         </a>
-      </li>
+      </li> -->
 
 
 

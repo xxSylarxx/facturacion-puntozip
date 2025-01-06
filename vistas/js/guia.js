@@ -650,3 +650,12 @@ $(document).on("click", ".btn-remove-add-serie-agregar", function (e) {
 
   });
 });
+
+$('#listaClientes').change(function () {
+  let idcliente = $("#listaClientes").val();
+  let clienteRuc = $("#listaClientes").find('option:selected').data('ruc');
+  let clienteNombre = $("#listaClientes").find('option:selected').data('razonsocial');
+  $("#idCliente").val(idcliente);
+  $("#docIdentidad").val(clienteRuc);
+  $("#razon_social").val(clienteNombre);
+});

@@ -36,7 +36,7 @@ class ControladorSucursal
     {
         $tabla = "sucursales";
         $item = 'id';
-        $valor = $_SESSION['id_sucursal'];
+        $valor = isset($_SESSION['id_sucursal']) ? $_SESSION['id_sucursal'] : 1;
         $respuesta = ModeloSucursal::mdlMostrarSucursalTotal($tabla, $item, $valor);
         return $respuesta;
     }

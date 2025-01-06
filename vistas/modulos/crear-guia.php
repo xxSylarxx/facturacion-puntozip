@@ -7,19 +7,7 @@ use Controladores\ControladorConductores;
 use Controladores\ControladorSucursal;
 
 $sucursal = ControladorSucursal::ctrSucursal();
-$id_sucursal = isset($_POST['idSucursal']) ? $_POST['idSucursal']
-  : $sucursal['id'];
-echo '<pre>';
-print_r($_GET);
-die(); 
-define('GUIA_BORRADOR', isset($_GET['id']) ? $_GET['id'] : null);
-$borradorGuia = [];
-if (GUIA_BORRADOR) {
-  $borradorGuia = ControladorGuiaRemision::ctrObtenerGuia(GUIA_BORRADOR);
-  echo '<pre>';
-  print_r($borradorGuia);
-  die();
-}
+$id_sucursal = isset($_POST['idSucursal']) ? $_POST['idSucursal'] : $sucursal['id'];
 ?>
 <div class="content-wrapper panel-medio-principal">
   <?php
@@ -157,45 +145,38 @@ if (GUIA_BORRADOR) {
                         </label> Cliente</legend>
 
                       <div class="col-md-3">
+
                         <div class="form-group">
-                          <label for="" class="tipoDocTransporte">Tipo Documento <span style="color:red; border-style: none !important; font-size:20px;">*</span> </label>
-                          <div class="input-group">
-                            <!-- ID CLIENTE -->
-                            <input type="hidden" name="idCliente" id="idCliente">
-
-                            <span class="input-group-addon"><i class="fas fa-id-card"></i></span>
-
-                            <select class="form-control" name="tipoDoc" id="tipoDoc">
-                              <?php
-                              $item = null;
-                              $valor = null;
-                              $tipoDocumento = ControladorSunat::ctrMostrarTipoDocumento($item, $valor);
-                              unset($tipoDocumento[0]);
-                              foreach ($tipoDocumento as $key => $value) {
-
-                                echo "<script>$('#tipoDoc').val(6);</script>";
-
-                                echo '<option value=' . $value['codigo'] . '>' . $value['descripcion'] . '</option>';
-                              }
-                              ?>
-                            </select>
-
+                          <div class="kardex-contenedor">
+                            <input type="hidden" name="tipoDocTransporte" id="tipoDocTransporte" value="1">
+                            <div class="form-group busca-pro-kardex select">
+                              <input type="hidden" name="idCliente" id="idCliente">
+                              <label for="">Buscar cliente:</label>
+                              <select class="form-control select2" style="width: 100%;" name="listaClientes" id="listaClientes">
+                                <option value="">SELECCIONAR CLIENTE</option>
+                                <?php
+                                $clientes = ControladorClientes::ctrMostrarClientes(null, null);
+                                foreach ($clientes as $v) {
+                                  echo '<option value="' . $v['id'] . '" data-ruc="' . $v['ruc'] . '" data-razonsocial="' . $v['razon_social'] . '">' . $v['ruc'] . ' - ' . $v['razon_social'] . '</option>';
+                                }
+                                ?>
+                              </select>
+                            </div>
                           </div>
                         </div>
                       </div>
 
                       <!-- ENTRADA DOCUMENTO -->
                       <div class="col-md-4">
-
                         <div class="form-group">
                           <label for="" class="tipoDocTransporte">N° Documento<span style="color:red; border-style: none !important; font-size:20px;">*</span> </label>
                           <div class="input-group">
                             <div id="rucActivo"></div>
 
                             <input type="text" class="form-control" id="docIdentidad" name="docIdentidad" placeholder="Ingrese número de documento...">
-                            <span class="input-group-addon btn"><i class="fa fa-search"></i></span>
-                            <div id="reloadC"></div>
-                            <div class="resultadoCliente" idCliente=""><a href="#" class="btn-add"></a></div>
+                            <span class="input-group-addon btn" style="pointer-events: none;"><i class="fa fa-search"></i></span>
+                            <!-- <div id="reloadC"></div>
+                            <div class="resultadoCliente" idCliente=""><a href="#" class="btn-add"></a></div> -->
                           </div>
                         </div>
                       </div>
