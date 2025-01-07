@@ -196,6 +196,10 @@ class ModeloGuiaRemision
 
     public static function mdlGuardarGuiaSinEnviarSunat($id_sucursal, $datosGuia)
     {
+        $transportistaNom = (string) $datosGuia['transportista']['nombreRazon'] . ' ' . $datosGuia['transportista']['apellidosRazon'];
+        /* echo '<pre>';
+        print_r($transportistaNom);
+        die(); */
         $stmt = Conexion::conectar()->prepare("INSERT INTO guia(id, id_sucursal, id_cliente, cli_tipodoc, tipodoc, serie, correlativo, fecha_emision, hora, comp_ref, baja_numdoc, baja_tipodoc, rel_numdoc, rel_tipodoc, terceros_tipodoc, terceros_numdoc, terceros_nombrerazon, cod_traslado, uniPeso, pesoTotal, numBultos, indTransbordo, modTraslado, fechaTraslado, transp_tipoDoc, transp_numDoc, transp_nombreRazon, transp_placa, tipoDocChofer, numDocChofer, observacion, ubigeoPartida, direccionPartida, ubigeoLlegada, direccionLlegada, tipovehiculo, descripcion, series) VALUES (NULL, :id_sucursal, :id_cliente, :cli_tipodoc, :tipodoc, :serie, :correlativo, :fecha_emision, :hora, :comp_ref, :baja_numdoc, :baja_tipodoc, :rel_numdoc, :rel_tipodoc, :terceros_tipodoc, :terceros_numdoc, :terceros_nombrerazon, :cod_traslado, :uniPeso, :pesoTotal, :numBultos, :indTransbordo, :modTraslado, :fechaTraslado, :transp_tipoDoc, :transp_numDoc, :transp_nombreRazon, :transp_placa, :tipoDocChofer, :numDocChofer, :observacion, :ubigeoPartida, :direccionPartida, :ubigeoLlegada, :direccionLlegada, :tipovehiculo, :descripcion, :series)");
 
         $stmt->bindParam(":id_sucursal", $id_sucursal, PDO::PARAM_INT);
@@ -224,7 +228,7 @@ class ModeloGuiaRemision
         $stmt->bindParam(":fechaTraslado", $datosGuia['datosEnvio']['fechaTraslado'], PDO::PARAM_STR);
         $stmt->bindParam(":transp_tipoDoc", $datosGuia['transportista']['tipoDoc'], PDO::PARAM_STR);
         $stmt->bindParam(":transp_numDoc", $datosGuia['transportista']['numDoc'], PDO::PARAM_STR);
-        $stmt->bindParam(":transp_nombreRazon", $datosGuia['transportista']['nombreRazon'] . ' ' . $datosGuia['transportista']['apellidosRazon'], PDO::PARAM_STR);
+        $stmt->bindParam(":transp_nombreRazon", $transportistaNom, PDO::PARAM_STR);
         $stmt->bindParam(":transp_placa", $datosGuia['transportista']['placa'], PDO::PARAM_STR);
         $stmt->bindParam(":tipoDocChofer", $datosGuia['transportista']['tipoDocChofer'], PDO::PARAM_STR);
         $stmt->bindParam(":numDocChofer", $datosGuia['transportista']['numDocChofer'], PDO::PARAM_STR);

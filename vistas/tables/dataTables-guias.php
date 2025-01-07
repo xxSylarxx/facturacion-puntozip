@@ -144,7 +144,12 @@ class DataTablesGuias
           <td class="text-center">-</td>
           <td class="text-center">-</td>
           ';
-          $tablaGuias .= '<td><a href="crear-guia?id=' . $v['id'] . '" class="btn btn-primary">Editar</a></td></tr>';
+          $tablaGuias .= '<td>
+            <form id="guiaEditar" name="guiaEditar" method="post" action="crear-guia">
+                <input type="hidden" id="id_guia_form" name="id_guia_edit" value="' . $v['id'] . '">
+                <button type="submit" class="btn btn-primary">Editar</button>
+            </form>
+          </td></tr>';
         }
         echo $tablaGuias;
       }

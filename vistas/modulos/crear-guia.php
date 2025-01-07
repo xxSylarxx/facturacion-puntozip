@@ -8,6 +8,7 @@ use Controladores\ControladorSucursal;
 
 $sucursal = ControladorSucursal::ctrSucursal();
 $id_sucursal = isset($_POST['idSucursal']) ? $_POST['idSucursal'] : $sucursal['id'];
+$borradorId = isset($_POST['id_guia_edit']) ? $_POST['id_guia_edit'] : null;
 ?>
 <div class="content-wrapper panel-medio-principal">
   <?php
