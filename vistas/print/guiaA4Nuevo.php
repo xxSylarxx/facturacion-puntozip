@@ -7,6 +7,10 @@ use Controladores\ControladorGuiaRemision;
 
 $dataCliente = ControladorClientes::ctrBucarClienteId($guia['id_cliente']);
 $tipoVehiculo = ControladorGuiaRemision::ctrMostrarTiposVehiculo('tipo_vehiculo', null, null);
+$conductor = ControladorConductores::ctrBucarConductorId($guia['id_conductor']);
+echo '<pre>';
+var_dump($conductor);
+die();
 $tipoVehiculoDes = '';
 foreach ($tipoVehiculo as $value) {
     if ($value['id'] == $guia['tipovehiculo']) {
@@ -174,7 +178,7 @@ foreach ($tipoVehiculo as $value) {
                 </td>
                 <td width="203">
                     TIPO VEHICULO Y PLACA: <b><?php echo $tipoVehiculoDes . ' / ' . $guia['transp_placa'] ?></b><br>
-                    LICENCIA DE CONDUCIR: <b><?php echo '4242344554' ?></b>
+                    LICENCIA DE CONDUCIR: <b><?php echo $guia[''] ?></b>
                 </td>
                 <td width="203">
                     NOMBRE O RAZON SOCIAL <b><?php echo $guia['transp_nombreRazon'] ?></b><br>

@@ -14,7 +14,6 @@ class ModeloGuiaRemision
         if ($item != null) {
             $stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla  WHERE $item = :$item");
             $stmt->bindParam(":" . $item, $valor, PDO::PARAM_STR);
-
             $stmt->execute();
             return $stmt->fetch();
         } else {
@@ -25,11 +24,19 @@ class ModeloGuiaRemision
         }
     }
 
+    public static function mdlBuscar($valor)
+    {
+
+        $stmt = Conexion::conectar()->prepare("SELECT g.*, c.ruc as cliente_ruc, c.razon_social as cliente_razon_social, c.direccion as cliente_direccion, c.ubigeo as cliente_ubigeo FROM guia AS g LEFT JOIN clientes AS c ON c.id = g.id_cliente WHERE g.id = " . $valor);
+        $stmt->execute();
+        return $stmt->fetch();
+    }
+
     public static function mdlMostrarDetalles($tabla, $item, $valor)
     {
 
         if ($item != null) {
-            $stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla  WHERE $item = :$item");
+            $stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla WHERE $item = :$item");
             $stmt->bindParam(":" . $item, $valor, PDO::PARAM_STR);
 
             $stmt->execute();
@@ -117,8 +124,8 @@ class ModeloGuiaRemision
     // GUARDAR DETALLES VENTA CARRITO EN LA BD
     public static function mdlInsertarDetallesGuia($idGuia, $detalle)
     {
-        $stmt = Conexion::conectar()->prepare("INSERT INTO guia_detalle(id_guia, indexg, id_producto, codSunat, cantidad, peso, bultos, PO, color, partida)
-        VALUES (:id_guia, :indexg, :id_producto, :codSunat, :cantidad, :peso, :bultos, :PO, :color, :partida)");
+        $stmt = Conexion::conectar()->prepare("INSERT INTO guia_detalle(id_guia, indexg, id_producto, codSunat, cantidad, peso, bultos, PO, color, partida, adicional)
+        VALUES (:id_guia, :indexg, :id_producto, :codSunat, :cantidad, :peso, :bultos, :PO, :color, :partida, :adicional)");
         foreach ($detalle as $k => $v) {
             $stmt->bindParam(":id_guia", $idGuia, PDO::PARAM_INT);
             $stmt->bindParam(":indexg", $v['index'], PDO::PARAM_INT);
@@ -130,6 +137,7 @@ class ModeloGuiaRemision
             $stmt->bindParam(":PO", $v['PO'], PDO::PARAM_STR);
             $stmt->bindParam(":color", $v['color'], PDO::PARAM_STR);
             $stmt->bindParam(":partida", $v['partida'], PDO::PARAM_STR);
+            $stmt->bindParam(":adicional", $v['adicional'], PDO::PARAM_STR);
             $stmt->execute();
         }
     }
@@ -309,20 +317,27 @@ class ModeloGuiaRemision
     // GUARDAR VENTA CARRITO EN LA BD
     public static function mdlActualizarCDR($idGuia, $codigosSunat)
     {
-
         $stmt = Conexion::conectar()->prepare("UPDATE guia SET feestado=:feestado WHERE id=:id");
-
         $stmt->bindParam(":id", $idGuia, PDO::PARAM_INT);
         $stmt->bindParam(":feestado", $codigosSunat['feestado'], PDO::PARAM_STR);
-
-
-
         if ($stmt->execute()) {
             return   'ok';
         } else {
             return  'error';
         }
+        $stmt->close();
+        $stmt = null;
+    }
 
+    public static function mdlEliminarGuiaDetalle($idGuia)
+    {
+        $stmt = Conexion::conectar()->prepare("DELETE FROM guia_detalle WHERE id_guia = :id");
+        $stmt->bindParam(":id", $idGuia, PDO::PARAM_INT);
+        if ($stmt->execute()) {
+            return 'ok';
+        } else {
+            return 'error';
+        }
         $stmt->close();
         $stmt = null;
     }

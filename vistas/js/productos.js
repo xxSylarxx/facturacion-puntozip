@@ -1007,8 +1007,9 @@ function calcularBultosTotal() {
   $('#numeroBultos').val(suma);
 }
 
-function actualizarGuiaProductos(idProducto_update, campo, valor) {
+function actualizarGuiaProductos(idCar, idProducto_update, campo, valor) {
   let data = {
+    idCar,
     idProducto_update,
     campo,
     valor
@@ -1024,22 +1025,25 @@ function actualizarGuiaProductos(idProducto_update, campo, valor) {
 }
 
 $('body').on('keyup change', '.input-peso', function () {
+  const idCar = $(this).attr('idcar');
   const idProducto = $(this).attr('cod');
   const valor = $(this).val();
   calcularPesoTotal();
-  actualizarGuiaProductos(idProducto, 'peso', valor);
+  actualizarGuiaProductos(idCar, idProducto, 'peso', valor);
 });
 
 $('body').on('keyup change', '.input-bultos', function () {
+  const idCar = $(this).attr('idcar');
   const idProducto = $(this).attr('cod');
   const valor = $(this).val();
   calcularBultosTotal();
-  actualizarGuiaProductos(idProducto, 'bultos', valor);
+  actualizarGuiaProductos(idCar, idProducto, 'bultos', valor);
 });
 
 $('body').on('change', '.input-prod', function () {
+  const idCar = $(this).attr('idcar');
   const idProducto = $(this).attr('cod');
   const campo = $(this).attr('campo');
   const valor = $(this).val();
-  actualizarGuiaProductos(idProducto, campo, valor);
+  actualizarGuiaProductos(idCar, idProducto, campo, valor);
 });

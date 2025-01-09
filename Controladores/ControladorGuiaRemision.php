@@ -28,19 +28,16 @@ class ControladorGuiaRemision
         $respuesta = ModeloGuiaRemision::mdlMostrarDetalles($tabla, $item, $valor);
         return $respuesta;
     }
-
     public static function ctrMostrarTraslado($tabla, $item, $valor)
     {
         $respuesta = ModeloGuiaRemision::mdlMostrarTraslado($tabla, $item, $valor);
         return $respuesta;
     }
-
     public static function ctrMostrarTiposVehiculo($tabla, $item, $valor)
     {
         $respuesta = ModeloGuiaRemision::mdlMostrarTiposVehiculo($tabla, $item, $valor);
         return $respuesta;
     }
-
     public static function ctrMostrarUbigeo($item, $valor)
     {
 
@@ -71,11 +68,11 @@ class ControladorGuiaRemision
             echo "<tr class='id-eliminar" . $k . "'>";
             $response =  "<td>" . $v['codigo'] . "</td>
                 <td>" . $v['descripcion'] . "<br/>
-                    <input type='text' class='datos-adicionales-item-guia' id='descripcion' name='descripcion[]' placeholder='DATOS ADICIONALES' onkeyup='this.value = this.value.toUpperCase();'>
+                    <input type='text' class='datos-adicionales-item-guia input-prod' id='descripcion' name='descripcion[]' idcar='" . $k . "' cod='" . $v['codigo'] . "' campo='descripcion' placeholder='DATOS ADICIONALES'>
                 </td>
-                <td><input type='text' class='form-control input-prod' cod='" . $v['codigo'] . "' campo='color' placeholder='Color' value='" . $v['color'] . "'></td>
+                <td><input type='text' class='form-control input-prod' idcar='" . $k . "' cod='" . $v['codigo'] . "' campo='color' placeholder='Color' value='" . $v['color'] . "'></td>
                 <td>
-                    <select class='form-control input-prod'> cod='" . $v['codigo'] . "' campo='unidad'";
+                    <select class='form-control input-prod' idcar='" . $k . "' cod='" . $v['codigo'] . "' campo='unidad'>";
             $undHtml = '';
             foreach ($unidad_medida as $m) {
                 if ($m['activo'] != 's') continue;
@@ -84,11 +81,11 @@ class ControladorGuiaRemision
             $response .= $undHtml;
             $response .=  "</select>
                 </td>
-                <td><input type='text' class='form-control input-prod' cod='" . $v['codigo'] . "' campo='PO' value='" . $v['PO'] . "' placeholder='P.O'></td>
-                <td><input type='text' class='form-control input-prod' cod='" . $v['codigo'] . "' campo='partida' value='" . $v['partida'] . "' placeholder='Partida'></td>
-                <td><input type='number' class='form-control input-prod' cod='" . $v['codigo'] . "' campo='cantidad' placeholder='Cantidad' value='" . $v['cantidad'] . "'></td>
-                <td><input type='number' class='form-control input-bultos' cod='" . $v['codigo'] . "' campo='bultos' value='" . $v['bultos'] . "' placeholder='Bultos'></td>
-                <td><input type='number' class='form-control input-peso' cod='" . $v['codigo'] . "' campo='peso' value='" . $v['peso'] . "' placeholder='Peso'></td>
+                <td><input type='text' class='form-control input-prod' idcar='" . $k . "' cod='" . $v['codigo'] . "' campo='PO' value='" . $v['PO'] . "' placeholder='P.O'></td>
+                <td><input type='text' class='form-control input-prod' idcar='" . $k . "' cod='" . $v['codigo'] . "' campo='partida' value='" . $v['partida'] . "' placeholder='Partida'></td>
+                <td><input type='number' class='form-control input-prod' idcar='" . $k . "' cod='" . $v['codigo'] . "' campo='cantidad' placeholder='Cantidad' value='" . $v['cantidad'] . "'></td>
+                <td><input type='number' class='form-control input-bultos' idcar='" . $k . "' cod='" . $v['codigo'] . "' campo='bultos' value='" . $v['bultos'] . "' placeholder='Bultos'></td>
+                <td><input type='number' class='form-control input-peso' idcar='" . $k . "' cod='" . $v['codigo'] . "' campo='peso' value='" . $v['peso'] . "' placeholder='Peso'></td>
                 <td><button type='button' class='btn btn-danger btn-xs btnEliminarItemCarroG' itemEliminar='" . $k . "'><i class='fas fa-trash-alt'></i></button>
                     <button type='button' class='btn btn-primary btn-xs btnAgregarSerieG' idProductoG='" . $v['id'] . "'><i class='fa fa-barcode'  data-toggle='modal' data-target='#modalEditarProductoSeries'></i></button>
                 </td>";
@@ -277,7 +274,8 @@ class ControladorGuiaRemision
                 'bultos'  => isset($v['bultos']) ? $v['bultos'] : 0,
                 'PO'      => isset($v['PO']) ? $v['PO'] : 0,
                 'color'   => isset($v['color']) ? $v['color'] : 0,
-                'partida' => isset($v['partida']) ? $v['partida'] : 0
+                'partida' => isset($v['partida']) ? $v['partida'] : 0,
+                'adicional' => isset($v['adicional']) ? $v['adicional'] : ''
             );
             $itemx;
             $detalle[] = $itemx;
@@ -366,7 +364,10 @@ class ControladorGuiaRemision
                 }
                 $guiaid = ModeloGuiaRemision::mdlObtenerUltimoComprobanteIdGuia();
                 $idGuia = $guiaid['id'];
-                $insertarDetalles = ModeloGuiaRemision::mdlInsertarDetallesGuia($idGuia, $detalle);
+                if (self::$esBorrador) {
+                    ModeloGuiaRemision::mdlEliminarGuiaDetalle($idGuia);
+                }
+                ModeloGuiaRemision::mdlInsertarDetallesGuia($idGuia, $detalle);
                 if ($guardarGuia == 'ok') {
                     $valor = null;
                     /* $actualizarStock = ControladorProductos::ctrActualizarStock($detalle, $valor); */
@@ -462,5 +463,46 @@ class ControladorGuiaRemision
     {
         $respuesta = ModeloGuiaRemision::mdlMostrar('guia', 'id', $idGuia);
         return $respuesta;
+    }
+
+    public static function ctrObtenerGuiaById($idGuia)
+    {
+        $respuesta = ModeloGuiaRemision::mdlBuscar($idGuia);
+        return $respuesta;
+    }
+
+    public static function ctrObtenerGuiaDetalleById($idGuia)
+    {
+        $respuesta = ModeloGuiaRemision::mdlMostrarDetalles('guia_detalle', 'id_guia', $idGuia);
+        return $respuesta;
+    }
+
+    public static function ctrLlenarGuiaRemisionDetalle($sucursal, $detalle)
+    {
+        $_SESSION['carritoG'] = array();
+        if (!empty($detalle)) {
+            $carritoG = $_SESSION['carritoG'];
+            $item = 'id';
+            foreach ($detalle as $key => $value) {
+                $item = $key;
+                $producto = ControladorProductos::ctrMostrarProductos('id', $value['id_producto'], $sucursal);
+                if ($producto) {
+                    $carritoG[$item] = array(
+                        'id' => $value['id_producto'],
+                        'codigo' => $producto['codigo'],
+                        'descripcion' => $producto['descripcion'],
+                        'unidad' => $producto['codunidad'],
+                        'cantidad' => $value['cantidad'],
+                        'peso' => $value['peso'],
+                        'bultos' => $value['bultos'],
+                        'color' => $value['color'],
+                        'PO' => $value['PO'],
+                        'partida' => $value['partida'],
+                        'adicional' => $value['adicional']
+                    );
+                }
+            }
+            $_SESSION['carritoG'] = $carritoG;
+        }
     }
 }

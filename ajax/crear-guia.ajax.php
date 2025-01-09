@@ -96,49 +96,38 @@ class AjaxGuia
             }
             $item = count($carritoG) + 1;
             $existe = false;
-
             foreach ($carritoG as $k => $v) {
-
                 if ($v['id'] == $producto['id']) {
                     $item = $k;
                     $existe = true;
                     break;
                 }
             }
-
-
-
             $carritoG[$item] = array(
                 'id' => $producto['id'],
                 'codigo' => $producto['codigo'],
                 'descripcion' => $producto['descripcion'],
                 'unidad' => $producto['codunidad'],
                 'cantidad' => $value['cantidad']
-
             );
         }
-
         $_SESSION['carritoG'] = $carritoG;
-
         $respuesta = ControladorGuiaRemision::ctrLlenarCarritoGuia($carritoG);
     }
 
     public function ajaxActualizarCarroGuia()
     {
         if (isset($_POST['idProducto_update'])) {
+            $idCar = $_POST['idCar'];
             $idProducto = $_POST['idProducto_update'];
             $campo = $_POST['campo'];
             $carritoG = $_SESSION['carritoG'];
-            $item = count($carritoG) + 1;
-            foreach ($carritoG as $k => $v) {
-                if ($v['codigo'] == $idProducto) {
-                    $item = $k;
-                    break;
-                }
+            $item = $idCar;
+            if (is_numeric($idCar) && isset($carritoG[$item])) {
+                $carritoG[$item][$campo] = $_POST['valor'];
+                $_SESSION['carritoG'] = $carritoG;
+                echo 'OK';
             }
-            $carritoG[$item][$campo] = $_POST['valor'];
-            $_SESSION['carritoG'] = $carritoG;
-            echo 'OK';
         } else {
             echo 'ERROR';
         }
@@ -167,13 +156,13 @@ class AjaxGuia
         //$item = count($carritoG)+1;
         if ($_POST['cantidad'] != null) {
             $item = count($carritoG) + 1;
-            foreach ($carritoG as $k => $v) {
+            /* foreach ($carritoG as $k => $v) {
                 if ($v['id'] == $producto['id']) {
                     $item = $k;
                     $existe = true;
                     break;
                 }
-            }
+            } */
 
             $carritoG[$item] = array(
                 'id' => $producto['id'],

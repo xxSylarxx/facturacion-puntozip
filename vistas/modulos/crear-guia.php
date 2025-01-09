@@ -9,6 +9,15 @@ use Controladores\ControladorSucursal;
 $sucursal = ControladorSucursal::ctrSucursal();
 $id_sucursal = isset($_POST['idSucursal']) ? $_POST['idSucursal'] : $sucursal['id'];
 $borradorId = isset($_POST['id_guia_edit']) ? $_POST['id_guia_edit'] : null;
+$esBorrador = !empty($borradorId) && is_numeric($borradorId);
+
+$guiaDatos = [];
+if ($esBorrador) {
+  $guiaDatos = ControladorGuiaRemision::ctrObtenerGuiaById($borradorId);
+  $guiaDetalle = ControladorGuiaRemision::ctrObtenerGuiaDetalleById($borradorId);
+  $id_sucursal = $guiaDatos['id_sucursal'];
+  ControladorGuiaRemision::ctrLlenarGuiaRemisionDetalle($id_sucursal, $guiaDetalle);
+}
 ?>
 <div class="content-wrapper panel-medio-principal">
   <?php
@@ -51,7 +60,7 @@ $borradorId = isset($_POST['id_guia_edit']) ? $_POST['id_guia_edit'] : null;
             $valor = null;
             $sucursal = ControladorSucursal::ctrMostrarSucursalTotal($item, $valor);
             foreach ($sucursal as $k => $v) {
-              echo '<option value="' . $v['id'] . '" data-direccion="' . $v['direccion'] . '" data-ubigeo="' . $v['ubigeo'] . '">' . $v['nombre_sucursal'] . ' - Sede: ' . $v['direccion'] . '</option>';
+              echo '<option value="' . $v['id'] . '" data-direccion="' . $v['direccion'] . '" data-ubigeo="' . $v['ubigeo'] . '" ' . (isset($guiaDatos['id_sucursal']) ? ($guiaDatos['id_sucursal'] == $v['id'] ? 'selected' : '') : '') .' >' . $v['nombre_sucursal'] . ' - Sede: ' . $v['direccion'] . '</option>';
             }
 
             echo '</select>';
@@ -77,7 +86,7 @@ $borradorId = isset($_POST['id_guia_edit']) ? $_POST['id_guia_edit'] : null;
 
               <form role="form" method="post" class="formGuia" id="formGuia">
                 <input type="hidden" name="ruta_comprobante" id="ruta_comprobante" value="<?php echo  $_GET["ruta"] ?>">
-
+                <input type="hidden" name="esBorrador" value="<?php echo $esBorrador ? 'S' : 'N'; ?>" >
 
                 <div class="box-body" style="border: 0px; padding-top:0px; ">
 
@@ -127,7 +136,7 @@ $borradorId = isset($_POST['id_guia_edit']) ? $_POST['id_guia_edit'] : null;
                       <div class="form-group">
                         <div class="input-group">
                           <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                          <input type="text" class="form-control" name="fechaEmision" id="fechaEmision" value="<?php echo date("d/m/Y") ?>" required>
+                          <input type="text" class="form-control" name="fechaEmision" id="fechaEmision" value="<?php echo isset($guiaDatos['fecha_emision']) ? $guiaDatos['fecha_emision'] : date("d/m/Y") ?>" required>
                         </div>
                       </div>
                     </div>
@@ -151,14 +160,14 @@ $borradorId = isset($_POST['id_guia_edit']) ? $_POST['id_guia_edit'] : null;
                           <div class="kardex-contenedor">
                             <input type="hidden" name="tipoDocTransporte" id="tipoDocTransporte" value="1">
                             <div class="form-group busca-pro-kardex select">
-                              <input type="hidden" name="idCliente" id="idCliente">
+                              <input type="hidden" name="idCliente" id="idCliente" value="<?php echo isset($guiaDatos['id_cliente']) ? $guiaDatos['id_cliente'] : '' ?>">
                               <label for="">Buscar cliente:</label>
                               <select class="form-control select2" style="width: 100%;" name="listaClientes" id="listaClientes">
                                 <option value="">SELECCIONAR CLIENTE</option>
                                 <?php
                                 $clientes = ControladorClientes::ctrMostrarClientes(null, null);
                                 foreach ($clientes as $v) {
-                                  echo '<option value="' . $v['id'] . '" data-ruc="' . $v['ruc'] . '" data-razonsocial="' . $v['razon_social'] . '" data-direccion="' . $v['direccion'] . '">' . $v['ruc'] . ' - ' . $v['razon_social'] . '</option>';
+                                  echo '<option value="' . $v['id'] . '" data-ruc="' . $v['ruc'] . '" data-razonsocial="' . $v['razon_social'] . '" data-direccion="' . $v['direccion'] . '" ' . (isset($guiaDatos['id_cliente']) ? ($guiaDatos['id_cliente'] == $v['id'] ? 'selected' : '') : '') . '>' . $v['ruc'] . ' - ' . $v['razon_social'] . '</option>';
                                 }
                                 ?>
                               </select>
@@ -174,7 +183,7 @@ $borradorId = isset($_POST['id_guia_edit']) ? $_POST['id_guia_edit'] : null;
                           <div class="input-group">
                             <div id="rucActivo"></div>
 
-                            <input type="text" class="form-control" id="docIdentidad" name="docIdentidad" placeholder="Ingrese número de documento...">
+                            <input type="text" class="form-control" id="docIdentidad" name="docIdentidad" placeholder="Ingrese número de documento..." value="<?php echo isset($guiaDatos['cliente_ruc']) ? $guiaDatos['cliente_ruc'] : '' ?>">
                             <span class="input-group-addon btn" style="pointer-events: none;"><i class="fa fa-search"></i></span>
                             <!-- <div id="reloadC"></div>
                             <div class="resultadoCliente" idCliente=""><a href="#" class="btn-add"></a></div> -->
@@ -186,7 +195,7 @@ $borradorId = isset($_POST['id_guia_edit']) ? $_POST['id_guia_edit'] : null;
                         <div class="form-group">
                           <div class="input-group-adddon">
                             <label for="" class="tipoDocTransporte">Nombre o RS <span style="color:red; border-style: none !important; font-size:20px;">*</span> </label>
-                            <input type="text" class="form-control" id="razon_social" name=" razon_social" placeholder="Ingrese nombre o razón social...">
+                            <input type="text" class="form-control" id="razon_social" name=" razon_social" placeholder="Ingrese nombre o razón social..." value="<?php echo isset($guiaDatos['cliente_razon_social']) ? $guiaDatos['cliente_razon_social'] : '' ?>">
                             <!-- <span class="input-group-addon"></span>  -->
                           </div>
                         </div>
@@ -212,7 +221,7 @@ $borradorId = isset($_POST['id_guia_edit']) ? $_POST['id_guia_edit'] : null;
                               $tipoDocumento = ControladorGuiaRemision::ctrMostrarTraslado($tabla, $item, $valor);
                               foreach ($tipoDocumento as $key => $value) {
 
-                                echo '<option value=' . $value['codigo'] . '>' . $value['descripcion'] . '</option>';
+                                echo '<option value="' . $value['codigo'] . '" ' . (isset($guiaDatos['cod_traslado']) ? ($guiaDatos['cod_traslado'] == $value['codigo'] ? 'selected' : '') : '') . ' >' . $value['descripcion'] . '</option>';
                               }
                               ?>
                             </select>
@@ -235,8 +244,7 @@ $borradorId = isset($_POST['id_guia_edit']) ? $_POST['id_guia_edit'] : null;
                               $valor = null;
                               $tipoDocumento = ControladorGuiaRemision::ctrMostrarTraslado($tabla, $item, $valor);
                               foreach ($tipoDocumento as $key => $value) {
-
-                                echo '<option value=' . $value['codigo'] . '>' . $value['descripcion'] . '</option>';
+                                echo '<option value="' . $value['codigo'] . '" ' . (isset($guiaDatos['modTraslado']) ? ($guiaDatos['modTraslado'] == $value['codigo'] ? 'selected' : '') : '') . '>' . $value['descripcion'] . '</option>';
                               }
                               ?>
                             </select>
@@ -258,7 +266,7 @@ $borradorId = isset($_POST['id_guia_edit']) ? $_POST['id_guia_edit'] : null;
                               $valor = null;
                               $tipoVehiculo = ControladorGuiaRemision::ctrMostrarTiposVehiculo($tabla, $item, $valor);
                               foreach ($tipoVehiculo as $key => $value) {
-                                echo '<option value=' . $value['id'] . '>' . $value['descripcion'] . '</option>';
+                                echo '<option value="' . $value['id'] . '" ' . (isset($guiaDatos['tipovehiculo']) ? ($guiaDatos['tipovehiculo'] == $value['id'] ? 'selected' : '') : '') . ' >' . $value['descripcion'] . '</option>';
                               }
                               ?>
                             </select>
@@ -271,7 +279,7 @@ $borradorId = isset($_POST['id_guia_edit']) ? $_POST['id_guia_edit'] : null;
                         <div class="form-group">
                           <div class="input-group-adddon">
                             <label for="">Fecha Inicial de Traslado <span style="color:red; border-style: none !important; font-size:20px;">*</span> </label>
-                            <input type="text" class="form-control" id="fechaInicialTraslado" name="fechaInicialTraslado" value="<?php echo date("d/m/Y") ?>">
+                            <input type="text" class="form-control" id="fechaInicialTraslado" name="fechaInicialTraslado" value="<?php echo isset($guiaDatos['fechaTraslado']) ? $guiaDatos['fechaTraslado'] : date("d/m/Y"); ?>">
 
                           </div>
                         </div>
@@ -285,7 +293,7 @@ $borradorId = isset($_POST['id_guia_edit']) ? $_POST['id_guia_edit'] : null;
                         <div class="form-group">
                           <div class="input-group-adddon">
                             <label for="">Peso bruto (KGM) <span style="color:red; border-style: none !important; font-size:20px;">*</span> </label>
-                            <input type="number" class="form-control" id="pesoBruto" name="pesoBruto">
+                            <input type="number" class="form-control" id="pesoBruto" name="pesoBruto" value="<?php echo isset($guiaDatos['pesoTotal']) ? $guiaDatos['pesoTotal'] : ''; ?>">
                             <!-- <span class="input-group-addon"><i class="fa fa-search"></i></span>  -->
                           </div>
                         </div>
@@ -295,7 +303,7 @@ $borradorId = isset($_POST['id_guia_edit']) ? $_POST['id_guia_edit'] : null;
                         <div class="form-group">
                           <div class="input-group-adddon">
                             <label for="">Número de bultos <span style="color:red; border-style: none !important; font-size:20px;">*</span> </label>
-                            <input type="number" class="form-control" id="numeroBultos" name="numeroBultos">
+                            <input type="number" class="form-control" id="numeroBultos" name="numeroBultos" value="<?php echo isset($guiaDatos['numBultos']) ? $guiaDatos['numBultos'] : ''; ?>">
                             <!-- <span class="input-group-addon"><i class="fa fa-search"></i></span>  -->
                           </div>
                         </div>
@@ -339,8 +347,18 @@ $borradorId = isset($_POST['id_guia_edit']) ? $_POST['id_guia_edit'] : null;
                                 <option value="">BUSCAR CONDUCTOR</option>
                                 <?php
                                 $conductores = ControladorConductores::ctrMostrarConductores(null, null);
+                                $conductorNombre = '';
+                                $conductorApellidos = '';
+                                $conductorBrevete = '';
                                 foreach ($conductores as $v) {
-                                  echo '<option value="' . $v['id'] . '" data-nombre="' . $v['nombres'] . '" data-apellidos="' . $v['apellidos'] . '" data-placa="' . $v['numplaca'] . '" data-brevete="' . $v['numbrevete'] . '" data-numdoc="' . $v['numdoc'] . '">' . $v['numdoc'] . ' - ' . $v['apellidos'] . ', ' . $v['nombres'] . '</option>';
+                                  if (isset($guiaDatos['id_conductor'])) {
+                                    if ($guiaDatos['id_conductor'] == $v['id']) {
+                                      $conductorNombre = $v['nombres'];
+                                      $conductorApellidos = $v['apellidos'];
+                                      $conductorBrevete = $v['numbrevete'];
+                                    }
+                                  }
+                                  echo '<option value="' . $v['id'] . '" data-nombre="' . $v['nombres'] . '" data-apellidos="' . $v['apellidos'] . '" data-placa="' . $v['numplaca'] . '" data-brevete="' . $v['numbrevete'] . '" data-numdoc="' . $v['numdoc'] . '" ' . (isset($guiaDatos['id_conductor']) ? ($guiaDatos['id_conductor'] == $v['id'] ? 'selected' : '') : '') . '  >' . $v['numdoc'] . ' - ' . $v['apellidos'] . ', ' . $v['nombres'] . '</option>';
                                 }
                                 ?>
                               </select>
@@ -352,7 +370,7 @@ $borradorId = isset($_POST['id_guia_edit']) ? $_POST['id_guia_edit'] : null;
                         <div class="form-group">
                           <div class="input-group-">
                             <label for="" class="nombreRazon">N° DNI del conductor <span style="color:red; border-style: none !important; font-size:20px;">*</span> </label>
-                            <input type="text" class="form-control" id="docTransporte" name="docTransporte" placeholder="Ingrese número de documento...">
+                            <input type="text" class="form-control" id="docTransporte" name="docTransporte" placeholder="Ingrese número de documento..." value="<?php echo isset($guiaDatos['transp_numDoc']) ? $guiaDatos['transp_numDoc'] : ''; ?>">
                           </div>
                         </div>
                       </div>
@@ -361,12 +379,12 @@ $borradorId = isset($_POST['id_guia_edit']) ? $_POST['id_guia_edit'] : null;
                         <div class="form-group">
                           <div class="input-group-">
                             <label for="" class="nombreRazon">Nombre Conductor <span style="color:red; border-style: none !important; font-size:20px;">*</span> </label>
-                            <input type="text" class="form-control" id="nombreRazon" name="nombreRazon" placeholder="Nombre o Razón Social">
+                            <input type="text" class="form-control" id="nombreRazon" name="nombreRazon" placeholder="Nombre o Razón Social" value="<?php echo $conductorNombre; ?>">
 
                           </div>
                           <div class="input-group-c-apellidos">
                             <label for="" class="apellidosRazon">Apellidos Conductor <span style="color:red; border-style: none !important; font-size:20px;">*</span> </label>
-                            <input type="text" class="form-control" id="apellidosRazon" name="apellidosRazon" placeholder="Apellidos">
+                            <input type="text" class="form-control" id="apellidosRazon" name="apellidosRazon" placeholder="Apellidos" value="<?php echo $conductorApellidos; ?>">
                           </div>
                         </div>
 
@@ -376,11 +394,11 @@ $borradorId = isset($_POST['id_guia_edit']) ? $_POST['id_guia_edit'] : null;
                         <div class="form-group">
                           <div class="input-group-">
                             <label for="" class="placa">N° Placa Vehículo <span style="color:red; border-style: none !important; font-size:20px;">*</span> </label>
-                            <input type="text" class="form-control" id="placa" name="placa" placeholder="Número de placa">
+                            <input type="text" class="form-control" id="placa" name="placa" placeholder="Número de placa" value="<?php echo isset($guiaDatos['transp_placa']) ? $guiaDatos['transp_placa'] : ''; ?>">
 
                             <div class="input-group-c-apellidos">
                               <label for="" class="apellidosRazon">Num. Brevete <span style="color:red; border-style: none !important; font-size:20px;">*</span></label>
-                              <input type="text" class="form-control" id="numBrevete" name="numBrevete" placeholder="Num. brevete">
+                              <input type="text" class="form-control" id="numBrevete" name="numBrevete" placeholder="Num. brevete" value="<?php echo $conductorBrevete; ?>">
                             </div>
 
                           </div>
@@ -447,7 +465,7 @@ $borradorId = isset($_POST['id_guia_edit']) ? $_POST['id_guia_edit'] : null;
                             <div class="form-group">
 
                               <label for="" class="placa">Dirección <span style="color:red; border-style: none !important; font-size: 20px;">*</span> </label>
-                              <input type="text" class="form-control" id="direccionPartida" name="direccionPartida" placeholder="Dirección de Partida">
+                              <input type="text" class="form-control" id="direccionPartida" name="direccionPartida" placeholder="Dirección de Partida" value="<?php echo isset($guiaDatos['direccionPartida']) ? $guiaDatos['direccionPartida'] : ''; ?>">
 
                             </div>
                           </div>
@@ -469,7 +487,7 @@ $borradorId = isset($_POST['id_guia_edit']) ? $_POST['id_guia_edit'] : null;
 
                                     foreach ($productos as $k => $v) {
 
-                                      echo '<option value="' . $v['ubigeo'] . '">' . $v['ubigeo'] . ' ' . $v['nombre_distrito'] . ' - ' . $v['nombre_provincia'] . ' - ' . $v['name'] . '</option>
+                                      echo '<option value="' . $v['ubigeo'] . '" '. (isset($guiaDatos['ubigeoPartida']) ? ($guiaDatos['ubigeoPartida'] == $v['ubigeo'] ? 'selected' : '') : '') . '>' . $v['ubigeo'] . ' ' . $v['nombre_distrito'] . ' - ' . $v['nombre_provincia'] . ' - ' . $v['name'] . '</option>
                                                         ';
                                     }
 
@@ -497,7 +515,7 @@ $borradorId = isset($_POST['id_guia_edit']) ? $_POST['id_guia_edit'] : null;
                               <div class="input-group-">
 
                                 <label for="" class="placa">Dirección <span style="color:red; border-style: none !important; font-size: 20px;">*</span> </label>
-                                <input type="text" class="form-control" id="direccionLlegada" name="direccionLlegada" placeholder="Dirección de LLegada">
+                                <input type="text" class="form-control" value="<?php echo isset($guiaDatos['direccionLlegada']) ? $guiaDatos['direccionLlegada'] : '' ?>" id="direccionLlegada" name="direccionLlegada" placeholder="Dirección de LLegada">
 
                               </div>
                             </div>
@@ -520,7 +538,7 @@ $borradorId = isset($_POST['id_guia_edit']) ? $_POST['id_guia_edit'] : null;
 
                                     foreach ($productos as $k => $v) {
 
-                                      echo '<option value="' . $v['ubigeo'] . '">' . $v['ubigeo'] . ' ' . $v['nombre_distrito'] . ' - ' . $v['nombre_provincia'] . ' - ' . $v['name'] . '</option>
+                                      echo '<option value="' . $v['ubigeo'] . '" ' . (isset($guiaDatos['ubigeoLlegada']) ? ($guiaDatos['ubigeoLlegada'] == $v['ubigeo'] ? 'selected' : '') : '') . '>' . $v['ubigeo'] . ' ' . $v['nombre_distrito'] . ' - ' . $v['nombre_provincia'] . ' - ' . $v['name'] . '</option>
                                                         ';
                                     }
 
@@ -546,7 +564,7 @@ $borradorId = isset($_POST['id_guia_edit']) ? $_POST['id_guia_edit'] : null;
                         <div class="form-group">
                           <div class="input-group">
                             <label for="">Serie Correlativo (F001-2)</label>
-                            <input type="text" class="form-control" name="serieCorrelativoReferencial" id="serieCorrelativoReferencial">
+                            <input type="text" class="form-control" name="serieCorrelativoReferencial" id="serieCorrelativoReferencial" value="<?php isset($guiaDatos['comp_ref']) ? $guiaDatos['comp_ref'] : ''; ?>">
                             <div class="resultado-serie"></div>
 
 
@@ -582,17 +600,9 @@ $borradorId = isset($_POST['id_guia_edit']) ? $_POST['id_guia_edit'] : null;
                             </tr>
                           </thead>
                           <tbody id="itemsPG">
-                            <tr>
-                              <td>
-                                <?php
-                                echo "<div class='resubi'></div>";
-                                // $item = 'nombre_distrito';
-                                // $valor = 'RIOJA';
-                                // $respuesta = ControladorGuiaRemision::ctrMostrarUbigeo($item, $valor);
-                                // var_dump($respuesta);
-                                ?>
-                              </td>
-                            </tr>
+                            <?php if ($esBorrador) {
+                              ControladorGuiaRemision::ctrLlenarCarritoGuia($_SESSION['carritoG']);
+                            } ?>
                           </tbody>
 
                         </table>
@@ -645,7 +655,9 @@ $borradorId = isset($_POST['id_guia_edit']) ? $_POST['id_guia_edit'] : null;
                                   <div class="form-group">
                                     <div class="input-group">
                                       <span class="input-group-addon"><i class="far fa-comment-dots"></i></span>
-                                      <textarea class="form-control" name="comentario" id="comentario" cols="50" rows="4" placeholder="Escribe aquí una observacion" maxlength="250"></textarea>
+                                      <textarea class="form-control" name="comentario" id="comentario" cols="50" rows="4" placeholder="Escribe aquí una observacion" maxlength="250">
+                                        <?php echo isset($guiaDatos['observacion']) ? $guiaDatos['observacion'] : '' ?>
+                                      </textarea>
                                     </div>
                                   </div>
                                 </td>

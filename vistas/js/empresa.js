@@ -1,6 +1,7 @@
 function checketSunat() {
   $(".radio-envio #firmar").prop("checked", false);
-  $(".radio-envio #enviar").prop("checked", true);
+  $(".radio-envio #enviar").prop("checked", false);
+  $(".radio-envio #no").prop("checked", true);
 }
 checketSunat();
 
