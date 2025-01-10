@@ -257,8 +257,6 @@ class ControladorGuiaRemision
             'id_conductor' => $datosForm['listConductores'],
             'borrador'   => $datosForm['envioSunat'] == 'enviar' ? 'S' : 'N'
         );
-        var_dump($datosGuia);
-        exit();
         if (!isset($_SESSION['carritoG'])) {
             $_SESSION['carritoG'] = array();
         }
