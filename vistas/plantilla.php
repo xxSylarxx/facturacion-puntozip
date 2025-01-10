@@ -257,7 +257,7 @@ $tiem = time();
   <script src="vistas/js/categorias.js"></script>
   <script src="vistas/js/productos.js?q=<?php echo $tiempo; ?>"></script>
   <script src="vistas/js/proveedores.js"></script>
-  <script src="vistas/js/clientes.js"></script>
+  <script src="vistas/js/clientes.js?q=<?php echo $tiempo; ?>"></script>
   <script src="vistas/js/sunat.js"></script>
   <script src="vistas/js/ventas.js?q=<?php echo $tiempo; ?>"></script>
   <script src="vistas/js/nota-credito.js"></script>

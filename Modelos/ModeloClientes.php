@@ -62,7 +62,7 @@ class ModeloClientes
     {
 
         $stmt = Conexion::conectar();
-        $stmt = $stmt->prepare("UPDATE $tabla SET nombre = :nombre, documento = :documento, ruc = :ruc, razon_social = :razon_social, email = :email, telefono = :telefono, direccion = :direccion, fecha_nacimiento = :fecha_nacimiento WHERE id = :id");
+        $stmt = $stmt->prepare("UPDATE $tabla SET nombre = :nombre, documento = :documento, ruc = :ruc, razon_social = :razon_social, email = :email, telefono = :telefono, direccion = :direccion, fecha_nacimiento = :fecha_nacimiento, ubigeo = :ubigeo WHERE id = :id");
 
         $stmt->bindParam(":id", $datos['id'], PDO::PARAM_INT);
         $stmt->bindParam(":nombre", $datos['nombre'], PDO::PARAM_STR);
@@ -73,7 +73,7 @@ class ModeloClientes
         $stmt->bindParam(":telefono", $datos['telefono'], PDO::PARAM_STR);
         $stmt->bindParam(":direccion", $datos['direccion'], PDO::PARAM_STR);
         $stmt->bindParam(":fecha_nacimiento", $datos['fecha_nacimiento'], PDO::PARAM_STR);
-
+        $stmt->bindParam(":ubigeo", $datos['ubigeo'], PDO::PARAM_STR);
         if ($stmt->execute()) {
 
             return "ok";

@@ -28,6 +28,16 @@ class ModeloConductores
         $stmt = null;
     }
 
+    public static function mdlMostrarConductorId($id)
+    {
+        if (!empty($id)) {
+            $stmt = Conexion::conectar()->prepare("SELECT * FROM conductor WHERE id = " . $id);
+            $stmt->execute();
+            return $stmt->fetch();
+        }
+        return [];
+    }
+
     public static function mdlGuardarConductor($datos)
     {
         $tabla = self::$tabla;

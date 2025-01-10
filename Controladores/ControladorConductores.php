@@ -104,9 +104,9 @@ class ControladorConductores
       return $respuesta;
    }
 
-   public static function ctrBucarConductorId($valor)
+   public static function ctrBucarConductorId($idConductor)
    {
-      $respuesta = ModeloConductores::mdlMostrarConductores(null, null);
+      $respuesta = ModeloConductores::mdlMostrarConductorId($idConductor);
       return $respuesta;
    }
 

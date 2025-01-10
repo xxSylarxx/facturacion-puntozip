@@ -68,7 +68,7 @@ class ControladorGuiaRemision
             echo "<tr class='id-eliminar" . $k . "'>";
             $response =  "<td>" . $v['codigo'] . "</td>
                 <td>" . $v['descripcion'] . "<br/>
-                    <input type='text' class='datos-adicionales-item-guia input-prod' id='descripcion' name='descripcion[]' idcar='" . $k . "' cod='" . $v['codigo'] . "' campo='descripcion' placeholder='DATOS ADICIONALES'>
+                    <input type='text' class='datos-adicionales-item-guia input-prod' id='descripcion' name='descripcion[]' idcar='" . $k . "' cod='" . $v['codigo'] . "' campo='adicional' placeholder='DATOS ADICIONALES'>
                 </td>
                 <td><input type='text' class='form-control input-prod' idcar='" . $k . "' cod='" . $v['codigo'] . "' campo='color' placeholder='Color' value='" . $v['color'] . "'></td>
                 <td>
@@ -104,6 +104,12 @@ class ControladorGuiaRemision
     public static function ctrGuardarGuiaSinSunat($id_sucursal, $datosGuia)
     {
         $respuesta = ModeloGuiaRemision::mdlGuardarGuiaSinEnviarSunat($id_sucursal, $datosGuia);
+        return $respuesta;
+    }
+
+    public static function ctrActualizarGuiaSinSunat($id_sucursal, $datosGuia, $idGuia)
+    {
+        $respuesta = ModeloGuiaRemision::mdlEditarGuiaSinEnviarSunat($id_sucursal, $datosGuia, $idGuia);
         return $respuesta;
     }
 
@@ -248,10 +254,11 @@ class ControladorGuiaRemision
             'puerto' => $puerto,
             'comp_ref'   => $datosForm['serieCorrelativoReferencial'],
             'id_cliente' => $datosForm['idCliente'],
+            'id_conductor' => $datosForm['listConductores'],
             'borrador'   => $datosForm['envioSunat'] == 'enviar' ? 'S' : 'N'
         );
-        // var_dump($datosGuia);
-        // exit();
+        var_dump($datosGuia);
+        exit();
         if (!isset($_SESSION['carritoG'])) {
             $_SESSION['carritoG'] = array();
         }
@@ -356,7 +363,7 @@ class ControladorGuiaRemision
                     );
                     $id_sucursal = $datosForm['idSucursal'];
                     if (self::$esBorrador) {
-                        // editar
+                        $guardarGuia = ControladorGuiaRemision::ctrActualizarGuiaSinSunat($id_sucursal, $datosGuia, $_POST['guiaEditar']);
                     } else {
                         $actualizarSerie = ControladorSunat::ctrActualizarCorrelativo($datos);
                         $guardarGuia = ControladorGuiaRemision::ctrGuardarGuiaSinSunat($id_sucursal, $datosGuia);

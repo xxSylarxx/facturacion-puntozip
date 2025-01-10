@@ -98,19 +98,19 @@ use Controladores\ControladorClientes;
 
       <div class="row">
         <div class="col-md-12">
-        <div class="box-body chart-responsive chart-responsive-compradores">
-              <!-- <div class="chart" id="revenue-chart" style="height: 300px;"></div> -->
-            </div>
+          <div class="box-body chart-responsive chart-responsive-compradores">
+            <!-- <div class="chart" id="revenue-chart" style="height: 300px;"></div> -->
+          </div>
+        </div>
+
+
+
       </div>
 
-
-
     </div>
-
-</div>
-<!-- BOX FIN -->
-<!-- /.box-footer -->
-</section>
+    <!-- BOX FIN -->
+    <!-- /.box-footer -->
+  </section>
 
 </div>
 
@@ -244,6 +244,18 @@ CUERPO DEL MODAL
               </div>
 
             </div>
+
+            <div class="form-group">
+              <select class="form-control select2" style="width: 100%; height: 60px;" name="editarClienteUbigeo" id="editarClienteUbigeo">
+                <option value="">-SELECCIONAR UBIGEO-</option>
+                <?php
+                $listUbigeo = ControladorClientes::ctrBuscarUbigeo();
+                foreach ($listUbigeo as $v) { ?>
+                  <option value="<?php echo $v['ubigeo'] ?>"><?php echo $v['ubigeo'] . ' ' . $v['nombre_distrito'] . ' - ' . $v['nombre_provincia'] . ' - ' . $v['name']; ?></option>
+                <?php } ?>
+              </select>
+            </div>
+
             <!-- ENTRADA PARA FECHA NACIMIENTO -->
             <!-- <div class="form-group">
 
@@ -294,7 +306,7 @@ PIE DEL MODAL
 <!-- fullscreen-modal -->
 <!-- MODAL EDITAR CLIENTE-->
 <!-- Modal -->
-<div id="modalAgregarCliente" class="modal fade modal-forms" role="dialog" tabindex="-1">
+<div id="modalAgregarCliente" class="modal fade modal-forms" role="dialog">
   <div class="modal-dialog">
 
     <!-- Modal content-->
@@ -421,6 +433,17 @@ PIE DEL MODAL
 
               </div>
 
+            </div>
+
+            <div class="form-group">
+              <select class="form-control select2" style="width: 100%; height: 60px;" name="nuevoclienteUbigeo" id="nuevoclienteUbigeo">
+                <option value="">-SELECCIONAR UBIGEO-</option>
+                <?php
+                $listUbigeo = ControladorClientes::ctrBuscarUbigeo();
+                foreach ($listUbigeo as $v) { ?>
+                  <option value="<?php echo $v['ubigeo'] ?>"><?php echo $v['ubigeo'] . ' ' . $v['nombre_distrito'] . ' - ' . $v['nombre_provincia'] . ' - ' . $v['name']; ?></option>
+                <?php } ?>
+              </select>
             </div>
             <!-- ENTRADA PARA FECHA NACIMIENTO -->
             <!-- <div class="form-group">

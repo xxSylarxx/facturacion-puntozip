@@ -87,6 +87,7 @@ if ($esBorrador) {
               <form role="form" method="post" class="formGuia" id="formGuia">
                 <input type="hidden" name="ruta_comprobante" id="ruta_comprobante" value="<?php echo  $_GET["ruta"] ?>">
                 <input type="hidden" name="esBorrador" value="<?php echo $esBorrador ? 'S' : 'N'; ?>" >
+                <input type="hidden" name="guiaEditar" value="<?php echo isset($_POST['id_guia_edit']) ? $_POST['id_guia_edit'] : ''; ?>" >
 
                 <div class="box-body" style="border: 0px; padding-top:0px; ">
 
@@ -167,7 +168,7 @@ if ($esBorrador) {
                                 <?php
                                 $clientes = ControladorClientes::ctrMostrarClientes(null, null);
                                 foreach ($clientes as $v) {
-                                  echo '<option value="' . $v['id'] . '" data-ruc="' . $v['ruc'] . '" data-razonsocial="' . $v['razon_social'] . '" data-direccion="' . $v['direccion'] . '" ' . (isset($guiaDatos['id_cliente']) ? ($guiaDatos['id_cliente'] == $v['id'] ? 'selected' : '') : '') . '>' . $v['ruc'] . ' - ' . $v['razon_social'] . '</option>';
+                                  echo '<option value="' . $v['id'] . '" data-ruc="' . $v['ruc'] . '" data-razonsocial="' . $v['razon_social'] . '" data-direccion="' . $v['direccion'] . '" data-ubigeo="' . $v['ubigeo'] . '" ' . (isset($guiaDatos['id_cliente']) ? ($guiaDatos['id_cliente'] == $v['id'] ? 'selected' : '') : '') . '>' . $v['ruc'] . ' - ' . $v['razon_social'] . '</option>';
                                 }
                                 ?>
                               </select>
@@ -495,10 +496,6 @@ if ($esBorrador) {
                                   </select>
                                 </div>
                               </div>
-                              <!-- <label for="" class=" placa">Ubigeo <span style="color:red; border-style: none !important; font-size: 20px;">*</span> </label>
-                                    <input type="text" class="form-control" id="ubigeoPartida" name="ubigeoPartida">
-
-                                    <div class="resultado-ubigeos-partida"></div> -->
                             </div>
 
                           </div>
@@ -655,9 +652,7 @@ if ($esBorrador) {
                                   <div class="form-group">
                                     <div class="input-group">
                                       <span class="input-group-addon"><i class="far fa-comment-dots"></i></span>
-                                      <textarea class="form-control" name="comentario" id="comentario" cols="50" rows="4" placeholder="Escribe aquí una observacion" maxlength="250">
-                                        <?php echo isset($guiaDatos['observacion']) ? $guiaDatos['observacion'] : '' ?>
-                                      </textarea>
+                                      <textarea class="form-control" name="comentario" id="comentario" cols="50" rows="4" placeholder="Escribe aquí una observacion" maxlength="250"><?php echo isset($guiaDatos['observacion']) ? $guiaDatos['observacion'] : '' ?></textarea>
                                     </div>
                                   </div>
                                 </td>

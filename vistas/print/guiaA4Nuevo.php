@@ -5,12 +5,15 @@ use Controladores\ControladorClientes;
 use Controladores\ControladorConductores;
 use Controladores\ControladorGuiaRemision;
 
+var_dump($guia);
+die();
 $dataCliente = ControladorClientes::ctrBucarClienteId($guia['id_cliente']);
 $tipoVehiculo = ControladorGuiaRemision::ctrMostrarTiposVehiculo('tipo_vehiculo', null, null);
 $conductor = ControladorConductores::ctrBucarConductorId($guia['id_conductor']);
-echo '<pre>';
-var_dump($conductor);
-die();
+$dataUbigeo = ControladorClientes::ctrBuscarUbigeoMejorado();
+if ($conductor == false) {
+    $conductor = [];
+}
 $tipoVehiculoDes = '';
 foreach ($tipoVehiculo as $value) {
     if ($value['id'] == $guia['tipovehiculo']) {
@@ -114,13 +117,13 @@ foreach ($tipoVehiculo as $value) {
                                 echo $logo;
                                 ?>" style="width: 150px;">
                     <p style="font-size: 14px; margin-bottom: -6px; font-weight: bold;">PUNTOZIP S.A.C</p>
-                    <p style="font-size: 13px;">CAL. SAN AURELIO NRO. 266 COO. SANTA LUISA</p>
+                    <p style="font-size: 13px;"><?php echo $sucursal['direccion'] . ' ' . $sucursal['distrito'] . ' - ' . $sucursal['provincia'] . ' - ' . $sucursal['departamento']; ?></p>
                 </td>
                 <td style="width: 260px;">
                     <div id="ruc-emisor">
                         <p style="font-size: 15px; font-weight: bold; margin-bottom: 0px;">R.U.C. 20505573162</p>
                         <p style="font-size: 15px; font-weight: bold; line-height: 23px;">GUÍA DE REMISIÓN REMITENTE<br>ELECTRÓNICA</p>
-                        <p style="font-size: 15px; font-weight: bold; margin-top: -5px;"><?php echo $guia['serie'] . '-' . str_pad($guia['correlativo'], 8, '0', STR_PAD_LEFT) ?></p>
+                        <p style="font-size: 15px; font-weight: bold; margin-top: -5px;"><?php echo $guia['serie'] . ' - ' . str_pad($guia['correlativo'], 8, '0', STR_PAD_LEFT) ?></p>
                     </div>
                 </td>
             </tr>
@@ -159,8 +162,8 @@ foreach ($tipoVehiculo as $value) {
                 <th width="322">DIRECCIÓN DE LLEGADA</th>
             </tr>
             <tr>
-                <td width="322"><?php echo $guia['direccionPartida'] ?></td>
-                <td width="322"><?php echo $guia['direccionLlegada'] ?></td>
+                <td width="322"><?php echo $guia['direccionPartida'] . ' ' . $dataUbigeo[$guia['ubigeoPartida']]['nombre_distrito'] . ' - ' . $dataUbigeo[$guia['ubigeoPartida']]['nombre_provincia'] . ' - ' . $dataUbigeo[$guia['ubigeoPartida']]['name']; ?></td>
+                <td width="322"><?php echo $guia['direccionLlegada'] . ' ' . $dataUbigeo[$guia['ubigeoLlegada']]['nombre_distrito'] . ' - ' . $dataUbigeo[$guia['ubigeoLlegada']]['nombre_provincia'] . ' - ' . $dataUbigeo[$guia['ubigeoLlegada']]['name']; ?></td>
             </tr>
         </table>
         <br>
@@ -178,7 +181,7 @@ foreach ($tipoVehiculo as $value) {
                 </td>
                 <td width="203">
                     TIPO VEHICULO Y PLACA: <b><?php echo $tipoVehiculoDes . ' / ' . $guia['transp_placa'] ?></b><br>
-                    LICENCIA DE CONDUCIR: <b><?php echo $guia[''] ?></b>
+                    LICENCIA DE CONDUCIR: <b><?php echo isset($conductor['numbrevete']) ? $conductor['numbrevete'] : '' ?></b>
                 </td>
                 <td width="203">
                     NOMBRE O RAZON SOCIAL <b><?php echo $guia['transp_nombreRazon'] ?></b><br>
@@ -224,15 +227,12 @@ foreach ($tipoVehiculo as $value) {
                 <?php
                 $series = array();
                 foreach ($detalle as $key => $fila) {
-                    /* $descripcion = json_decode($guia['descripcion']);
-                    $itemd = $key;
-                    $idSeries = json_decode($guia['series']); */
                 ?>
                     <tr>
                         <td width="50" style="text-align: center; vertical-align: middle;"><?php echo $fila['codigo']; ?></td>
                         <td width="40" style="text-align: center; vertical-align: middle;"><?php echo $fila['cantidad']; ?></td>
                         <td width="40" style="text-align: center; vertical-align: middle;"><?php echo $fila['codunidad']; ?></td>
-                        <td width="445"><?php echo $fila['descripcion'] . ' COLOR: ' . $fila['color'] . ' - PESO: ' . $fila['peso'] . ' - BULTOS: ' . $fila['bultos'] . ' - PARTIDA: ' . $fila['partida']; ?></td>
+                        <td width="445"><?php echo $fila['descripcion'] . ' COLOR: (' . $fila['color'] . ') - PO: (' . $fila['PO'] . ') - PARTIDA: (' . $fila['partida'] . ') - DATOS ADICIONALES: (' . $fila['adicional'] . ') - PESO: (' . $fila['peso'] . ') - BULTOS: (' . $fila['bultos'] . ')'; ?></td>
                     </tr>
                 <?php } ?>
                 <tr>
@@ -245,7 +245,7 @@ foreach ($tipoVehiculo as $value) {
         </div>
         <p style="font-size: 11px; margin-bottom: 5px;"><b>INFORMACIÓN ADICIONAL</b></p>
         <div style="width: 100%; border-radius: 3px; border: 1px solid black; padding: 6px; font-size: 11px;">
-            <?php echo $guia['observacion'] ?>
+            <?php echo $guia['observacion']; ?>
         </div>
         <br>
         <br><br>
@@ -275,9 +275,7 @@ foreach ($tipoVehiculo as $value) {
             </div>
             <div style="font-size: 10px; text-align: center;">
                 <p style="line-height: 12px;">
-                    Representación impresa de la Guía de Remisión Remitente Electrónica, para consultar el documento visité <b>http://www.grupovisualcont.com/</b>
-                    Autorizado mendiante la Resolución de Intendencia Nro. 0340050007579
-                    <b>Resumen: ---</b>
+                    Representación impresa de la Guía de Remisión Remitente Electrónica.
                 </p>
             </div>
         </div>

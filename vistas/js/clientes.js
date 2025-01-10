@@ -185,6 +185,7 @@ $(document).on("click", ".btnEditarCliente", function () {
         $("#editarTelefono").val(respuesta["telefono"]);
         $("#editarDireccion").val(respuesta["direccion"]);
         $("#editarnombrerazon").val(respuesta["razon_social"]);
+        $("#editarClienteUbigeo").val(respuesta["ubigeo"]).trigger('change');
         $("#editartipodoc").val(6);
       }
       if (respuesta["documento"] != "") {
@@ -194,6 +195,7 @@ $(document).on("click", ".btnEditarCliente", function () {
         $("#editarTelefono").val(respuesta["telefono"]);
         $("#editarDireccion").val(respuesta["direccion"]);
         $("#editarnombrerazon").val(respuesta["nombre"]);
+        $("#editarClienteUbigeo").val(respuesta["ubigeo"]).trigger('change');
         $("#editartipodoc").val(1);
       }
     },

@@ -104,7 +104,8 @@ class ControladorClientes
                     "direccion" => $_POST['nuevoDireccion'],
                     "ruc" => $_POST['nuevonumdoc'],
                     "razon_social" => $_POST['nuevonombrerazon'],
-                    "fecha_nacimiento" => null
+                    "fecha_nacimiento" => null,
+                    "ubigeo" => isset($_POST['nuevoclienteUbigeo']) ? $_POST['nuevoclienteUbigeo'] : null
                 );
             } else {
                 $datos = array(
@@ -115,7 +116,8 @@ class ControladorClientes
                     "direccion" => $_POST['nuevoDireccion'],
                     "ruc" => '',
                     "razon_social" => '',
-                    "fecha_nacimiento" => null
+                    "fecha_nacimiento" => null,
+                    "ubigeo" => isset($_POST['nuevoclienteUbigeo']) ? $_POST['nuevoclienteUbigeo'] : null
                 );
             }
 
@@ -209,7 +211,8 @@ class ControladorClientes
                     "direccion" => $_POST['editarDireccion'],
                     "ruc" => $_POST['editarnumdoc'],
                     "razon_social" => $_POST['editarnombrerazon'],
-                    "fecha_nacimiento" => null
+                    "fecha_nacimiento" => null,
+                    "ubigeo" => isset($_POST['editarClienteUbigeo']) ? $_POST['editarClienteUbigeo'] : null
                 );
             } else {
                 $datos = array(
@@ -221,7 +224,8 @@ class ControladorClientes
                     "direccion" => $_POST['editarDireccion'],
                     "ruc" => '',
                     "razon_social" => '',
-                    "fecha_nacimiento" => null
+                    "fecha_nacimiento" => null,
+                    "ubigeo" => isset($_POST['editarClienteUbigeo']) ? $_POST['editarClienteUbigeo'] : null
                 );
             }
 
@@ -283,7 +287,18 @@ class ControladorClientes
     {
         $respuesta = ModeloClientes::mdlBuscarUbigeo();
         return $respuesta;
-    }  
+    } 
+
+    public static function ctrBuscarUbigeoMejorado()
+    {
+        $data = ModeloClientes::mdlBuscarUbigeo();
+        $respuesta = [];
+        foreach ($data as $value) {
+            $respuesta[$value['ubigeo']] = $value;
+        }
+        return $respuesta;
+    } 
+
     public static function ctrBuscarUbigeoNombre($tabla, $item, $valor)
     {
         $respuesta = ModeloClientes::mdlBuscarUbigeoNombres($tabla, $item, $valor);

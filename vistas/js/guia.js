@@ -648,8 +648,12 @@ $('#listaClientes').change(function () {
   let clienteRuc = $("#listaClientes").find('option:selected').data('ruc');
   let clienteNombre = $("#listaClientes").find('option:selected').data('razonsocial');
   let clienteDireccion = $("#listaClientes").find('option:selected').data('direccion');
+  let clienteUbigeo = $("#listaClientes").find('option:selected').data('ubigeo');
   $("#idCliente").val(idcliente);
   $("#docIdentidad").val(clienteRuc);
   $("#razon_social").val(clienteNombre);
   $("#direccionLlegada").val(clienteDireccion);
+  if (clienteUbigeo) {
+    $("#ubigeoLlegada").val(clienteUbigeo).trigger('change');
+  }
 });

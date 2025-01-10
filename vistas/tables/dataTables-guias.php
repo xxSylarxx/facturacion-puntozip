@@ -142,7 +142,7 @@ class DataTablesGuias
           $tablaGuias .= '
           <td class="text-center">-</td>
           <td class="text-center">-</td>
-          <td class="text-center">-</td>
+          <td><div class="contenedor-print-comprobantes" estadocdr' . $v['id'] . '> ' . $botonEstado . ' </div></td>
           ';
           $tablaGuias .= '<td>
             <form id="guiaEditar" name="guiaEditar" method="post" action="crear-guia">
