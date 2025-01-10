@@ -5,8 +5,6 @@ use Controladores\ControladorClientes;
 use Controladores\ControladorConductores;
 use Controladores\ControladorGuiaRemision;
 
-var_dump($guia);
-die();
 $dataCliente = ControladorClientes::ctrBucarClienteId($guia['id_cliente']);
 $tipoVehiculo = ControladorGuiaRemision::ctrMostrarTiposVehiculo('tipo_vehiculo', null, null);
 $conductor = ControladorConductores::ctrBucarConductorId($guia['id_conductor']);
