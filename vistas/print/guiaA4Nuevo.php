@@ -230,7 +230,7 @@ foreach ($tipoVehiculo as $value) {
                         <td width="50" style="text-align: center; vertical-align: middle;"><?php echo $fila['codigo']; ?></td>
                         <td width="40" style="text-align: center; vertical-align: middle;"><?php echo $fila['cantidad']; ?></td>
                         <td width="40" style="text-align: center; vertical-align: middle;"><?php echo $fila['codunidad']; ?></td>
-                        <td width="445"><?php echo $fila['descripcion'] . ' COLOR: (' . $fila['color'] . ') - PO: (' . $fila['PO'] . ') - PARTIDA: (' . $fila['partida'] . ') - DATOS ADICIONALES: (' . $fila['adicional'] . ') - PESO: (' . $fila['peso'] . ') - BULTOS: (' . $fila['bultos'] . ')'; ?></td>
+                        <td width="445"><?php echo $fila['descripcion'] . ' COLOR: (' . $fila['color'] . ') - PO: (' . $fila['PO'] . ') - PARTIDA: (' . $fila['partida'] . ') - (' . $fila['adicional'] . ') - PESO: (' . $fila['peso'] . ') - BULTOS: (' . $fila['bultos'] . ')'; ?></td>
                     </tr>
                 <?php } ?>
                 <tr>
