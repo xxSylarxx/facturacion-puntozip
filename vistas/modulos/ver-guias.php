@@ -105,7 +105,6 @@ use Controladores\ControladorSucursal;
                 <th>COMPROBANTE</th>
                 <th>CLIENTE</th>
                 <!-- <th>I.G.V.</th> -->
-                <th>DOC FERERCIA</th>
                 <th width="118px">PDF</th>
                 <th>XML</th>
                 <th>CDR</th>

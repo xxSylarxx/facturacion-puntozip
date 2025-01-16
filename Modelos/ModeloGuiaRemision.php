@@ -205,10 +205,70 @@ class ModeloGuiaRemision
         $stmt = null;
     }
 
+    // COMPLETAR AXELL
+    public static function mdlEditarGuia($id_sucursal, $datosGuia, $codigosSunat, $ticket, $idGuia)
+    {
+        $transportistaNom = (string) $datosGuia['transportista']['nombreRazon'] . ' ' . $datosGuia['transportista']['apellidosRazon'];
+        $stmt = Conexion::conectar()->prepare("UPDATE guia SET id_sucursal = :id_sucursal, id_cliente = :id_cliente, cli_tipodoc = :cli_tipodoc, tipodoc = :tipodoc, serie = :serie, correlativo = :correlativo, fecha_emision = :fecha_emision, hora = :hora, comp_ref = :comp_ref, baja_numdoc = :baja_numdoc, baja_tipodoc = :baja_tipodoc, rel_numdoc = :rel_numdoc, rel_tipodoc = :rel_tipodoc, terceros_tipodoc = :terceros_tipodoc, terceros_numdoc = :terceros_numdoc, terceros_nombrerazon = :terceros_nombrerazon, cod_traslado = :cod_traslado, uniPeso = :uniPeso, pesoTotal = :pesoTotal, numBultos = :numBultos, indTransbordo = :indTransbordo, modTraslado = :modTraslado, fechaTraslado = :fechaTraslado, transp_tipoDoc = :transp_tipoDoc, transp_numDoc = :transp_numDoc, transp_nombreRazon = :transp_nombreRazon, transp_placa = :transp_placa, tipoDocChofer = :tipoDocChofer, numDocChofer = :numDocChofer, observacion = :observacion, ubigeoPartida = :ubigeoPartida, direccionPartida = :direccionPartida, ubigeoLlegada = :ubigeoLlegada, direccionLlegada = :direccionLlegada, tipovehiculo = :tipovehiculo, descripcion = :descripcion, series = :series, feestado = :feestado, fecodigoerror = :fecodigoerror, femensajesunat = :femensajesunat, nombrexml = :nombrexml, xmlbase64 = :xmlbase64, cdrbase64 = :cdrbase64, tipovehiculo = :tipovehiculo, ticket = :ticket, borrador = 'N' WHERE id = :id_guia");
+        $stmt->bindParam(":id_sucursal", $id_sucursal, PDO::PARAM_INT);
+        $stmt->bindParam(":id_cliente", $datosGuia['id_cliente'], PDO::PARAM_INT);
+        $stmt->bindParam(":id_conductor", $datosGuia['id_conductor'], PDO::PARAM_INT);
+        $stmt->bindParam(":cli_tipodoc", $datosGuia['destinatario']['tipoDoc'], PDO::PARAM_STR);
+        $stmt->bindParam(":tipodoc", $datosGuia['guia']['tipoDoc'], PDO::PARAM_STR);
+        $stmt->bindParam(":serie", $datosGuia['guia']['serie'], PDO::PARAM_STR);
+        $stmt->bindParam(":correlativo", $datosGuia['guia']['correlativo'], PDO::PARAM_INT);
+        $stmt->bindParam(":fecha_emision", $datosGuia['guia']['fechaEmision'], PDO::PARAM_STR);
+        $stmt->bindParam(":fecha_emision", $datosGuia['guia']['fechaEmision'], PDO::PARAM_STR);
+        $stmt->bindParam(":hora", $datosGuia['guia']['horaEmision'], PDO::PARAM_STR);
+        $stmt->bindParam(":comp_ref", $datosGuia['comp_ref'], PDO::PARAM_STR);
+        $stmt->bindParam(":baja_numdoc", $datosGuia['docBaja']['nroDoc'], PDO::PARAM_STR);
+        $stmt->bindParam(":baja_tipodoc", $datosGuia['docBaja']['tipoDoc'], PDO::PARAM_STR);
+        $stmt->bindParam(":rel_numdoc", $datosGuia['relDoc']['nroDoc'], PDO::PARAM_STR);
+        $stmt->bindParam(":rel_tipodoc", $datosGuia['relDoc']['tipoDoc'], PDO::PARAM_STR);
+        $stmt->bindParam(":terceros_tipodoc", $datosGuia['terceros']['tipoDoc'], PDO::PARAM_STR);
+        $stmt->bindParam(":terceros_numdoc", $datosGuia['terceros']['numDoc'], PDO::PARAM_STR);
+        $stmt->bindParam(":terceros_nombrerazon", $datosGuia['terceros']['nombreRazon'], PDO::PARAM_STR);
+        $stmt->bindParam(":cod_traslado", $datosGuia['datosEnvio']['codTraslado'], PDO::PARAM_STR);
+        $stmt->bindParam(":uniPeso", $datosGuia['datosEnvio']['uniPesoTotal'], PDO::PARAM_STR);
+        $stmt->bindParam(":pesoTotal", $datosGuia['datosEnvio']['pesoTotal'], PDO::PARAM_STR);
+        $stmt->bindParam(":numBultos", $datosGuia['datosEnvio']['numBultos'], PDO::PARAM_STR);
+        $stmt->bindParam(":indTransbordo", $datosGuia['datosEnvio']['indTransbordo'], PDO::PARAM_STR);
+        $stmt->bindParam(":modTraslado", $datosGuia['datosEnvio']['modTraslado'], PDO::PARAM_STR);
+        $stmt->bindParam(":fechaTraslado", $datosGuia['datosEnvio']['fechaTraslado'], PDO::PARAM_STR);
+        $stmt->bindParam(":transp_tipoDoc", $datosGuia['transportista']['tipoDoc'], PDO::PARAM_STR);
+        $stmt->bindParam(":transp_numDoc", $datosGuia['transportista']['numDoc'], PDO::PARAM_STR);
+        $stmt->bindParam(":transp_nombreRazon", $transportistaNom, PDO::PARAM_STR);
+        $stmt->bindParam(":transp_placa", $datosGuia['transportista']['placa'], PDO::PARAM_STR);
+        $stmt->bindParam(":tipoDocChofer", $datosGuia['transportista']['tipoDocChofer'], PDO::PARAM_STR);
+        $stmt->bindParam(":numDocChofer", $datosGuia['transportista']['numDocChofer'], PDO::PARAM_STR);
+        $stmt->bindParam(":ubigeoPartida", $datosGuia['partida']['ubigeo'], PDO::PARAM_STR);
+        $stmt->bindParam(":direccionPartida", $datosGuia['partida']['direccion'], PDO::PARAM_STR);
+        $stmt->bindParam(":ubigeoLlegada", $datosGuia['llegada']['ubigeo'], PDO::PARAM_STR);
+        $stmt->bindParam(":direccionLlegada", $datosGuia['llegada']['direccion'], PDO::PARAM_STR);
+        $stmt->bindParam(":observacion", $datosGuia['guia']['observacion'], PDO::PARAM_STR);
+        $stmt->bindParam(":feestado", $codigosSunat['feestado'], PDO::PARAM_STR);
+        $stmt->bindParam(":fecodigoerror", $codigosSunat['fecodigoerror'], PDO::PARAM_STR);
+        $stmt->bindParam(":femensajesunat", $codigosSunat['femensajesunat'], PDO::PARAM_STR);
+        $stmt->bindParam(":nombrexml", $codigosSunat['nombrexml'], PDO::PARAM_STR);
+        $stmt->bindParam(":xmlbase64", $codigosSunat['xmlbase64'], PDO::PARAM_STR);
+        $stmt->bindParam(":cdrbase64", $codigosSunat['cdrbase64'], PDO::PARAM_STR);
+        $stmt->bindParam(":tipovehiculo", $datosGuia['datosEnvio']['tipoVehiculo'], PDO::PARAM_STR);
+        $stmt->bindParam(":descripcion", $datosGuia['guia']['descripcion'], PDO::PARAM_STR);
+        $stmt->bindParam(":ticket", $ticket, PDO::PARAM_STR);
+        $stmt->bindParam(":series", $datosGuia['guia']['series'], PDO::PARAM_STR);
+        if ($stmt->execute()) {
+            return 'ok';
+        } else {
+            return 'error';
+        }
+        $stmt->close();
+        $stmt = null;
+    }
+
     public static function mdlGuardarGuiaSinEnviarSunat($id_sucursal, $datosGuia)
     {
         $transportistaNom = (string) $datosGuia['transportista']['nombreRazon'] . ' ' . $datosGuia['transportista']['apellidosRazon'];
-        $stmt = Conexion::conectar()->prepare("INSERT INTO guia(id, id_sucursal, id_cliente, id_conductor, cli_tipodoc, tipodoc, serie, correlativo, fecha_emision, hora, comp_ref, baja_numdoc, baja_tipodoc, rel_numdoc, rel_tipodoc, terceros_tipodoc, terceros_numdoc, terceros_nombrerazon, cod_traslado, uniPeso, pesoTotal, numBultos, indTransbordo, modTraslado, fechaTraslado, transp_tipoDoc, transp_numDoc, transp_nombreRazon, transp_placa, tipoDocChofer, numDocChofer, observacion, ubigeoPartida, direccionPartida, ubigeoLlegada, direccionLlegada, tipovehiculo, descripcion, series) VALUES (NULL, :id_sucursal, :id_cliente, :id_conductor, :cli_tipodoc, :tipodoc, :serie, :correlativo, :fecha_emision, :hora, :comp_ref, :baja_numdoc, :baja_tipodoc, :rel_numdoc, :rel_tipodoc, :terceros_tipodoc, :terceros_numdoc, :terceros_nombrerazon, :cod_traslado, :uniPeso, :pesoTotal, :numBultos, :indTransbordo, :modTraslado, :fechaTraslado, :transp_tipoDoc, :transp_numDoc, :transp_nombreRazon, :transp_placa, :tipoDocChofer, :numDocChofer, :observacion, :ubigeoPartida, :direccionPartida, :ubigeoLlegada, :direccionLlegada, :tipovehiculo, :descripcion, :series)");
+        $stmt = Conexion::conectar()->prepare("INSERT INTO guia(id, id_sucursal, id_cliente, id_conductor, cli_tipodoc, tipodoc, serie, correlativo, fecha_emision, hora, comp_ref, baja_numdoc, baja_tipodoc, rel_numdoc, rel_tipodoc, terceros_tipodoc, terceros_numdoc, terceros_nombrerazon, cod_traslado, uniPeso, pesoTotal, numBultos, indTransbordo, modTraslado, fechaTraslado, transp_tipoDoc, transp_numDoc, transp_nombreRazon, transp_placa, tipoDocChofer, numDocChofer, observacion, ubigeoPartida, direccionPartida, ubigeoLlegada, direccionLlegada, tipovehiculo, descripcion, series, nombrexml) VALUES (NULL, :id_sucursal, :id_cliente, :id_conductor, :cli_tipodoc, :tipodoc, :serie, :correlativo, :fecha_emision, :hora, :comp_ref, :baja_numdoc, :baja_tipodoc, :rel_numdoc, :rel_tipodoc, :terceros_tipodoc, :terceros_numdoc, :terceros_nombrerazon, :cod_traslado, :uniPeso, :pesoTotal, :numBultos, :indTransbordo, :modTraslado, :fechaTraslado, :transp_tipoDoc, :transp_numDoc, :transp_nombreRazon, :transp_placa, :tipoDocChofer, :numDocChofer, :observacion, :ubigeoPartida, :direccionPartida, :ubigeoLlegada, :direccionLlegada, :tipovehiculo, :descripcion, :series, :nombrexml)");
 
         $stmt->bindParam(":id_sucursal", $id_sucursal, PDO::PARAM_INT);
         $stmt->bindParam(":id_cliente", $datosGuia['id_cliente'], PDO::PARAM_INT);
@@ -256,6 +316,7 @@ class ModeloGuiaRemision
         $stmt->bindParam(":descripcion", $datosGuia['guia']['descripcion'], PDO::PARAM_STR);
         /* $stmt->bindParam(":ticket", $ticket, PDO::PARAM_STR); */
         $stmt->bindParam(":series", $datosGuia['guia']['series'], PDO::PARAM_STR);
+        $stmt->bindParam(":nombrexml", $datosGuia['nombrexml'], PDO::PARAM_STR);
 
         if ($stmt->execute()) {
             return   'ok';
@@ -270,7 +331,7 @@ class ModeloGuiaRemision
     public static function mdlEditarGuiaSinEnviarSunat($id_sucursal, $datosGuia, $idGuia)
     {
         $transportistaNom = (string) $datosGuia['transportista']['nombreRazon'] . ' ' . $datosGuia['transportista']['apellidosRazon'];
-        $stmt = Conexion::conectar()->prepare("UPDATE guia SET id_sucursal = :id_sucursal, id_cliente = :id_cliente, cli_tipodoc = :cli_tipodoc, tipodoc = :tipodoc, serie = :serie, correlativo = :correlativo, fecha_emision = :fecha_emision, hora = :hora, comp_ref = :comp_ref, baja_numdoc = :baja_numdoc, baja_tipodoc = :baja_tipodoc, rel_numdoc = :rel_numdoc, rel_tipodoc = :rel_tipodoc, terceros_tipodoc = :terceros_tipodoc, terceros_numdoc = :terceros_numdoc, terceros_nombrerazon = :terceros_nombrerazon, cod_traslado = :cod_traslado, uniPeso = :uniPeso, pesoTotal = :pesoTotal, numBultos = :numBultos, indTransbordo = :indTransbordo, modTraslado = :modTraslado, fechaTraslado = :fechaTraslado, transp_tipoDoc = :transp_tipoDoc, transp_numDoc = :transp_numDoc, transp_nombreRazon = :transp_nombreRazon, transp_placa = :transp_placa, tipoDocChofer = :tipoDocChofer, numDocChofer = :numDocChofer, observacion = :observacion, ubigeoPartida = :ubigeoPartida, direccionPartida = :direccionPartida, ubigeoLlegada = :ubigeoLlegada, direccionLlegada = :direccionLlegada, tipovehiculo = :tipovehiculo, descripcion = :descripcion, series = :series WHERE id = :id_guia");
+        $stmt = Conexion::conectar()->prepare("UPDATE guia SET id_sucursal = :id_sucursal, id_cliente = :id_cliente, cli_tipodoc = :cli_tipodoc, tipodoc = :tipodoc, serie = :serie, correlativo = :correlativo, fecha_emision = :fecha_emision, hora = :hora, comp_ref = :comp_ref, baja_numdoc = :baja_numdoc, baja_tipodoc = :baja_tipodoc, rel_numdoc = :rel_numdoc, rel_tipodoc = :rel_tipodoc, terceros_tipodoc = :terceros_tipodoc, terceros_numdoc = :terceros_numdoc, terceros_nombrerazon = :terceros_nombrerazon, cod_traslado = :cod_traslado, uniPeso = :uniPeso, pesoTotal = :pesoTotal, numBultos = :numBultos, indTransbordo = :indTransbordo, modTraslado = :modTraslado, fechaTraslado = :fechaTraslado, transp_tipoDoc = :transp_tipoDoc, transp_numDoc = :transp_numDoc, transp_nombreRazon = :transp_nombreRazon, transp_placa = :transp_placa, tipoDocChofer = :tipoDocChofer, numDocChofer = :numDocChofer, observacion = :observacion, ubigeoPartida = :ubigeoPartida, direccionPartida = :direccionPartida, ubigeoLlegada = :ubigeoLlegada, direccionLlegada = :direccionLlegada, tipovehiculo = :tipovehiculo, descripcion = :descripcion, series = :series, nombrexml = :nombrexml WHERE id = :id_guia");
 
         $stmt->bindParam(":id_sucursal", $id_sucursal, PDO::PARAM_INT);
         $stmt->bindParam(":id_cliente", $datosGuia['id_cliente'], PDO::PARAM_INT);
@@ -310,6 +371,7 @@ class ModeloGuiaRemision
         $stmt->bindParam(":tipovehiculo", $datosGuia['datosEnvio']['tipoVehiculo'], PDO::PARAM_STR);
         $stmt->bindParam(":descripcion", $datosGuia['guia']['descripcion'], PDO::PARAM_STR);
         $stmt->bindParam(":series", $datosGuia['guia']['series'], PDO::PARAM_STR);
+        $stmt->bindParam(":nombrexml", $datosGuia['nombrexml'], PDO::PARAM_STR);
         $stmt->bindParam(":id_guia", $idGuia, PDO::PARAM_INT);
 
         if ($stmt->execute()) {
@@ -325,7 +387,7 @@ class ModeloGuiaRemision
     // MOSTRAR DETALLES Y PRODUCTOS DE LA GUIA
     public static function mdlMostrarDetallesProductosGuia($item, $valor)
     {
-        $stmt = Conexion::conectar()->prepare("SELECT t1.id_producto, t1.cantidad, t2.descripcion, t2.id, t2.codunidad, t2.codigo, t2.id, t1.cantidad, t1.peso, t1.bultos, t1.color, t1.PO, t1.partida, t1.adicional FROM guia_detalle t1 INNER JOIN productos t2 ON t1.id_producto=t2.id  WHERE $item=:$item");
+        $stmt = Conexion::conectar()->prepare("SELECT t1.id_producto, t1.cantidad, t2.descripcion, t2.id, t2.codunidad, t2.codigo, t2.id, t1.cantidad, t1.peso, t1.bultos, t1.color, t1.PO, t1.partida, t1.adicional, t1.servicio, t1.caracteristica, c.categoria as categoria_des FROM guia_detalle t1 INNER JOIN productos t2 ON t1.id_producto=t2.id LEFT JOIN categorias c ON c.id = t2.id_categoria WHERE $item=:$item");
         $stmt->bindParam(":" . $item, $valor, PDO::PARAM_STR);
         $stmt->execute();
         return $stmt->fetchall();
@@ -383,6 +445,19 @@ class ModeloGuiaRemision
     public static function mdlEliminarGuia($idGuia)
     {
         $stmt = Conexion::conectar()->prepare("DELETE FROM guia WHERE id = :id");
+        $stmt->bindParam(":id", $idGuia, PDO::PARAM_INT);
+        if ($stmt->execute()) {
+            return 'ok';
+        } else {
+            return 'error';
+        }
+        $stmt->close();
+        $stmt = null;
+    }
+
+    public static function mdlAnularGuia($idGuia)
+    {
+        $stmt = Conexion::conectar()->prepare("UPDATE guia SET anulado = 'S' WHERE id = :id");
         $stmt->bindParam(":id", $idGuia, PDO::PARAM_INT);
         if ($stmt->execute()) {
             return 'ok';

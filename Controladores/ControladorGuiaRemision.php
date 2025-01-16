@@ -117,8 +117,8 @@ class ControladorGuiaRemision
 
     public static function ctrActualizarGuia($id_sucursal, $datosGuia, $codigosSunat, $ticket, $idGuia)
     {
-        //$respuesta = ModeloGuiaRemision::mdlEditarGuiaSinEnviarSunat($id_sucursal, $datosGuia, $idGuia);
-        //return $respuesta;
+        $respuesta = ModeloGuiaRemision::mdlEditarGuia($id_sucursal, $datosGuia, $codigosSunat, $ticket, $idGuia);
+        return $respuesta;
     }
 
     public static function ctrCrearGuia($datosForm)
@@ -371,6 +371,7 @@ class ControladorGuiaRemision
                         'correlativo' => $datosGuia['guia']['correlativo'],
                     );
                     $id_sucursal = $datosForm['idSucursal'];
+                    $datosGuia['nombrexml'] = $nombre;
                     if (self::$esBorrador) {
                         $guardarGuia = ControladorGuiaRemision::ctrActualizarGuiaSinSunat($id_sucursal, $datosGuia, $_POST['guiaEditar']);
                     } else {
@@ -525,6 +526,11 @@ class ControladorGuiaRemision
     public static function ctrEliminarGuia($id) {
         ModeloGuiaRemision::mdlEliminarGuiaDetalle($id);
         ModeloGuiaRemision::mdlEliminarGuia($id);
+        return 'ok';
+    }
+
+    public static function ctrAnularGuia($id) {
+        ModeloGuiaRemision::mdlAnularGuia($id);
         return 'ok';
     }
 }

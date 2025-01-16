@@ -294,6 +294,12 @@ class AjaxGuia
         $respuesta = ControladorGuiaRemision::ctrEliminarGuia($idGuiaEliminar);
         echo $respuesta;
     }
+
+    public function ajaxAnularGuia() {
+        $idGuiaAnular = $_POST['idGuiaAnular'];
+        $respuesta = ControladorGuiaRemision::ctrAnularGuia($idGuiaAnular);
+        echo $respuesta;
+    }
 }
 
 if (isset($_POST['modalidadTraslado'])) {
@@ -348,4 +354,9 @@ if (isset($_POST['idgetGuia'])) {
 if (isset($_POST['idGuiaDelete'])) {
     $objretornar = new AjaxGuia();
     $objretornar->ajaxEliminarGuia();
+}
+
+if (isset($_POST['idGuiaAnular'])) {
+    $objretornar = new AjaxGuia();
+    $objretornar->ajaxAnularGuia();
 }

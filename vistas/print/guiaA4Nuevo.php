@@ -19,6 +19,12 @@ foreach ($tipoVehiculo as $value) {
         break;
     }
 }
+
+$tipoTraslado = ControladorGuiaRemision::ctrMostrarTraslado('motivo_traslado', 'codigo', $guia['cod_traslado']);
+$trasladoDesc = '';
+if (is_array($tipoTraslado)) {
+    $trasladoDesc = $tipoTraslado['descripcion'];
+}
 ?>
 <style>
     #tabla-fechas,
@@ -126,7 +132,6 @@ foreach ($tipoVehiculo as $value) {
                 </td>
             </tr>
         </table>
-        <br>
         <table id="tabla-fechas">
             <tr>
                 <th>FECHA DE EMISIÓN</th>
@@ -188,12 +193,12 @@ foreach ($tipoVehiculo as $value) {
                 </td>
             </tr>
         </table>
-        <p style="font-size: 11px;"><b>MOTIVO DE TRASLADO:</b> 17 TRASLADO DE BIENES PARA TRANSFORMACIÓN</p>
+        <p style="font-size: 11px;"><b>MOTIVO DE TRASLADO:</b> <?php echo $guia['cod_traslado'] . ' ' . $trasladoDesc ?></p>
         <div style="width: 100%; border-radius: 4px; border: 1px solid black; padding: 6px; font-size: 9px;">
             <table>
                 <tr>
-                    <td>01 Venta</td>
-                    <td>13 Otros</td>
+                    <td>01 VENTA</td>
+                    <td>13 OTROS</td>
                 </tr>
                 <tr>
                     <td>02 COMPRA</td>
@@ -230,7 +235,11 @@ foreach ($tipoVehiculo as $value) {
                         <td width="50" style="text-align: center; vertical-align: middle;"><?php echo $fila['codigo']; ?></td>
                         <td width="40" style="text-align: center; vertical-align: middle;"><?php echo $fila['cantidad']; ?></td>
                         <td width="40" style="text-align: center; vertical-align: middle;"><?php echo $fila['codunidad']; ?></td>
-                        <td width="445"><?php echo $fila['descripcion'] . ' COLOR: (' . $fila['color'] . ') - PO: (' . $fila['PO'] . ') - PARTIDA: (' . $fila['partida'] . ') - DATOS ADICIONALES: (' . $fila['adicional'] . ') - PESO: (' . $fila['peso'] . ') - BULTOS: (' . $fila['bultos'] . ')'; ?></td>
+                        <td width="445">
+                            SERVICIO : <?php echo $fila['servicio']; ?><br>
+                            <?php echo $fila['categoria_des']; ?> : 
+                            <?php echo $fila['descripcion'] . ' ' . $fila['caracteristica'] . ' - COLOR: (' . $fila['color'] . ') - PO: (' . $fila['PO'] . ') - PARTIDA: (' . $fila['partida'] . ') - ' . $fila['adicional'] . ' - PESO: (' . $fila['peso'] . ') - BULTOS: (' . $fila['bultos'] . ')'; ?>
+                        </td>
                     </tr>
                 <?php } ?>
                 <tr>

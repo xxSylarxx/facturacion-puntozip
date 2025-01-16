@@ -685,3 +685,32 @@ $(document).on("click", ".btnEliminarGuia", function (e) {
       }
     });
 });
+
+$(document).on("click", ".btnAnularGuia", function (e) {
+  let idGuiaAnular = $(this).attr('guiaAnular');
+  Swal.fire({
+    title: "¿Estás seguro de anular la guia de remisión?",
+    text: "¡Verifica todo antes de continuar!",
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Sí, anular!",
+    cancelButtonText: "Cancelar",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.ajax({
+        method: "POST",
+        url: "ajax/crear-guia.ajax.php",
+        data: {
+          idGuiaAnular
+        },
+        success: function (datos) {
+          if (datos == 'ok') {
+            window.location.reload();
+          }
+        }
+      });
+    }
+  });
+});

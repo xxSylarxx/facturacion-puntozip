@@ -112,10 +112,9 @@ class DataTablesGuias
         }
         $tablaGuias = '<tr>
                 <td>' . ++$k . '</td>
-                <td>' . $v['fecha_emision'] . '</td>
-                <td>' . $v['serie'] . '-' . $v['correlativo'] . '</td>
-                <td>' . $nombreRazon . '<br>' . $doc . '</td>
-                <td>' . $v['comp_ref'] . '</td>
+                <td ' . ($v['anulado'] == 'S' ? 'style="text-decoration: line-through; color: red;"' : '') . '>' . $v['fecha_emision'] . '</td>
+                <td ' . ($v['anulado'] == 'S' ? 'style="text-decoration: line-through; color: red;"' : '') . '>' . $v['serie'] . '-' . $v['correlativo'] . '</td>
+                <td ' . ($v['anulado'] == 'S' ? 'style="text-decoration: line-through; color: red;"' : '') . '>' . $nombreRazon . '<br>' . $doc . '</td>
                 <td>
                 <div class="contenedor-print-comprobantes">
                   <form id="printC" name="printC" method="post" action="vistas/print/printguia/" target="_blank">
@@ -124,7 +123,7 @@ class DataTablesGuias
                   </form>
                 </div>
                 </td>';
-        if ($v['borrador'] == 'N') {
+        if ($v['borrador'] == 'N' || $v['anulado'] == 'S') {
           $tablaGuias .= '
                 <td>
                 <div class="contenedor-print-comprobantes" estadocdr' . $v['id'] . '>
@@ -134,8 +133,15 @@ class DataTablesGuias
                 <div class="contenedor-print-comprobantes" estadocdr' . $v['id'] . '>
                 ' . $botonEstadoCdr . '
                </div>
-               </td>
-                <td><div class="contenedor-print-comprobantes" estadocdr' . $v['id'] . '> ' . $botonEstado . ' </div></td>';
+               </td>';
+          if ($v['anulado'] == 'S') {
+            $tablaGuias .= '<td style="text-align: center; vertical-align: middle;"><img src="./vistas/img/cruz.png" width="30" title="Anulado"></td>';
+          } else {
+            $tablaGuias .= '<td><div class="contenedor-print-comprobantes" estadocdr' . $v['id'] . '> ' . $botonEstado . ' </div></td>';
+          }
+          if ($v['feestado'] == '1') {
+            $tablaGuias .= '<td><button type="button" class="btn btn-danger btnAnularGuia" guiaAnular="' . $v['id'] . '" title="Anular"><i class="fas fa-window-close"></i></button></td>';
+          }
         } else {
           $tablaGuias .= '
           <td>
@@ -148,10 +154,11 @@ class DataTablesGuias
           $tablaGuias .= '<td>
             <form id="guiaEditar" name="guiaEditar" method="post" action="crear-guia">
                 <input type="hidden" id="id_guia_form" name="id_guia_edit" value="' . $v['id'] . '">
-                <button type="submit" class="btn btn-warning"><i class="fas fa-user-edit"></i></button>
+                <button type="submit" class="btn btn-warning" title="Editar"><i class="fas fa-user-edit"></i></button>
+                <button type="button" class="btn btn-danger btnEliminarGuia" guiaDelete="' . $v['id'] . '" title="Eliminar"><i class="fas fa-trash-alt"></i></button>
                 ';
           if ($v['fechaLimit'] == 'S') {
-            $tablaGuias .= '<button type="button" class="btn btn-danger btnEliminarGuia" guiaDelete="' . $v['id'] . '"><i class="fas fa-trash-alt"></i></button>';
+            // $tablaGuias .= '<button type="button" class="btn btn-danger btnEliminarGuia" guiaDelete="' . $v['id'] . '"><i class="fas fa-trash-alt"></i></button>';
           }
           $tablaGuias .= '</form>
           </td></tr>';
