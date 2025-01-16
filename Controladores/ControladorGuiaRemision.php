@@ -533,4 +533,8 @@ class ControladorGuiaRemision
         ModeloGuiaRemision::mdlAnularGuia($id);
         return 'ok';
     }
+
+    public static function ctrActualizarEstado($id) {
+        ModeloGuiaRemision::mdlActualizarGuiaEstado($id, 2);
+    }
 }

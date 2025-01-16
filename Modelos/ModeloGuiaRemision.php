@@ -480,4 +480,18 @@ class ModeloGuiaRemision
         $stmt->close();
         $stmt = null;
     }
+
+    public static function mdlActualizarGuiaEstado($idGuia, $estado)
+    {
+        $stmt = Conexion::conectar()->prepare("UPDATE guia SET borrador = 'N', feestado = :feestado WHERE id = :id");
+        $stmt->bindParam(":id", $idGuia, PDO::PARAM_INT);
+        $stmt->bindParam(":feestado", $estado, PDO::PARAM_INT);
+        if ($stmt->execute()) {
+            return 'ok';
+        } else {
+            return 'error';
+        }
+        $stmt->close();
+        $stmt = null;
+    }
 }

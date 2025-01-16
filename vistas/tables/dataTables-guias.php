@@ -12,6 +12,16 @@ use Controladores\ControladorSucursal;
 class DataTablesGuias
 {
 
+  public function comprobarMayorDe24Horas($fecha_emision, $hora)
+  {
+    $fechaHora = $fecha_emision . ' ' . $hora;
+    $fechaHoraDateTime = new DateTime($fechaHora);
+    $fechaActual = new DateTime();
+    $intervalo = $fechaActual->diff($fechaHoraDateTime);
+    $horasDeDiferencia = $intervalo->h + ($intervalo->days * 24);
+    return $horasDeDiferencia >= 24 ? true : false;
+  }
+
   public function dtaListarGuias()
   {
 
@@ -78,13 +88,14 @@ class DataTablesGuias
       $reload = './index.php';
       //main query to fetch the data
       $pdo =  Conexion::conectar();
-      $registros = $pdo->prepare("SELECT *, (CASE WHEN fecha_emision < NOW() THEN 'S' ELSE 'N' END) AS fechaLimit FROM  $sTable $sWhere ORDER BY id DESC LIMIT $offset,$per_page");
+      $registros = $pdo->prepare("SELECT * FROM  $sTable $sWhere ORDER BY id DESC LIMIT $offset, $per_page");
       $registros->execute();
       $registros = $registros->fetchall();
       foreach ($registros as $k => $v) {
         $item = 'id';
         $valor = $v['id_cliente'];
         $cliente = ControladorClientes::ctrMostrarClientes($item, $valor);
+        $mayor_24_horas = $this->comprobarMayorDe24Horas($v['fecha_emision'], $v['hora']);
         if ($v['cli_tipodoc'] == 1 && $v['cli_tipodoc'] != 2) {
           $nombreRazon = $cliente['nombre'];
           $doc = $cliente['documento'];
@@ -157,9 +168,6 @@ class DataTablesGuias
                 <button type="submit" class="btn btn-warning" title="Editar"><i class="fas fa-user-edit"></i></button>
                 <button type="button" class="btn btn-danger btnEliminarGuia" guiaDelete="' . $v['id'] . '" title="Eliminar"><i class="fas fa-trash-alt"></i></button>
                 ';
-          if ($v['fechaLimit'] == 'S') {
-            // $tablaGuias .= '<button type="button" class="btn btn-danger btnEliminarGuia" guiaDelete="' . $v['id'] . '"><i class="fas fa-trash-alt"></i></button>';
-          }
           $tablaGuias .= '</form>
           </td></tr>';
         }

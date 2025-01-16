@@ -533,7 +533,6 @@ $(document).on("click", "#getcdr-guia", function () {
         .html("<img src='vistas/img/reload.svg' width='80px'> ");
     },
     success: function (respuesta) {
-      console.log(respuesta);
       Swal.fire({
         icon: "success",
         title: "",

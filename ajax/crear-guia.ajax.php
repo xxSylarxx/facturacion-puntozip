@@ -256,19 +256,37 @@ class AjaxGuia
         $desactivarRetornoGuia = ControladorGuiaRemision::ctrDesactivarRetorno($datos);
     }
 
+    public function comprobarMayorDe24Horas($fecha_emision, $hora)
+    {
+      $fechaHora = $fecha_emision . ' ' . $hora;
+      $fechaHoraDateTime = new DateTime($fechaHora);
+      $fechaActual = new DateTime();
+      $intervalo = $fechaActual->diff($fechaHoraDateTime);
+      $horasDeDiferencia = $intervalo->h + ($intervalo->days * 24);
+      return $horasDeDiferencia >= 24 ? true : false;
+    }
+
     public function ajaxGetCDR()
     {
-        $emisor = ControladorEmpresa::ctrEmisor();
-        $token_result = ApiFacturacion::ObtenerToken($emisor);
-        // var_dump($token_result);
-        $token = $token_result->access_token;
-        // echo $token;
-
         $idGuia = $_POST['idgetGuia'];
         $tabla = 'guia';
         $item = 'id';
         $valor = $_POST['idgetGuia'];
         $guia = ControladorGuiaRemision::ctrMostrar($tabla, $item, $valor);
+        // VERIFICAR SI PASO MAS DE 24 HORAS
+        $mayor_24_horas = $this->comprobarMayorDe24Horas($guia['fecha_emision'], $guia['hora']);
+
+        if ($mayor_24_horas) {
+            ControladorGuiaRemision::ctrActualizarEstado($idGuia);
+            return 'GUIA RECHAZADA';
+        }
+
+        $emisor = ControladorEmpresa::ctrEmisor();
+        $token_result = ApiFacturacion::ObtenerToken($emisor);
+        die('No existe token'); exit();
+        $token = $token_result->access_token;
+
+        
         $ticket = $guia['ticket'];
         $nombre = $emisor['ruc'] . '-' . $guia['tipodoc'] . '-' . $guia['serie'] . '-' . $guia['correlativo'];
         $nombre_archivo = $nombre . '.zip';
