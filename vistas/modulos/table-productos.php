@@ -33,7 +33,6 @@ $categorias =  ControladorCategorias::ctrMostrarCategorias($item, $valor);
             echo '<option value="' . $v['id'] . '">' . $v['categoria'] . '</option>';
           }
           ?>
-
         </select>
       </div>
     </div>

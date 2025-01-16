@@ -33,7 +33,7 @@ $sucursal = ControladorSucursal::ctrSucursal();
                         <th style="width:10px">#</th>
                         <!-- <th>Imagen</th> -->
                         <th>Código</th>
-                        <!-- <th>Serie</th> -->
+                        <th>Categoría</th>
                         <th>Descripción</th>
                         <th>Unidad M</th>
                         <th>Cantidad</th>

@@ -388,6 +388,19 @@ class ModeloGuiaRemision
         $stmt = null;
     }
 
+    public static function mdlEliminarGuia($idGuia)
+    {
+        $stmt = Conexion::conectar()->prepare("DELETE FROM guia WHERE id = :id");
+        $stmt->bindParam(":id", $idGuia, PDO::PARAM_INT);
+        if ($stmt->execute()) {
+            return 'ok';
+        } else {
+            return 'error';
+        }
+        $stmt->close();
+        $stmt = null;
+    }
+
     public static function mdlEliminarGuiaDetalle($idGuia)
     {
         $stmt = Conexion::conectar()->prepare("DELETE FROM guia_detalle WHERE id_guia = :id");

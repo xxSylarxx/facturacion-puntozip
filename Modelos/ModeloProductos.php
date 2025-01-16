@@ -160,7 +160,7 @@ class ModeloProductos
         $item = null;
         $valor = null;
         $respuesta = ControladorSucursal::ctrSucursalPrincipal($item, $valor);
-        $stmt = Conexion::conectar()->prepare("INSERT INTO $tabla(id_categoria, id_sucursal, codigo, serie, descripcion, imagen, stock, codigoafectacion, codunidad) VALUES (:id_categoria, :id_sucursal, :codigo, :serie, :descripcion, :imagen, :stock, :codigoafectacion, :codunidad)");
+        $stmt = Conexion::conectar()->prepare("INSERT INTO $tabla (id_categoria, id_sucursal, codigo, serie, descripcion, caracteristica, imagen, stock, codigoafectacion, codunidad) VALUES (:id_categoria, :id_sucursal, :codigo, :serie, :descripcion, :caracteristica, :imagen, :stock, :codigoafectacion, :codunidad)");
 
         if (isset($datos['id_sucursal']) && $datos['id_sucursal']  != 'todos') {
             $stmt->bindParam(":id_categoria", $datos['id_categoria'], PDO::PARAM_INT);
@@ -168,6 +168,7 @@ class ModeloProductos
             $stmt->bindParam(":codigo", $datos['codigo'], PDO::PARAM_STR);
             $stmt->bindParam(":serie", $datos['serie'], PDO::PARAM_STR);
             $stmt->bindParam(":descripcion", $datos['descripcion'], PDO::PARAM_STR);
+            $stmt->bindParam(':caracteristica', $datos['caracteristica'], PDO::PARAM_STR);
             $stmt->bindParam(":imagen", $datos['imagen'], PDO::PARAM_STR);
             $stmt->bindParam(":stock", $datos['stock'], PDO::PARAM_STR);
             /* $stmt->bindParam(":tipo_precio", $datos['tipo_precio'], PDO::PARAM_STR);
@@ -194,6 +195,7 @@ class ModeloProductos
                 $stmt->bindParam(":codigo", $datos['codigo'], PDO::PARAM_STR);
                 $stmt->bindParam(":serie", $datos['serie'], PDO::PARAM_STR);
                 $stmt->bindParam(":descripcion", $datos['descripcion'], PDO::PARAM_STR);
+                $stmt->bindParam(':caracteristica', $datos['caracteristica'], PDO::PARAM_STR);
                 $stmt->bindParam(":imagen", $datos['imagen'], PDO::PARAM_STR);
                 $stmt->bindParam(":stock", $datos['stock'], PDO::PARAM_STR);
                 /* $stmt->bindParam(":tipo_precio", $datos['tipo_precio'], PDO::PARAM_STR);
@@ -213,13 +215,14 @@ class ModeloProductos
     // EDITAR PRODUCTO
     public static function mdlEditarProducto($tabla, $datos)
     {
-        $stmt = Conexion::conectar()->prepare("UPDATE $tabla set id = :id, id_categoria = :id_categoria, id_sucursal=:id_sucursal, codigo=:codigo, serie = :serie, descripcion = :descripcion, imagen = :imagen, stock = :stock, codigoafectacion = :codigoafectacion, codunidad = :codunidad WHERE id = :id");
+        $stmt = Conexion::conectar()->prepare("UPDATE $tabla set id = :id, id_categoria = :id_categoria, id_sucursal=:id_sucursal, codigo=:codigo, serie = :serie, descripcion = :descripcion, caracteristica = :caracteristica, imagen = :imagen, stock = :stock, codigoafectacion = :codigoafectacion, codunidad = :codunidad WHERE id = :id");
         $stmt->bindParam(":id", $datos['id'], PDO::PARAM_INT);
         $stmt->bindParam(":id_categoria", $datos['id_categoria'], PDO::PARAM_INT);
         $stmt->bindParam(":id_sucursal", $datos['id_sucursal'], PDO::PARAM_INT);
         $stmt->bindParam(":serie", $datos['serie'], PDO::PARAM_STR);
         $stmt->bindParam(":codigo", $datos['codigo'], PDO::PARAM_STR);
         $stmt->bindParam(":descripcion", $datos['descripcion'], PDO::PARAM_STR);
+        $stmt->bindParam(':caracteristica', $datos['caracteristica'], PDO::PARAM_STR);
         $stmt->bindParam(":imagen", $datos['imagen'], PDO::PARAM_STR);
         $stmt->bindParam(":stock", $datos['stock'], PDO::PARAM_STR);
         $stmt->bindParam(":codigoafectacion", $datos['codigoafectacion'], PDO::PARAM_STR);

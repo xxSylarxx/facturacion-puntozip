@@ -119,6 +119,7 @@ class ControladorProductos
                             "unidad" => $productos['unidad'],
                             "descripcion" => $productos['nuevaDescripcion'],
                             "stock" => $productos['nuevoStock'],
+                            'caracteristica' => $productos['nuevaCaracteristica'],
                             "tipo_precio" => '01',
                             "imagen" => $rutabd,
                             "id_sucursal"  => $productos['nuevaSucursal']
@@ -227,6 +228,7 @@ class ControladorProductos
                 "codigoafectacion" => $_POST['editarAfectacion'],
                 "unidad" => $_POST['editarUnidadMedida'],
                 "descripcion" => $_POST['editarDescripcion'],
+                'caracteristica' => $_POST['editarCaracteristica'],
                 "stock" => $_POST['editarStock'],
                 "imagen" => $ruta,
                 "id_sucursal" => $_POST['editarSucursal']

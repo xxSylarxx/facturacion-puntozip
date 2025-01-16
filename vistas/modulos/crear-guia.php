@@ -10,6 +10,9 @@ $sucursal = ControladorSucursal::ctrSucursal();
 $id_sucursal = isset($_POST['idSucursal']) ? $_POST['idSucursal'] : $sucursal['id'];
 $borradorId = isset($_POST['id_guia_edit']) ? $_POST['id_guia_edit'] : null;
 $esBorrador = !empty($borradorId) && is_numeric($borradorId);
+$valor = "09";
+$dataCorrelativo = ControladorSunat::ctrMostrarSerie($valor, $id_sucursal);
+$dataSerie = !empty($dataCorrelativo) ? $dataCorrelativo[0] : [];
 
 $guiaDatos = [];
 if ($esBorrador) {
@@ -560,8 +563,8 @@ if ($esBorrador) {
                       <div class="col-md-4">
                         <div class="form-group">
                           <div class="input-group">
-                            <label for="">Serie Correlativo (F001-2)</label>
-                            <input type="text" class="form-control" name="serieCorrelativoReferencial" id="serieCorrelativoReferencial" value="<?php isset($guiaDatos['comp_ref']) ? $guiaDatos['comp_ref'] : ''; ?>">
+                            <label for="">Serie Correlativo</label>
+                            <input type="text" class="form-control" name="serieCorrelativoReferencial" id="serieCorrelativoReferencial" value="<?php echo !$esBorrador ? (isset($dataSerie['correlativo']) ? (intval($dataSerie['correlativo']) + 1) : '') : $guiaDatos['correlativo']; ?>" <?php echo $esBorrador ? 'disabled' : ''; ?> >
                             <div class="resultado-serie"></div>
 
 

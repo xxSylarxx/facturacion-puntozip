@@ -522,7 +522,6 @@ $(document).on("click", ".btn-retornar-almacen", function (e) {
 $(document).on("click", "#getcdr-guia", function () {
   var idgetGuia = $(this).attr("idGuia");
   var activo = $("#active").attr("idP");
-  console.log(idgetGuia);
   let datos = { idgetGuia: idgetGuia };
   $.ajax({
     method: "POST",
@@ -656,4 +655,33 @@ $('#listaClientes').change(function () {
   if (clienteUbigeo) {
     $("#ubigeoLlegada").val(clienteUbigeo).trigger('change');
   }
+});
+
+$(document).on("click", ".btnEliminarGuia", function (e) {
+    let idGuiaDelete = $(this).attr('guiaDelete');
+    Swal.fire({
+      title: "¿Estás seguro de eliminar la guia de remisión?",
+      text: "¡Verifica todo antes de continuar!",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sí, eliminar!",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          method: "POST",
+          url: "ajax/crear-guia.ajax.php",
+          data: {
+            idGuiaDelete
+          },
+          success: function (datos) {
+            if (datos == 'ok') {
+              window.location.reload();
+            }
+          }
+        });
+      }
+    });
 });

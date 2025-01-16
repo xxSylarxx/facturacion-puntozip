@@ -68,7 +68,7 @@ class ControladorGuiaRemision
             echo "<tr class='id-eliminar" . $k . "'>";
             $response =  "<td>" . $v['codigo'] . "</td>
                 <td>" . $v['descripcion'] . "<br/>
-                    <input type='text' class='datos-adicionales-item-guia input-prod' id='descripcion' name='descripcion[]' idcar='" . $k . "' cod='" . $v['codigo'] . "' campo='adicional' placeholder='DATOS ADICIONALES'>
+                    <input type='text' class='datos-adicionales-item-guia input-prod' id='descripcion' name='descripcion[]' idcar='" . $k . "' cod='" . $v['codigo'] . "' campo='adicional' value='". $v['adicional'] ."' placeholder='DATOS ADICIONALES'>
                 </td>
                 <td><input type='text' class='form-control input-prod' idcar='" . $k . "' cod='" . $v['codigo'] . "' campo='color' placeholder='Color' value='" . $v['color'] . "'></td>
                 <td>
@@ -113,6 +113,12 @@ class ControladorGuiaRemision
         return $respuesta;
     }
 
+    public static function ctrActualizarGuia($id_sucursal, $datosGuia, $codigosSunat, $ticket, $idGuia)
+    {
+        //$respuesta = ModeloGuiaRemision::mdlEditarGuiaSinEnviarSunat($id_sucursal, $datosGuia, $idGuia);
+        //return $respuesta;
+    }
+
     public static function ctrCrearGuia($datosForm)
     {
 
@@ -135,9 +141,11 @@ class ControladorGuiaRemision
         }
         $descripcion = isset($datosForm['descripcion']) ? json_encode($descItem, JSON_UNESCAPED_UNICODE) : null;
         $seriesProductos = isset($datosForm['idserie']) ? json_encode($seriesP, JSON_UNESCAPED_UNICODE) : null;
+        // SERIE CORRELATIVO UPDATE - NUEVO
+        $seriex['correlativo'] = $datosForm['serieCorrelativoReferencial'];
         $guia = array(
             'serie' => $seriex['serie'],
-            'correlativo' => $seriex['correlativo'] + 1,
+            'correlativo' => $seriex['correlativo'], // + 1 cambio
             'fechaEmision' => $fechaEmision,
             'horaEmision' => date('H:i:s'),
             'tipoDoc' => '09',
@@ -239,6 +247,8 @@ class ControladorGuiaRemision
             'codPuerto' => isset($datosForm['codigoPuerto']) ? $datosForm['codigoPuerto'] : ''
         );
 
+        $SERIE_SIGUIENTE = $datosForm['serieCorrelativoReferencial'];
+
         $datosGuia = array(
             'guia' => $guia,
             'docBaja' =>  $docbaja,
@@ -252,7 +262,7 @@ class ControladorGuiaRemision
             'contenedor' => $contenedor,
             'partida' => $partida,
             'puerto' => $puerto,
-            'comp_ref'   => $datosForm['serieCorrelativoReferencial'],
+            'comp_ref'   => null,
             'id_cliente' => $datosForm['idCliente'],
             'id_conductor' => $datosForm['listConductores'],
             'borrador'   => $datosForm['envioSunat'] == 'enviar' ? 'S' : 'N'
@@ -307,11 +317,6 @@ class ControladorGuiaRemision
             // if (($datosForm['modalidadTraslado'] == '02' && !empty($datosForm['placa'])  && !empty($datosForm['numBrevete'])) || ($datosForm['modalidadTraslado'] == '01' && empty($datosForm['placa']))) {
             if (!empty($detalle)) {
                 if ($datosForm['envioSunat'] != 'no') {
-                    if ($datosForm['envioSunat'] == 'firmar') {
-                        $generadoXML = new GeneradorXML();
-                        $generadoXML->CrearXMLGuiaRemision($ruta . $nombre, $emisor, $datosGuia, $detalle);
-                        echo "EL COMPROBANTE HA SIDO FIRMADO";
-                    }
                     if ($datosForm['envioSunat'] == 'enviar') {
                         $generadoXML = new GeneradorXML();
                         $generadoXML->CrearXMLGuiaRemision($ruta . $nombre, $emisor, $datosGuia, $detalle);
@@ -348,13 +353,15 @@ class ControladorGuiaRemision
                         'correlativo' => $datosGuia['guia']['correlativo'],
                     );
                     $id_sucursal = $datosForm['idSucursal'];
-                    $actualizarSerie = ControladorSunat::ctrActualizarCorrelativo($datos);
                     if (self::$esBorrador) {
-                        // editar
+                        $guardarGuia = ControladorGuiaRemision::ctrActualizarGuia($id_sucursal, $datosGuia, $codigosSunat, $ticket, $_POST['guiaEditar']);
                     } else {
                         $guardarGuia = ControladorGuiaRemision::ctrGuardarGuia($id_sucursal, $datosGuia, $codigosSunat, $ticket);
+                        $actualizarSerie = ControladorSunat::ctrActualizarCorrelativo($datos);
                     }
                 } else {
+                    $generadoXML = new GeneradorXML();
+                    $generadoXML->CrearXMLGuiaRemision($ruta . $nombre, $emisor, $datosGuia, $detalle);
                     $datos = array(
                         'id' => $datosForm['serie'],
                         'correlativo' => $datosGuia['guia']['correlativo'],
@@ -509,5 +516,11 @@ class ControladorGuiaRemision
             }
             $_SESSION['carritoG'] = $carritoG;
         }
+    }
+
+    public static function ctrEliminarGuia($id) {
+        ModeloGuiaRemision::mdlEliminarGuiaDetalle($id);
+        ModeloGuiaRemision::mdlEliminarGuia($id);
+        return 'ok';
     }
 }

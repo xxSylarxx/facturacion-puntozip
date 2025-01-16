@@ -335,6 +335,15 @@ $sucursal = ControladorSucursal::ctrSucursal();
                   </div>
                 </div>
               </div>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <textarea class="form-control" name="nuevaCaracteristica" id="nuevaCaracteristica" placeholder="Ingresar característica" rows="3" style="font-size: 18px;"></textarea>
+                  </div>
+                </div>
+              </div>
+
               <!-- ENTRADA PARA PRECIO VENTA-->
               <!-- CHECKBOX PARA PORCENTAJE -->
             </div>
@@ -540,6 +549,15 @@ $sucursal = ControladorSucursal::ctrSucursal();
                   </div>
                 </div>
               </div>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <textarea class="form-control" name="editarCaracteristica" id="editarCaracteristica" placeholder="Ingresar característica" rows="3" style="font-size: 18px;"></textarea>
+                  </div>
+                </div>
+              </div>
+
               <div class="row">
                 <!-- ENTRADA PARA SELECCIONAR SU PERFIL -->
                 <div class="col-md-12">

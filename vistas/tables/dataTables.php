@@ -132,7 +132,7 @@ class DataTables
   // DATA_TABLE LISTAR PRODUCTOS
   public  function dtaProductos()
   {
-   
+
     $action = (isset($_REQUEST['action']) && $_REQUEST['action'] != NULL) ? $_REQUEST['action'] : '';
     if ($action == 'ajax') {
       $sucursal = ControladorSucursal::ctrSucursal();
@@ -146,7 +146,7 @@ class DataTables
       $aColumns = array('codigo', 'serie', 'descripcion'); //Columnas de busqueda
       $sTable = 'productos';
       $sWhere = "";
-      
+
       if ($_SESSION['perfil'] == 'Administrador') {
         if (isset($selectSucursal) && !empty($selectSucursal)) {
           $id_sucursal = "id_sucursal =  $selectSucursal  AND";
@@ -234,13 +234,13 @@ class DataTables
         $valor = $value["id"];
         $productosserie = ControladorProductos::ctrMostrarSeriesProductos($item, $valor);
 
-        if(!empty($productosserie)){
-         echo '<button class="btn btn-success btnActualizarSeries" idProducto="' . $value["id"] . '" codigo="' . $value["codigo"] . '" imagen="' . $value["imagen"] . '" data-toggle="modal" data-target="#modalEditarProductoSeries">Series</button>';
-        }else{
+        if (!empty($productosserie)) {
+          echo '<button class="btn btn-success btnActualizarSeries" idProducto="' . $value["id"] . '" codigo="' . $value["codigo"] . '" imagen="' . $value["imagen"] . '" data-toggle="modal" data-target="#modalEditarProductoSeries">Series</button>';
+        } else {
           echo '<button class="btn btn-info btnActualizarSeries" idProducto="' . $value["id"] . '" codigo="' . $value["codigo"] . '" imagen="' . $value["imagen"] . '" data-toggle="modal" data-target="#modalEditarProductoSeries">S</button>';
         }
-       
-      echo '</div>
+
+        echo '</div>
     </td>';
 
         echo '<td > ';
@@ -273,9 +273,9 @@ class DataTables
 
       $sucursal = ControladorSucursal::ctrSucursal();
       // escaping, additionally removing everything that could be (html/javascript-) code
-      $searchProducto = $_GET['searchProductoV'];
+      $searchProducto = isset($_GET['searchProductoV']) ? $_GET['searchProductoV'] : '';
       $selectnum = $_GET['selectnum'];
-      $categorias = $_GET['categorias'];
+      $categorias = isset($_GET['categorias']) ? $_GET['categorias'] : null;
       $selectSucursal = $_GET['selectSucursal'];
       $aColumns = array('codigo', 'serie', 'descripcion'); //Columnas de busqueda
       $sTable = 'productos';
@@ -294,7 +294,7 @@ class DataTables
         $id_sucursal = '';
       }
       // $id_sucursal = '';
-      if (isset($searchProducto)) {
+      if (!empty($searchProducto)) {
         $sWhere = "WHERE (";
         for ($i = 0; $i < count($aColumns); $i++) {
           $sWhere .= "$id_sucursal activo <> 'n' AND " . $aColumns[$i] . " LIKE '%" . $searchProducto . "%' OR ";
@@ -302,7 +302,7 @@ class DataTables
         $sWhere = substr_replace($sWhere, "", -3);
         $sWhere .= ')';
       }
-      if (isset($categorias) and $categorias != NULL) {
+      if (!empty($categorias)) {
         $sWhere = "WHERE (";
         for ($i = 0; $i < count($aColumns); $i++) {
           $sWhere .= "$id_sucursal activo <> 'n' AND id_categoria = '$categorias' AND " . $aColumns[$i] . " LIKE '%" . $searchProducto . "%' OR ";
@@ -487,7 +487,7 @@ class DataTables
       $aColumns = array('codigo', 'serie', 'descripcion'); //Columnas de busqueda
       $sTable = 'productos';
       $sWhere = "";
-     
+
       if ($emisor['multialmacen'] == 's') {
         if ($_SESSION['perfil'] == 'Administrador') {
           if (isset($selectSucursal) && !empty($selectSucursal)) {
@@ -540,10 +540,10 @@ class DataTables
         $categoria = ControladorCategorias::ctrMostrarCategorias($item, $valor);
         // <td><img src="'.$value['imagen'].'" alt="" class="img-thumbnail" width="40px"></td>
         echo '<tr class="contenedor-items">
-           <td>' . ++$key . '</td>
-          
-           <td> ' . $value['codigo'] . '</td>
-           <td>' . $value['descripcion'] . '</td>';
+          <td>' . ++$key . '</td>
+          <td> ' . $value['codigo'] . '</td>
+          <td> ' . (isset($categoria['categoria']) ? $categoria['categoria'] : '-') . '</td>
+          <td>' . $value['descripcion'] . '</td>';
 
         echo '<td>' . $value['codunidad'] . '</td>
                 
@@ -877,7 +877,6 @@ class DataTables
           $botonEstado = "<button class='s-success'></button>";
         } else {
           $botonEstado = '<button class="anulado"></button>';
-          
         }
         if ($value['feestado'] == '2') {
           $botonEstado = "<button class='s-rechazo'></button>";

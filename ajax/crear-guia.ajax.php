@@ -174,7 +174,8 @@ class AjaxGuia
                 'bultos' => '0',
                 'color' => '',
                 'PO' => '',
-                'partida' => ''
+                'partida' => '',
+                'adicional' => ''
             );
         }
 
@@ -285,6 +286,12 @@ class AjaxGuia
         // var_dump($codigosSunat);
         $guiaActualizar = ControladorGuiaRemision::ctrActualizarCDR($idGuia, $codigosSunat);
     }
+
+    public function ajaxEliminarGuia() {
+        $idGuiaEliminar = $_POST['idGuiaDelete'];
+        $respuesta = ControladorGuiaRemision::ctrEliminarGuia($idGuiaEliminar);
+        echo $respuesta;
+    }
 }
 
 if (isset($_POST['modalidadTraslado'])) {
@@ -334,4 +341,9 @@ if (isset($_POST['idGuia'])) {
 if (isset($_POST['idgetGuia'])) {
     $objretornar = new AjaxGuia();
     $objretornar->ajaxGetCDR();
+}
+
+if (isset($_POST['idGuiaDelete'])) {
+    $objretornar = new AjaxGuia();
+    $objretornar->ajaxEliminarGuia();
 }

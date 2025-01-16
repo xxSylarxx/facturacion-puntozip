@@ -78,11 +78,9 @@ class DataTablesGuias
       $reload = './index.php';
       //main query to fetch the data
       $pdo =  Conexion::conectar();
-      $registros = $pdo->prepare("SELECT * FROM  $sTable $sWhere ORDER BY id DESC LIMIT $offset,$per_page");
+      $registros = $pdo->prepare("SELECT *, (CASE WHEN fecha_emision < NOW() THEN 'S' ELSE 'N' END) AS fechaLimit FROM  $sTable $sWhere ORDER BY id DESC LIMIT $offset,$per_page");
       $registros->execute();
-
       $registros = $registros->fetchall();
-
       foreach ($registros as $k => $v) {
         $item = 'id';
         $valor = $v['id_cliente'];
@@ -140,15 +138,22 @@ class DataTablesGuias
                 <td><div class="contenedor-print-comprobantes" estadocdr' . $v['id'] . '> ' . $botonEstado . ' </div></td>';
         } else {
           $tablaGuias .= '
-          <td class="text-center">-</td>
+          <td>
+                <div class="contenedor-print-comprobantes" estadocdr' . $v['id'] . '>
+                ' . $btnXml . '
+               </div></td>
           <td class="text-center">-</td>
           <td><div class="contenedor-print-comprobantes" estadocdr' . $v['id'] . '> ' . $botonEstado . ' </div></td>
           ';
           $tablaGuias .= '<td>
             <form id="guiaEditar" name="guiaEditar" method="post" action="crear-guia">
                 <input type="hidden" id="id_guia_form" name="id_guia_edit" value="' . $v['id'] . '">
-                <button type="submit" class="btn btn-primary">Editar</button>
-            </form>
+                <button type="submit" class="btn btn-warning"><i class="fas fa-user-edit"></i></button>
+                ';
+          if ($v['fechaLimit'] == 'N') {
+            $tablaGuias .= '<button type="button" class="btn btn-danger btnEliminarGuia" guiaDelete="' . $v['id'] . '"><i class="fas fa-trash-alt"></i></button>';
+          }
+          $tablaGuias .= '</form>
           </td></tr>';
         }
         echo $tablaGuias;
