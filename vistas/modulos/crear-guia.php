@@ -582,21 +582,25 @@ if ($esBorrador) {
                         <button type="button" class="btn btn-primary pull-right btn-agregar-carrito" data-toggle="modal" data-target="#modalProductosGuia"><i class="fas fa-cart-plus fa-lg"></i> Agregar Productos o Servicios</button>
 
                       </div>
-                      <div class="table-responsive items-c">
+                      <div class="row mb-4">
+                      </div>
+                      <div class="table-responsive items-c" style="overflow-x: auto;">
                         <!-- BOTÓN PARA AGREGAR PRODUCTO-->
                         <table class="table tabla-items">
                           <thead>
                             <tr>
-                              <th>Código</th>
-                              <th>Descripción</th>
-                              <th style="max-width: 130px; width: 130px;">Color</th>
-                              <th style="max-width: 150px; width: 150px;">UND.M</th>
-                              <th style="max-width: 120px; width: 120px;">P.O</th>
-                              <th>Partida</th>
-                              <th style="max-width: 100px; width: 100px;">Cantidad</th>
-                              <th style="max-width: 130px; width: 130px;">Bultos</th>
-                              <th style="max-width: 130px; width: 130px;">Peso</th>
-                              <th style="max-width: 110px; width: 110px;">Opciones</th>
+                              <th style="max-width: 140px; width: 140px;">Código</th>
+                              <th style="max-width: 300px; width: 300px; min-width: 300px;">Descripción</th>
+                              <th style="max-width: 300px; width: 300px; min-width: 300px;">Servicio</th>
+                              <th style="max-width: 300px; width: 300px; min-width: 300px;">Característica</th>
+                              <th style="max-width: 130px; width: 130px; min-width: 130px;">Color</th>
+                              <th style="max-width: 150px; width: 150px; min-width: 150px;">UND.M</th>
+                              <th style="max-width: 120px; width: 120px; min-width: 120px;">P.O</th>
+                              <th style="max-width: 90px; width: 90px; min-width: 90px;">Partida</th>
+                              <th style="max-width: 90px; width: 90px; min-width: 90px;">Cantidad</th>
+                              <th style="max-width: 90px; width: 90px; min-width: 90px;">Bultos</th>
+                              <th style="max-width: 90px; width: 90px; min-width: 90px;">Peso</th>
+                              <th style="max-width: 10px; width: 100px; min-width: 100px;">Opciones</th>
                             </tr>
                           </thead>
                           <tbody id="itemsPG">

@@ -70,6 +70,8 @@ class ControladorGuiaRemision
                 <td>" . $v['descripcion'] . "<br/>
                     <input type='text' class='datos-adicionales-item-guia input-prod' id='descripcion' name='descripcion[]' idcar='" . $k . "' cod='" . $v['codigo'] . "' campo='adicional' value='". $v['adicional'] ."' placeholder='DATOS ADICIONALES'>
                 </td>
+                <td><input type='text' class='form-control input-prod' idcar='" . $k . "' cod='" . $v['codigo'] . "' campo='servicio' value='" . $v['servicio'] . "' placeholder='Servicio'></td>
+                <td><input type='text' class='form-control input-prod' idcar='" . $k . "' cod='" . $v['codigo'] . "' campo='caracteristica' value='" . $v['caracteristica'] . "' placeholder='Característica'></td>
                 <td><input type='text' class='form-control input-prod' idcar='" . $k . "' cod='" . $v['codigo'] . "' campo='color' placeholder='Color' value='" . $v['color'] . "'></td>
                 <td>
                     <select class='form-control input-prod' idcar='" . $k . "' cod='" . $v['codigo'] . "' campo='unidad'>";
@@ -290,7 +292,9 @@ class ControladorGuiaRemision
                 'PO'      => isset($v['PO']) ? $v['PO'] : 0,
                 'color'   => isset($v['color']) ? $v['color'] : 0,
                 'partida' => isset($v['partida']) ? $v['partida'] : 0,
-                'adicional' => isset($v['adicional']) ? $v['adicional'] : ''
+                'adicional' => isset($v['adicional']) ? $v['adicional'] : '',
+                'servicio'  => isset($v['servicio']) ? $v['servicio'] : '',
+                'caracteristica' => isset($v['caracteristica']) ? $v['caracteristica'] : ''
             );
             $itemx;
             $detalle[] = $itemx;

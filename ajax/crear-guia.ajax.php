@@ -175,7 +175,9 @@ class AjaxGuia
                 'color' => '',
                 'PO' => '',
                 'partida' => '',
-                'adicional' => ''
+                'adicional' => '',
+                'servicio' => '',
+                'caracteristica' => $producto['caracteristica']
             );
         }
 

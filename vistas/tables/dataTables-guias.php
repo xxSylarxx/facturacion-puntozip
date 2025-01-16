@@ -150,7 +150,7 @@ class DataTablesGuias
                 <input type="hidden" id="id_guia_form" name="id_guia_edit" value="' . $v['id'] . '">
                 <button type="submit" class="btn btn-warning"><i class="fas fa-user-edit"></i></button>
                 ';
-          if ($v['fechaLimit'] == 'N') {
+          if ($v['fechaLimit'] == 'S') {
             $tablaGuias .= '<button type="button" class="btn btn-danger btnEliminarGuia" guiaDelete="' . $v['id'] . '"><i class="fas fa-trash-alt"></i></button>';
           }
           $tablaGuias .= '</form>
