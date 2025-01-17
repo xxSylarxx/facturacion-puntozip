@@ -1,4 +1,6 @@
 <?php
+$dominio = $_SERVER['HTTP_HOST'];
+$uri = rtrim($_SERVER['REQUEST_URI'], '/');
 
 use Controladores\ControladorProductos;
 use Controladores\ControladorClientes;
@@ -25,6 +27,8 @@ $trasladoDesc = '';
 if (is_array($tipoTraslado)) {
     $trasladoDesc = $tipoTraslado['descripcion'];
 }
+/* var_dump($sucursal);
+exit(); */
 ?>
 <style>
     #tabla-fechas,
@@ -120,12 +124,12 @@ if (is_array($tipoTraslado)) {
                                 $logo =  (isset($emisor['logo'])) ? dirname(__FILE__) . '/../img/logo/puntozipsac.png' : '';
                                 echo $logo;
                                 ?>" style="width: 150px;">
-                    <p style="font-size: 14px; margin-bottom: -6px; font-weight: bold;">PUNTOZIP S.A.C</p>
+                    <p style="font-size: 14px; margin-bottom: -6px; font-weight: bold;"><?php echo $sucursal['nombre_sucursal']?></p>
                     <p style="font-size: 13px;"><?php echo $sucursal['direccion'] . ' ' . $sucursal['distrito'] . ' - ' . $sucursal['provincia'] . ' - ' . $sucursal['departamento']; ?></p>
                 </td>
                 <td style="width: 260px;">
                     <div id="ruc-emisor">
-                        <p style="font-size: 15px; font-weight: bold; margin-bottom: 0px;">R.U.C. 20505573162</p>
+                        <p style="font-size: 15px; font-weight: bold; margin-bottom: 0px;">R.U.C. <?= $sucursal['codigo'];?></p>
                         <p style="font-size: 15px; font-weight: bold; line-height: 23px;">GUÍA DE REMISIÓN REMITENTE<br>ELECTRÓNICA</p>
                         <p style="font-size: 15px; font-weight: bold; margin-top: -5px;"><?php echo $guia['serie'] . ' - ' . str_pad($guia['correlativo'], 8, '0', STR_PAD_LEFT) ?></p>
                     </div>
@@ -236,8 +240,8 @@ if (is_array($tipoTraslado)) {
                         <td width="40" style="text-align: center; vertical-align: middle;"><?php echo $fila['cantidad']; ?></td>
                         <td width="40" style="text-align: center; vertical-align: middle;"><?php echo $fila['codunidad']; ?></td>
                         <td width="445">
-                            SERVICIO : <?php echo $fila['servicio']; ?><br>
-                            <?php echo $fila['categoria_des']; ?> : 
+                            <b>SERVICIO : <?php echo $fila['servicio']; ?></b><br>
+                            <?php echo $fila['categoria_des']; ?> :
                             <?php echo $fila['descripcion'] . ' ' . $fila['caracteristica'] . ' - COLOR: (' . $fila['color'] . ') - PO: (' . $fila['PO'] . ') - PARTIDA: (' . $fila['partida'] . ') - ' . $fila['adicional'] . ' - PESO: (' . $fila['peso'] . ') - BULTOS: (' . $fila['bultos'] . ')'; ?>
                         </td>
                     </tr>
@@ -265,7 +269,7 @@ if (is_array($tipoTraslado)) {
                 </td>
                 <td style="text-align: center; width: 200px;">
                     <div style="width: 150px; border-top: 1px solid black; font-weight: bold; padding-top: 5px;">
-                        PUNTOZIP S.A.C.
+                    <?php echo $sucursal['nombre_sucursal']?>
                     </div>
                 </td>
                 <td style="text-align: center; width: 200px;">
@@ -278,7 +282,8 @@ if (is_array($tipoTraslado)) {
         <br><br><br><br>
         <div id="pie">
             <div class="bar-code">
-                <qrcode class="barcode" value="https://puntozip.riaac.com/vistas/print/printguia/?idCo=<?php echo $guia['id'] ?>" style="width: 26mm; background-color: white; color: #000; border: none; padding:none"></qrcode>
+                <qrcode class="barcode" value="<?php echo $dominio;?>/vistas/print/printguia/?idCo=<?php echo $guia['id'] ?>" style="width: 26mm; background-color: white; color: #000; border: none; padding:none"></qrcode>
+
             </div>
             <div style="font-size: 10px; text-align: center;">
                 <p style="line-height: 12px;">
