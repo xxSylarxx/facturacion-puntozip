@@ -371,7 +371,7 @@ class ControladorGuiaRemision
                         'correlativo' => $datosGuia['guia']['correlativo'],
                     );
                     $id_sucursal = $datosForm['idSucursal'];
-                    $datosGuia['nombrexml'] = $nombre;
+                    $datosGuia['nombrexml'] = $nombre . '.xml';
                     if (self::$esBorrador) {
                         $guardarGuia = ControladorGuiaRemision::ctrActualizarGuiaSinSunat($id_sucursal, $datosGuia, $_POST['guiaEditar']);
                     } else {
@@ -515,7 +515,9 @@ class ControladorGuiaRemision
                         'color' => $value['color'],
                         'PO' => $value['PO'],
                         'partida' => $value['partida'],
-                        'adicional' => $value['adicional']
+                        'adicional' => $value['adicional'],
+                        'servicio' => $value['servicio'],
+                        'caracteristica' => $value['caracteristica']
                     );
                 }
             }

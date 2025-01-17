@@ -134,7 +134,7 @@ class DataTablesGuias
                   </form>
                 </div>
                 </td>';
-        if ($v['borrador'] == 'N' || $v['anulado'] == 'S') {
+        if ($v['borrador'] == 'N' || $v['anulado'] == 'S' || !empty($v['feestado'])) {
           $tablaGuias .= '
                 <td>
                 <div class="contenedor-print-comprobantes" estadocdr' . $v['id'] . '>
@@ -150,7 +150,7 @@ class DataTablesGuias
           } else {
             $tablaGuias .= '<td><div class="contenedor-print-comprobantes" estadocdr' . $v['id'] . '> ' . $botonEstado . ' </div></td>';
           }
-          if ($v['feestado'] == '1') {
+          if ($v['feestado'] == '1' && $v['anulado'] != 'S') {
             $tablaGuias .= '<td><button type="button" class="btn btn-danger btnAnularGuia" guiaAnular="' . $v['id'] . '" title="Anular"><i class="fas fa-window-close"></i></button></td>';
           }
         } else {
