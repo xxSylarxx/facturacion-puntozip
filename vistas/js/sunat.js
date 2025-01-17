@@ -11,6 +11,7 @@ $(document).ready(function () {
       data: datos,
       success: function (respuesta) {
         $("#correlativo").val(respuesta);
+        $("#serieCorrelativoReferencial").val(respuesta);
       },
     });
   });
@@ -170,6 +171,8 @@ $(document).on("change", "#idcSucursal", function () {
     success: function (respuesta) {
       // console.log(respuesta);
       $("#serie").html(respuesta);
+      let numc = $("#serie").find('option:selected').data('correlativo');
+      $("#serieCorrelativoReferencial").val(parseInt(numc) + 1);
     },
   });
   eliminarCarro();

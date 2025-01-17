@@ -125,7 +125,7 @@ if ($esBorrador) {
                               $id_sucursal = $id_sucursal;
                               $serieComprobante = ControladorSunat::ctrMostrarSerie($valor, $id_sucursal);
                               foreach ($serieComprobante as $key => $value) {
-                                echo '<option value=' . $value['id'] . '>' . $value['serie'] . '</option>';
+                                echo '<option value=' . $value['id'] . ' data-correlativo="' . $value['correlativo'] .'" >' . $value['serie'] . '</option>';
                               }
                             }
                             ?>

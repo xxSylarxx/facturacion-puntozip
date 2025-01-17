@@ -91,8 +91,6 @@ class AjaxSunat
 
     public function ajaxCrearSeries()
     {
-        var_dump($_POST);
-
         if ($_POST['ruta'] == 'crear-factura') {
             $valor = "01";
         }
@@ -122,7 +120,7 @@ class AjaxSunat
         $id_sucursal = $_POST['idSucursal'];
         $serieComprobante = ControladorSunat::ctrMostrarSerie($valor, $id_sucursal);
         foreach ($serieComprobante as $key => $value) {
-            echo '<option value=' . $value['id'] . ' id="idSerie">' . $value['serie'] . '</option>';
+            echo '<option value=' . $value['id'] . ' id="idSerie" data-correlativo="' . $value['correlativo'] .'">' . $value['serie'] . '</option>';
         }
     }
     //  public function ajaxConnection(){
