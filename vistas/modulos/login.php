@@ -22,6 +22,10 @@ if ($stmt->rowCount() == 0) {
   <div class="log-cont">
 
     <div class="login-box">
+      <div class="button-container">
+        <a  class="btn1" id="button1">PUNTOZIP 1</a>
+        <a  class="btn2" id="button2">PUNTOZIP 2</a>
+      </div>
 
       <!-- <div class="login-logo">
    <img src="vistas/img/plantilla/logo-blanco-bloque.png" class="img-responsive" alt="" style="padding: 30px 100px 0px 100px">
@@ -53,7 +57,7 @@ if ($stmt->rowCount() == 0) {
 
 
             <!-- /.col -->
-            <div class="content-fluid" style="">
+            <div class="content-fluid">
               <button type="button" class="btn-flat" id="logUser">Ingresar al sistema <i class="fas fa-angle-double-right fa-lg"></i></button>
             </div>
             <!-- /.col -->

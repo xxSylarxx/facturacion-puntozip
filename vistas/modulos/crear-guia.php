@@ -564,7 +564,7 @@ if ($esBorrador) {
                         <div class="form-group">
                           <div class="input-group">
                             <label for="">Serie Correlativo</label>
-                            <input type="text" class="form-control" name="serieCorrelativoReferencial" id="serieCorrelativoReferencial" value="<?php echo !$esBorrador ? (isset($dataSerie['correlativo']) ? (intval($dataSerie['correlativo']) + 1) : '') : $guiaDatos['correlativo']; ?>" <?php echo $esBorrador ? 'disabled' : ''; ?> >
+                            <input type="text" class="form-control" name="serieCorrelativoReferencial" id="serieCorrelativoReferencial" value="<?php echo !$esBorrador ? (isset($dataSerie['correlativo']) ? (intval($dataSerie['correlativo']) + 1) : '') : $guiaDatos['correlativo']; ?>" <?php echo $esBorrador ? 'readonly' : ''; ?> >
                             <div class="resultado-serie"></div>
 
 

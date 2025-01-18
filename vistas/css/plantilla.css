@@ -1176,4 +1176,37 @@ background-color: rgb(248, 244, 244) !important
   color: #1c1c1c !important;
 }
 
+.button-container {
+  display: flex;
+  gap: 1px;
+  padding-bottom: 2rem;
+}
+.btn1 {
+  color:white;
+  flex: 1;
+  background-image: linear-gradient(148.25deg, #80272d 3%, #3d5295 89.85%) !important;
+  padding: 1.5rem;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  text-align: center;
+  transition: ease-in-out .9s;
+}
+.btn2 {
+  color:rgb(229, 229, 229);
+  flex: 1;
+  background-color: #4e4e4e;
+  padding: 1.5rem;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  text-align: center;
+  transition: ease-in-out .9s;
+}
+.btn1:hover {
+  color:white;
+  transform: scale(1.1);
+}
+.btn2:hover {
+  color:white;
+  transform: scale(1.1);
+}
 
