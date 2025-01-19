@@ -279,7 +279,7 @@ exit(); */
                 </td>
             </tr>
         </table>
-        <br><br><br><br>
+        <br><br>
         <div id="pie">
             <div class="bar-code">
                 <qrcode class="barcode" value="<?php echo $dominio;?>/vistas/print/printguia/?idCo=<?php echo $guia['id'] ?>" style="width: 26mm; background-color: white; color: #000; border: none; padding:none"></qrcode>
