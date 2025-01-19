@@ -283,7 +283,6 @@ class AjaxGuia
 
         $emisor = ControladorEmpresa::ctrEmisor();
         $token_result = ApiFacturacion::ObtenerToken($emisor);
-        die('No existe token'); exit();
         $token = $token_result->access_token;
 
         

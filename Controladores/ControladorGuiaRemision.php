@@ -126,7 +126,6 @@ class ControladorGuiaRemision
 
         $emisor = ControladorEmpresa::ctrEmisor();
         $sucursal = ControladorSucursal::ctrSucursal();
-        //  var_dump($emisor);
         $item = 'id';
         $valor = $datosForm['serie'];
         $seriex = ControladorSunat::ctrMostrarCorrelativo($item, $valor);
@@ -161,7 +160,7 @@ class ControladorGuiaRemision
             'nroDoc' => '',
             'tipoDoc' => ''
         );
-        $tipocomp = substr($datosForm['serieCorrelativoReferencial'], 0, 1);
+        $tipocomp = ''; // substr($datosForm['serieCorrelativoReferencial'], 0, 1);
         $seriecomp = '';
         if ($tipocomp == 'F') {
             $seriecomp = '01';
@@ -169,9 +168,13 @@ class ControladorGuiaRemision
         if ($tipocomp == 'B') {
             $seriecomp = '03';
         }
-        $relDoc = array(
+        /* $relDoc = array(
             'nroDoc' => $datosForm['serieCorrelativoReferencial'],
             'tipoDoc' => $seriecomp
+        ); */
+        $relDoc = array(
+            'nroDoc' => '',
+            'tipoDoc' => ''
         );
 
 
@@ -249,8 +252,6 @@ class ControladorGuiaRemision
             'codPuerto' => isset($datosForm['codigoPuerto']) ? $datosForm['codigoPuerto'] : ''
         );
 
-        $SERIE_SIGUIENTE = $datosForm['serieCorrelativoReferencial'];
-
         $datosGuia = array(
             'guia' => $guia,
             'docBaja' =>  $docbaja,
@@ -317,6 +318,19 @@ class ControladorGuiaRemision
             && !empty($datosForm['fechaInicialTraslado']) && !empty($datosForm['pesoBruto']) && !empty($datosForm['numeroBultos'])   && !empty($datosForm['direccionPartida']) && !empty($datosForm['ubigeoPartida']) && !empty($datosForm['direccionLlegada']) && !empty($datosForm['ubigeoLlegada'])
         ) {
 
+            // COMPROBAR SI CORRELATIVO DISPONIBLE
+            $existeCorrelativo = ControladorGuiaRemision::ctrExisteCorrelativo($datosForm['idSucursal'], $seriex['serie'], $guia['correlativo']);
+            if ($existeCorrelativo) {
+                echo "<script>
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'LA SERIE Y CORRELATIVO ". ($seriex['serie'] . '-' . $guia['correlativo']) . " YA EXISTE' ,
+                            text: '',
+                            html: `Debes ingresar otro correlativo`
+                        })
+                            </script>";
+                die();
+            }
 
             // if (($datosForm['modalidadTraslado'] == '02' && !empty($datosForm['placa'])  && !empty($datosForm['numBrevete'])) || ($datosForm['modalidadTraslado'] == '01' && empty($datosForm['placa']))) {
             if (!empty($detalle)) {
@@ -492,6 +506,16 @@ class ControladorGuiaRemision
     {
         $respuesta = ModeloGuiaRemision::mdlMostrarDetalles('guia_detalle', 'id_guia', $idGuia);
         return $respuesta;
+    }
+
+    public static function ctrExisteCorrelativo($sucursal, $serie, $correlativo)
+    {
+        $respuesta = ModeloGuiaRemision::mdlVerificarCorrelativo([
+            'sucursal' => $sucursal,
+            'serie' => $serie,
+            'correlativo' => $correlativo
+        ]);
+        return $respuesta != false;
     }
 
     public static function ctrLlenarGuiaRemisionDetalle($sucursal, $detalle)

@@ -48,7 +48,7 @@ exit(); */
     #tabla-fechas th,
     #tabla-fechas td {
         border: 1px solid black;
-        padding: 4px 2px;
+        padding: 3px 2px;
         border-radius: 2px;
         width: 120px;
         text-align: center;
@@ -68,14 +68,14 @@ exit(); */
     #tabla-llegada th,
     #tabla-llegada td {
         border: 1px solid black;
-        padding: 4px 8px;
+        padding: 3px 8px;
         border-radius: 2px;
     }
 
     #tabla-destinatario th,
     #tabla-destinatario td {
         border: 1px solid black;
-        padding: 4px 8px;
+        padding: 3px 8px;
         border-radius: 2px;
     }
 
@@ -94,7 +94,7 @@ exit(); */
 
     #tabla-productos td {
         border: 1px solid black;
-        padding: 4px 8px;
+        padding: 3px 8px;
     }
 
     #tabla-firmas {
@@ -105,13 +105,13 @@ exit(); */
 
     #pie {
         position: relative;
-        width: 72%;
-        left: -155px;
+        width: 60%;
+        left: -56px;
         text-align: center;
-        margin-top: 42px;
+        margin-top: 32px;
     }
 </style>
-<page backtop="10mm" backbottom="10mm" backleft="10mm" backright="10mm">
+<page backtop="7mm" backbottom="7mm" backleft="10mm" backright="10mm">
     <page_header>
     </page_header>
     <page_footer>
@@ -124,12 +124,12 @@ exit(); */
                                 $logo =  (isset($emisor['logo'])) ? dirname(__FILE__) . '/../img/logo/puntozipsac.png' : '';
                                 echo $logo;
                                 ?>" style="width: 150px;">
-                    <p style="font-size: 14px; margin-bottom: -6px; font-weight: bold;"><?php echo $sucursal['nombre_sucursal']?></p>
+                    <p style="font-size: 14px; margin-bottom: -6px; font-weight: bold;"><?php echo $sucursal['nombre_sucursal'] ?></p>
                     <p style="font-size: 13px;"><?php echo $sucursal['direccion'] . ' ' . $sucursal['distrito'] . ' - ' . $sucursal['provincia'] . ' - ' . $sucursal['departamento']; ?></p>
                 </td>
                 <td style="width: 260px;">
                     <div id="ruc-emisor">
-                        <p style="font-size: 15px; font-weight: bold; margin-bottom: 0px;">R.U.C. <?= $sucursal['codigo'];?></p>
+                        <p style="font-size: 15px; font-weight: bold; margin-bottom: 0px;">R.U.C. <?= $sucursal['codigo']; ?></p>
                         <p style="font-size: 15px; font-weight: bold; line-height: 23px;">GUÍA DE REMISIÓN REMITENTE<br>ELECTRÓNICA</p>
                         <p style="font-size: 15px; font-weight: bold; margin-top: -5px;"><?php echo $guia['serie'] . ' - ' . str_pad($guia['correlativo'], 8, '0', STR_PAD_LEFT) ?></p>
                     </div>
@@ -198,7 +198,7 @@ exit(); */
             </tr>
         </table>
         <p style="font-size: 11px;"><b>MOTIVO DE TRASLADO:</b> <?php echo $guia['cod_traslado'] . ' ' . $trasladoDesc ?></p>
-        <div style="width: 100%; border-radius: 4px; border: 1px solid black; padding: 6px; font-size: 9px;">
+        <div style="width: 100%; border-radius: 4px; border: 1px solid black; padding: 4px 6px; font-size: 8px;">
             <table>
                 <tr>
                     <td>01 VENTA</td>
@@ -260,30 +260,31 @@ exit(); */
         </div>
         <br>
         <br><br>
-        <table id="tabla-firmas">
-            <tr>
-                <td style="text-align: center; width: 200px;">
-                    <div style="width: 150px; border-top: 1px solid black; font-weight: bold; padding-top: 5px;">
-                        TRANSPORTADO POR
-                    </div>
-                </td>
-                <td style="text-align: center; width: 200px;">
-                    <div style="width: 150px; border-top: 1px solid black; font-weight: bold; padding-top: 5px;">
-                    <?php echo $sucursal['nombre_sucursal']?>
-                    </div>
-                </td>
-                <td style="text-align: center; width: 200px;">
-                    <div style="width: 150px; border-top: 1px solid black; font-weight: bold; padding-top: 5px;">
-                        RECIBI CONFORME
-                    </div>
-                </td>
-            </tr>
-        </table>
-        <br><br>
+        <div>
+            <table id="tabla-firmas">
+                <tr>
+                    <td style="text-align: center; width: 200px;">
+                        <div style="width: 150px; border-top: 1px solid black; font-weight: bold; padding-top: 5px;">
+                            TRANSPORTADO POR
+                        </div>
+                    </td>
+                    <td style="text-align: center; width: 200px;">
+                        <div style="width: 150px; border-top: 1px solid black; font-weight: bold; padding-top: 5px;">
+                            <?php echo $sucursal['nombre_sucursal'] ?>
+                        </div>
+                    </td>
+                    <td style="text-align: center; width: 200px;">
+                        <div style="width: 150px; border-top: 1px solid black; font-weight: bold; padding-top: 5px;">
+                            RECIBI CONFORME
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
         <div id="pie">
+            <br><br>
             <div class="bar-code">
-                <qrcode class="barcode" value="<?php echo $dominio;?>/vistas/print/printguia/?idCo=<?php echo $guia['id'] ?>" style="width: 26mm; background-color: white; color: #000; border: none; padding:none"></qrcode>
-
+                <qrcode class="barcode" value="<?php echo $dominio; ?>/vistas/print/printguia/?idCo=<?php echo $guia['id'] ?>" style="width: 20mm; background-color: white; color: #000; border: none; padding:none"></qrcode>
             </div>
             <div style="font-size: 10px; text-align: center;">
                 <p style="line-height: 12px;">

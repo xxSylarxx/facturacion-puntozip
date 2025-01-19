@@ -32,6 +32,17 @@ class ModeloGuiaRemision
         return $stmt->fetch();
     }
 
+    public static function mdlVerificarCorrelativo($params)
+    {
+
+        $stmt = Conexion::conectar()->prepare("SELECT id FROM guia WHERE id_sucursal = :sucursal AND serie = :serie AND correlativo = :correlativo");
+        $stmt->bindParam(":sucursal", $params['sucursal'], PDO::PARAM_INT);
+        $stmt->bindParam(":serie", $params['serie'], PDO::PARAM_INT);
+        $stmt->bindParam(":correlativo", $params['correlativo'], PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch();
+    }
+
     public static function mdlMostrarDetalles($tabla, $item, $valor)
     {
 
@@ -387,7 +398,7 @@ class ModeloGuiaRemision
     // MOSTRAR DETALLES Y PRODUCTOS DE LA GUIA
     public static function mdlMostrarDetallesProductosGuia($item, $valor)
     {
-        $stmt = Conexion::conectar()->prepare("SELECT t1.id_producto, t1.cantidad, t2.descripcion, t2.id, t2.codunidad, t2.codigo, t2.id, t1.cantidad, t1.peso, t1.bultos, t1.color, t1.PO, t1.partida, t1.adicional, t1.servicio, t1.caracteristica, c.categoria as categoria_des FROM guia_detalle t1 INNER JOIN productos t2 ON t1.id_producto=t2.id LEFT JOIN categorias c ON c.id = t2.id_categoria WHERE $item=:$item");
+        $stmt = Conexion::conectar()->prepare("SELECT t1.id_producto, t1.cantidad, t2.descripcion, t2.id, t2.codunidad, t2.codigo, t2.id, t1.cantidad, t1.peso, t1.bultos, t1.color, t1.PO, t1.partida, t1.adicional, t1.servicio, t1.caracteristica, c.categoria as categoria_des FROM guia_detalle t1 INNER JOIN productos t2 ON t1.id_producto=t2.id LEFT JOIN categorias c ON c.id = t2.id_categoria WHERE $item=:$item ORDER BY t1.indexg");
         $stmt->bindParam(":" . $item, $valor, PDO::PARAM_STR);
         $stmt->execute();
         return $stmt->fetchall();
