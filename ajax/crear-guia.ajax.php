@@ -73,7 +73,7 @@ class AjaxGuia
         $detalles = ControladorVentas::ctrMostrarDetalles($item, $valor);
         $_SESSION['carritoG'] = array();
         $carritoG = $_SESSION['carritoG'];
-        //Asignamos a la variable $carro los valores guardados en la sessión
+        //Asignamos a la variable $carro los valores guardados en la sessi贸n
         unset($carritoG);
 
         if (!isset($_SESSION['carritoG'])) {
@@ -193,7 +193,7 @@ class AjaxGuia
 
         //Como antes, usamos extract() por comodidad, pero podemos no hacerlo tranquilamente
         $carritoG = $_SESSION['carritoG'];
-        //Asignamos a la variable $carro los valores guardados en la sessión
+        //Asignamos a la variable $carro los valores guardados en la sessi贸n
         unset($carritoG[$idEliminarCarro]);
         $carritoG = array_values($carritoG);
         $_SESSION['carritoG'] = $carritoG;
@@ -258,12 +258,12 @@ class AjaxGuia
 
     public function comprobarMayorDe24Horas($fecha_emision, $hora)
     {
-      $fechaHora = $fecha_emision . ' ' . $hora;
-      $fechaHoraDateTime = new DateTime($fechaHora);
-      $fechaActual = new DateTime();
-      $intervalo = $fechaActual->diff($fechaHoraDateTime);
-      $horasDeDiferencia = $intervalo->h + ($intervalo->days * 24);
-      return $horasDeDiferencia >= 24 ? true : false;
+        $fechaHora = $fecha_emision . ' ' . $hora;
+        $fechaHoraDateTime = new DateTime($fechaHora);
+        $fechaActual = new DateTime();
+        $intervalo = $fechaActual->diff($fechaHoraDateTime);
+        $horasDeDiferencia = $intervalo->h + ($intervalo->days * 24);
+        return $horasDeDiferencia >= 24 ? true : false;
     }
 
     public function ajaxGetCDR()
@@ -282,15 +282,32 @@ class AjaxGuia
         }
 
         $emisor = ControladorEmpresa::ctrEmisor();
+    
         $token_result = ApiFacturacion::ObtenerToken($emisor);
-        $token = $token_result->access_token;
+        // Verificar si la respuesta es un objeto y si tiene la propiedad 'access_token'
+        if (is_object($token_result) && isset($token_result->access_token)) {
+            $token = $token_result->access_token;
+        } else {
+            // Manejar el error
+            error_log("Error al obtener el token de acceso: " . print_r($token_result, true));
+            // Mostrar un mensaje de error al usuario o tomar alguna otra acción
+            echo "Ocurrió un error al obtener el token de acceso. Por favor, inténtalo nuevamente más tarde.";
+        }
+        // die('No existe token'); exit();
 
-        
-        $ticket = $guia['ticket'];
-        $nombre = $emisor['ruc'] . '-' . $guia['tipodoc'] . '-' . $guia['serie'] . '-' . $guia['correlativo'];
-        $nombre_archivo = $nombre . '.zip';
         $ruta_archivo_xml = "../api/xml/";
         $ruta_archivo_cdr = "../api/cdr/";
+        $nombre = $emisor['ruc'] . '-' . $guia['tipodoc'] . '-' . $guia['serie'] . '-' . $guia['correlativo'];
+        if ($guia['borrador'] == 'S') {
+            $api = new ApiFacturacion();
+            $api->EnviarGuiaRemision($emisor, $nombre, $ruta_archivo_xml, $ruta_archivo_cdr, "../");
+            $token = $api->token;
+            $ticket = $api->ticketS;
+            $nombre_archivo = $nombre . '.zip';
+        } else {
+            $ticket = $guia['ticket'];
+            $nombre_archivo = $nombre . '.zip';
+        }
         $obtenerCdr = new ApiFacturacion();
         $obtenerCdr->ConsultarTicketGuiaRemision($emisor, $ticket, $token, $nombre_archivo, $nombre, $ruta_archivo_cdr);
         if (!empty($obtenerCdr)) {
@@ -306,13 +323,15 @@ class AjaxGuia
         $guiaActualizar = ControladorGuiaRemision::ctrActualizarCDR($idGuia, $codigosSunat);
     }
 
-    public function ajaxEliminarGuia() {
+    public function ajaxEliminarGuia()
+    {
         $idGuiaEliminar = $_POST['idGuiaDelete'];
         $respuesta = ControladorGuiaRemision::ctrEliminarGuia($idGuiaEliminar);
         echo $respuesta;
     }
 
-    public function ajaxAnularGuia() {
+    public function ajaxAnularGuia()
+    {
         $idGuiaAnular = $_POST['idGuiaAnular'];
         $respuesta = ControladorGuiaRemision::ctrAnularGuia($idGuiaAnular);
         echo $respuesta;

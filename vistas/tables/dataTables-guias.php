@@ -107,7 +107,7 @@ class DataTablesGuias
         $botonEstadoCdr = '<a href="./api/' . $ruta_cdr . '/' . $v['xmlbase64'] . '" target="_blank" class="cdr"  id="cdr" idComp="' . $v['id'] . '" ></a>';
 
         //  ESTADO SUNAT ===================
-        if ($v['feestado'] == '1') {
+        /* if ($v['feestado'] == '1') {
           $botonEstado = "<button class='s-success'></button>";
         } else {
           $botonEstado = '<button class="anulado"></button>';
@@ -120,6 +120,21 @@ class DataTablesGuias
         }
         if ($v['feestado'] == '') {
           $botonEstado = "<button class='s-getcdr' id='getcdr-guia' idGuia='" . $v['id'] . "'></button>";
+        } */
+        switch ($v['feestado']) {
+          case '1':
+            $botonEstado = "<button class='s-success'></button>";
+            break;
+          case '2':
+            $botonEstado = "<button class='s-rechazo'></button>";
+            break;
+          case '3':
+          case '':
+            $botonEstado = "<button class='s-getcdr' id='getcdr-guia' idGuia='" . $v['id'] . "'></button>";
+            break;
+          default:
+            $botonEstado = "<button class='s-getcdr' id='getcdr-guia' idGuia='" . $v['id'] . "'></button>";
+            break;
         }
         $tablaGuias = '<tr>
                 <td>' . ++$k . '</td>

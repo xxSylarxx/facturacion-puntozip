@@ -215,11 +215,11 @@ class ApiFacturacion
 			}
 		} else { //Problemas de comunicacion
 			$estadofe = "3";
-			if($response){
+			if ($response) {
 				$doc = new \DOMDocument();
 				$doc->loadXML($response);
 			}
-			
+
 			echo curl_error($ch);
 			echo "<script>
 			Swal.fire({
@@ -265,6 +265,7 @@ class ApiFacturacion
 				'password'    => $clave_sol
 			);
 		}
+
 		// MODO PRODUCCIÓN===========================
 		if ($emisor['modo'] == 's') {
 			$usuario_sol = $emisor['usuario_sol'];
@@ -285,9 +286,8 @@ class ApiFacturacion
 
 		$payload = http_build_query($datos_token);
 		$curl = curl_init();
-
 		curl_setopt_array($curl, array(
-			CURLOPT_SSL_VERIFYPEER => 1,
+			CURLOPT_SSL_VERIFYPEER => ($_SERVER['REQUEST_SCHEME'] == 'https') ? 1 : false,
 			CURLOPT_URL => $wsS,
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_HTTPAUTH => CURLAUTH_ANY,
@@ -303,11 +303,23 @@ class ApiFacturacion
 		));
 
 		$response = curl_exec($curl);
-
+		if (curl_errno($curl)) {
+			echo 'Error de cURL: ' . curl_error($curl) . '<br>primer echo<br>';
+		} else {
+			// Verificar si la respuesta es un JSON válido
+			$result = json_decode($response, true);
+			if (json_last_error() !== JSON_ERROR_NONE) {
+				echo 'Error al decodificar JSON: ' . json_last_error_msg() . '<br>segundo echo<br>';
+				echo 'Respuesta de la API: ' . $response . '<br>tercer echo<br>';
+			} else {
+				// Aquí procesarías el resultado si la decodificación fue exitosa
+				//var_dump($result);
+			}
+		}
 		curl_close($curl);
-		// var_dump($response);
+		//var_dump($response);
 		return json_decode($response);
-		// echo $response;
+		//echo $response;
 	}
 	public function EnviarGuiaRemision($emisor, $nombre, $ruta_archivo_xml, $ruta_archivo_cdr, $rutacertificado = null)
 	{
@@ -414,12 +426,25 @@ class ApiFacturacion
 		curl_close($ch);
 
 		$obt_ticket = json_decode($response);
-		$this->ticketS = $obt_ticket->numTicket;
+	
+		if (is_object($obt_ticket)) {
+			$this->ticketS = $obt_ticket->numTicket;
+		} else {
+			// Manejar el error
+			error_log("Error: \$obt_ticket no es un objeto. Tipo de dato: " . gettype($obt_ticket));
+			// Puedes asignar un valor predeterminado o lanzar una excepción
+			//$this->ticketS = null;
+		}
+		//$this->ticketS = $obt_ticket->numTicket;
+
+
 		// var_dump($response);
 	}
 	public function ConsultarTicketGuiaRemision($emisor, $ticket, $token, $nombre_archivo, $nombre, $ruta_archivo_cdr)
 	{
 
+		//echo '<pre>';
+		//var_dump($emisor, $ticket, $token, $nombre_archivo, $nombre, $ruta_archivo_cdr); die();
 		if ($emisor['modo'] == 'n') {
 
 			$wsS = self::SUNAT_CONSULT_API_ENDPOINT_TEST;
@@ -449,7 +474,7 @@ class ApiFacturacion
 
 		//para ejecutar los procesos de forma local en windows
 		//enlace de descarga del cacert.pem https://curl.haxx.se/docs/caextract.html
-		curl_setopt($ch, CURLOPT_CAINFO, dirname(__FILE__) . "/cacert.pem"); //solo en local, si estas en el servidor web con ssl comentar esta línea
+		//curl_setopt($ch, CURLOPT_CAINFO, dirname(__FILE__) . "/cacert.pem"); //solo en local, si estas en el servidor web con ssl comentar esta línea
 
 		$response = curl_exec($ch);
 
@@ -457,10 +482,16 @@ class ApiFacturacion
 		// ejecucion del llamado y respuesta del WS SUNAT.
 
 		$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE); // objten el codigo de respuesta de la peticion al WS SUNAT
+		//echo '<pre>';
+		//var_dump($httpcode, $response); die();
 
 		// var_dump($response);
 		// exit();
 		$cdrDecode = json_decode($response);
+
+		echo '<pre>';
+		print_r($cdrDecode);
+		exit();
 
 		if ($httpcode == 200) {
 
@@ -1022,12 +1053,10 @@ class ApiFacturacion
 				$mensaje = $doc->getElementsByTagName('statusMessage')->item(0)->nodeValue;
 				$code = $doc->getElementsByTagName('statusCode')->item(0)->nodeValue;
 				$this->codigoMsg = $code;
-				$this->msgConsulta = $comprobante['serie'].'-'.$comprobante['correlativo'].'<br/>'.$mensaje;
-				
+				$this->msgConsulta = $comprobante['serie'] . '-' . $comprobante['correlativo'] . '<br/>' . $mensaje;
 			} else {
-				
+
 				$this->msgConsulta = 'SOLO SE PUEDE CONSULTAR EN PRODUCCIÓN';
-				
 			}
 
 			// echo $response;
