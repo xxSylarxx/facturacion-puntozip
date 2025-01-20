@@ -229,10 +229,15 @@ $(document).on("click", ".btnGuardarGuia", function (e) {
             allowOutsideClick: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            cancelButtonText: "Cerrar",
+            cancelButtonText: "<a href='/ver-guias' style='color:white;'>Cerrar</a>",
+            allowOutsideClick: () => {
+              window.location.href = '/ver-guias';
+            }
           });
+          
           $(".reload-all").fadeOut(50);
           $("#successG").html(data);
+          
         },
       });
     }

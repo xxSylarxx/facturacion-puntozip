@@ -318,19 +318,25 @@ class ControladorGuiaRemision
             && !empty($datosForm['fechaInicialTraslado']) && !empty($datosForm['pesoBruto']) && !empty($datosForm['numeroBultos'])   && !empty($datosForm['direccionPartida']) && !empty($datosForm['ubigeoPartida']) && !empty($datosForm['direccionLlegada']) && !empty($datosForm['ubigeoLlegada'])
         ) {
 
+           
+            
             // COMPROBAR SI CORRELATIVO DISPONIBLE
-            $existeCorrelativo = ControladorGuiaRemision::ctrExisteCorrelativo($datosForm['idSucursal'], $seriex['serie'], $guia['correlativo']);
-            if ($existeCorrelativo) {
-                echo "<script>
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'LA SERIE Y CORRELATIVO ". ($seriex['serie'] . '-' . $guia['correlativo']) . " YA EXISTE' ,
-                            text: '',
-                            html: `Debes ingresar otro correlativo`
-                        })
-                            </script>";
-                die();
+            
+            if (!self::$esBorrador) {
+                $existeCorrelativo = ControladorGuiaRemision::ctrExisteCorrelativo($datosForm['idSucursal'], $seriex['serie'], $guia['correlativo']);
+                if ($existeCorrelativo) {
+                    echo "<script>
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'LA SERIE Y CORRELATIVO ". ($seriex['serie'] . '-' . $guia['correlativo']) . " YA EXISTE' ,
+                                text: '',
+                                html: `Debes ingresar otro correlativo`
+                            })
+                                </script>";
+                    die();
+                }
             }
+            
 
             // if (($datosForm['modalidadTraslado'] == '02' && !empty($datosForm['placa'])  && !empty($datosForm['numBrevete'])) || ($datosForm['modalidadTraslado'] == '01' && empty($datosForm['placa']))) {
             if (!empty($detalle)) {
