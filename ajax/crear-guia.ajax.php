@@ -319,8 +319,7 @@ class AjaxGuia
                 "cdrbase64"  => $obtenerCdr->cdrb64,
             );
         }
-        // var_dump($codigosSunat);
-        $guiaActualizar = ControladorGuiaRemision::ctrActualizarCDR($idGuia, $codigosSunat);
+        ControladorGuiaRemision::ctrActualizarCDR($idGuia, $codigosSunat);
     }
 
     public function ajaxEliminarGuia()

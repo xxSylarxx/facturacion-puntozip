@@ -268,7 +268,7 @@ class ControladorGuiaRemision
             'comp_ref'   => null,
             'id_cliente' => $datosForm['idCliente'],
             'id_conductor' => $datosForm['listConductores'],
-            'borrador'   => $datosForm['envioSunat'] == 'enviar' ? 'S' : 'N'
+            'borrador'   => $datosForm['envioSunat'] == 'enviar' ? 'N' : 'S'
         );
         if (!isset($_SESSION['carritoG'])) {
             $_SESSION['carritoG'] = array();
@@ -317,11 +317,7 @@ class ControladorGuiaRemision
             !empty($datosForm['idCliente']) && !empty($datosForm['docIdentidad']) && !empty($datosForm['razon_social'])
             && !empty($datosForm['fechaInicialTraslado']) && !empty($datosForm['pesoBruto']) && !empty($datosForm['numeroBultos'])   && !empty($datosForm['direccionPartida']) && !empty($datosForm['ubigeoPartida']) && !empty($datosForm['direccionLlegada']) && !empty($datosForm['ubigeoLlegada'])
         ) {
-
-           
-            
-            // COMPROBAR SI CORRELATIVO DISPONIBLE
-            
+            // COMPROBAR SI CORRELATIVO ESTA DISPONIBLE 
             if (!self::$esBorrador) {
                 $existeCorrelativo = ControladorGuiaRemision::ctrExisteCorrelativo($datosForm['idSucursal'], $seriex['serie'], $guia['correlativo']);
                 if ($existeCorrelativo) {
@@ -337,40 +333,37 @@ class ControladorGuiaRemision
                 }
             }
             
-
             // if (($datosForm['modalidadTraslado'] == '02' && !empty($datosForm['placa'])  && !empty($datosForm['numBrevete'])) || ($datosForm['modalidadTraslado'] == '01' && empty($datosForm['placa']))) {
             if (!empty($detalle)) {
-                if ($datosForm['envioSunat'] != 'no') {
-                    if ($datosForm['envioSunat'] == 'enviar') {
-                        $generadoXML = new GeneradorXML();
-                        $generadoXML->CrearXMLGuiaRemision($ruta . $nombre, $emisor, $datosGuia, $detalle);
-                        $api = new ApiFacturacion();
-                        $api->EnviarGuiaRemision($emisor, $nombre, $ruta_archivo_xml, $ruta_archivo_cdr, "../");
-                        $token = $api->token;
-                        $ticket = $api->ticketS;
-                        $nombre_archivo = $nombre . '.zip';
-                        //CONSULTAR TICKET=============================
-                        $obtenerCdr = new ApiFacturacion();
-                        $obtenerCdr->ConsultarTicketGuiaRemision($emisor, $ticket, $token, $nombre_archivo, $nombre, $ruta_archivo_cdr);
-                        if (!empty($obtenerCdr)) {
-                            $codigosSunat = array(
-                                "feestado" => $obtenerCdr->codrespuesta,
-                                "fecodigoerror"  => $obtenerCdr->coderror,
-                                "femensajesunat"  => $obtenerCdr->mensajeError,
-                                "nombrexml"  => $api->xml,
-                                "xmlbase64"  => $obtenerCdr->xmlb64,
-                                "cdrbase64"  => $obtenerCdr->cdrb64,
-                            );
-                        } else {
-                            $codigosSunat = array(
-                                "feestado" => 3,
-                                "fecodigoerror"  => '',
-                                "femensajesunat"  => '',
-                                "nombrexml"  => $api->xml,
-                                "xmlbase64"  => "R-" . $nombre . '.xml',
-                                "cdrbase64"  => "R-" . $nombre . '.zip',
-                            );
-                        }
+                if ($datosForm['envioSunat'] == 'enviar') {
+                    $generadoXML = new GeneradorXML();
+                    $generadoXML->CrearXMLGuiaRemision($ruta . $nombre, $emisor, $datosGuia, $detalle);
+                    $api = new ApiFacturacion();
+                    $api->EnviarGuiaRemision($emisor, $nombre, $ruta_archivo_xml, $ruta_archivo_cdr, "../");
+                    $token = $api->token;
+                    $ticket = $api->ticketS;
+                    $nombre_archivo = $nombre . '.zip';
+                    // CONSULTAR TICKET=============================
+                    $obtenerCdr = new ApiFacturacion();
+                    $obtenerCdr->ConsultarTicketGuiaRemision($emisor, $ticket, $token, $nombre_archivo, $nombre, $ruta_archivo_cdr);
+                    if (!empty($obtenerCdr)) {
+                        $codigosSunat = array(
+                            "feestado" => $obtenerCdr->codrespuesta,
+                            "fecodigoerror"  => $obtenerCdr->coderror,
+                            "femensajesunat"  => $obtenerCdr->mensajeError,
+                            "nombrexml"  => $api->xml,
+                            "xmlbase64"  => $obtenerCdr->xmlb64,
+                            "cdrbase64"  => $obtenerCdr->cdrb64,
+                        );
+                    } else {
+                        $codigosSunat = array(
+                            "feestado" => 3,
+                            "fecodigoerror"  => '',
+                            "femensajesunat"  => '',
+                            "nombrexml"  => $api->xml,
+                            "xmlbase64"  => "R-" . $nombre . '.xml',
+                            "cdrbase64"  => "R-" . $nombre . '.zip',
+                        );
                     }
                     $datos = array(
                         'id' => $datosForm['serie'],
