@@ -489,22 +489,11 @@ class ApiFacturacion
 		// exit();
 		$cdrDecode = json_decode($response);
 
-		echo '<pre>';
-		print_r($cdrDecode);
-		exit();
-
 		if ($httpcode == 200) {
-
-
-
 			if (isset($cdrDecode->arcCdr)) {
-
 				@$cdr = base64_decode($cdrDecode->arcCdr);
-
 				file_put_contents($ruta_archivo_cdr . "R-" . $nombre_archivo, $cdr);
-
 				$this->cdrb64 = "R-" . $nombre . '.zip';
-
 				$zip = new \ZipArchive;
 				if ($zip->open($ruta_archivo_cdr . "R-" . $nombre_archivo) === true) {
 					$zip->extractTo($ruta_archivo_cdr, 'R-' . $nombre . '.xml');
@@ -512,7 +501,6 @@ class ApiFacturacion
 				}
 
 				$this->xmlb64 = "R-" . $nombre . '.xml';
-
 				$xml_decode = file_get_contents($ruta_archivo_cdr . 'R-' . $nombre . '.xml') or die("Error: Cannot create object");
 				// Obteniendo datos del archivo .XML
 				$aceptado = "";
@@ -528,9 +516,6 @@ class ApiFacturacion
 				$hash_cdr = $DOM->getElementsByTagName('DigestValue')->item(0)->nodeValue;
 
 				$pos = $ResponseCode;
-
-
-
 				if ($pos == 0) {
 					$estadofe = '1';
 				} else {

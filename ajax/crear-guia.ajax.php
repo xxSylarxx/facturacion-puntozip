@@ -9,6 +9,7 @@ use Controladores\ControladorVentas;
 use Controladores\ControladorEmpresa;
 use Controladores\ControladorSucursal;
 use api\ApiFacturacion;
+use Modelos\ModeloGuiaRemision;
 
 class AjaxGuia
 {
@@ -304,6 +305,9 @@ class AjaxGuia
             $token = $api->token;
             $ticket = $api->ticketS;
             $nombre_archivo = $nombre . '.zip';
+            if ($ticket) {
+                ModeloGuiaRemision::mdlActualizarGuiaTicket($valor, $ticket);
+            }
         } else {
             $ticket = $guia['ticket'];
             $nombre_archivo = $nombre . '.zip';

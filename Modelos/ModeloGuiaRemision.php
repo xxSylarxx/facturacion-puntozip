@@ -501,4 +501,18 @@ class ModeloGuiaRemision
         $stmt->close();
         $stmt = null;
     }
+
+    public static function mdlActualizarGuiaTicket($idGuia, $ticket)
+    {
+        $stmt = Conexion::conectar()->prepare("UPDATE guia SET ticket = :ticket WHERE id = :id");
+        $stmt->bindParam(":id", $idGuia, PDO::PARAM_INT);
+        $stmt->bindParam(":ticket", $ticket, PDO::PARAM_STR);
+        if ($stmt->execute()) {
+            return 'ok';
+        } else {
+            return 'error';
+        }
+        $stmt->close();
+        $stmt = null;
+    }
 }
