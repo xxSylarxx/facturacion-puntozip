@@ -17,7 +17,7 @@ class ModeloGuiaRemision
             $stmt->execute();
             return $stmt->fetch();
         } else {
-            $stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla");
+            $stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla ORDER BY fecha_emision DESC");
             //$stmt->bindParam(":".$item, $valor, PDO::PARAM_STR);    
             $stmt->execute();
             return $stmt->fetchall();
@@ -437,7 +437,7 @@ class ModeloGuiaRemision
     // GUARDAR VENTA CARRITO EN LA BD
     public static function mdlActualizarCDR($idGuia, $codigosSunat)
     {
-        $stmt = Conexion::conectar()->prepare("UPDATE guia SET feestado=:feestado WHERE id=:id");
+        $stmt = Conexion::conectar()->prepare("UPDATE guia SET feestado = :feestado, cdrbase64 = :cdrbase64 WHERE id = :id");
         $stmt->bindParam(":id", $idGuia, PDO::PARAM_INT);
         $stmt->bindParam(":feestado", $codigosSunat['feestado'], PDO::PARAM_STR);
         if ($stmt->execute()) {

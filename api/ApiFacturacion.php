@@ -457,7 +457,7 @@ class ApiFacturacion
 		$ch = curl_init();
 
 		curl_setopt_array($ch, array(
-			CURLOPT_SSL_VERIFYPEER => 1,
+			CURLOPT_SSL_VERIFYPEER => ($_SERVER['REQUEST_SCHEME'] == 'https') ? 1 : false,
 			CURLOPT_URL => $wsS . $ticket,
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_HTTPAUTH => CURLAUTH_ANY,

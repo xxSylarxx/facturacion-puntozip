@@ -88,7 +88,7 @@ class DataTablesGuias
       $reload = './index.php';
       //main query to fetch the data
       $pdo =  Conexion::conectar();
-      $registros = $pdo->prepare("SELECT * FROM  $sTable $sWhere ORDER BY id DESC LIMIT $offset, $per_page");
+      $registros = $pdo->prepare("SELECT * FROM  $sTable $sWhere ORDER BY fecha_emision DESC, correlativo DESC LIMIT $offset, $per_page");
       $registros->execute();
       $registros = $registros->fetchall();
       foreach ($registros as $k => $v) {
