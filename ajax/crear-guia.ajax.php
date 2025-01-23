@@ -282,7 +282,6 @@ class AjaxGuia
         }
 
         $emisor = ControladorEmpresa::ctrEmisor();
-    
         $token_result = ApiFacturacion::ObtenerToken($emisor);
         // Verificar si la respuesta es un objeto y si tiene la propiedad 'access_token'
         if (is_object($token_result) && isset($token_result->access_token)) {
