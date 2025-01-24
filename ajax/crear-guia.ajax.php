@@ -298,6 +298,7 @@ class AjaxGuia
         $ruta_archivo_xml = "../api/xml/";
         $ruta_archivo_cdr = "../api/cdr/";
         $nombre = $emisor['ruc'] . '-' . $guia['tipodoc'] . '-' . $guia['serie'] . '-' . $guia['correlativo'];
+        $nombreXML = '';
         if ($guia['borrador'] == 'S') {
             $api = new ApiFacturacion();
             $api->EnviarGuiaRemision($emisor, $nombre, $ruta_archivo_xml, $ruta_archivo_cdr, "../");
@@ -307,8 +308,10 @@ class AjaxGuia
             if ($ticket) {
                 ModeloGuiaRemision::mdlActualizarGuiaTicket($valor, $ticket);
             }
+            $nombreXML = $api->xml;
         } else {
             $ticket = $guia['ticket'];
+            $nombreXML = isset($guia['nombrexml']) ? $guia['nombrexml'] : '';
             $nombre_archivo = $nombre . '.zip';
         }
         $obtenerCdr = new ApiFacturacion();
@@ -324,18 +327,26 @@ class AjaxGuia
             if (isset($codigosSunat['feestado'])) {
                 ControladorGuiaRemision::ctrActualizarCDR($idGuia, $codigosSunat);
             }
+            ModeloGuiaRemision::mdlActualizarCDRName($idGuia, [
+                'xmlbase64' => $codigosSunat['xmlbase64'],
+                'cdrbase64' => $codigosSunat['cdrbase64']
+            ]);
         } else {
             $codigosSunat = array(
                 "feestado" => 3,
                 "fecodigoerror"  => '',
                 "femensajesunat"  => '',
-                "nombrexml"  => $api->xml,
+                "nombrexml"  => $nombreXML,
                 "xmlbase64"  => "R-" . $nombre . '.xml',
                 "cdrbase64"  => "R-" . $nombre . '.zip',
             );
             if (isset($codigosSunat['feestado'])) {
                 ControladorGuiaRemision::ctrActualizarCDR($idGuia, $codigosSunat);
             }
+            ModeloGuiaRemision::mdlActualizarCDRName($idGuia, [
+                'xmlbase64' => $codigosSunat['xmlbase64'],
+                'cdrbase64' => $codigosSunat['cdrbase64']
+            ]);
         }
     }
 

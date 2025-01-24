@@ -388,8 +388,8 @@ class ControladorGuiaRemision
                     if (self::$esBorrador) {
                         $guardarGuia = ControladorGuiaRemision::ctrActualizarGuiaSinSunat($id_sucursal, $datosGuia, $_POST['guiaEditar']);
                     } else {
-                        $actualizarSerie = ControladorSunat::ctrActualizarCorrelativo($datos);
                         $guardarGuia = ControladorGuiaRemision::ctrGuardarGuiaSinSunat($id_sucursal, $datosGuia);
+                        $actualizarSerie = ControladorSunat::ctrActualizarCorrelativo($datos);
                     }
                 }
                 $guiaid = ModeloGuiaRemision::mdlObtenerUltimoComprobanteIdGuia();
@@ -401,11 +401,6 @@ class ControladorGuiaRemision
                 if ($guardarGuia == 'ok') {
                     $valor = null;
                     /* $actualizarStock = ControladorProductos::ctrActualizarStock($detalle, $valor); */
-                    if (empty($datosForm['serieCorrelativoReferencial'])) {
-                        //INVENTARIO====================================================
-                        $id_sucursal = $sucursal['id'];
-                        $entradasInventario = ControladorInventarios::ctrNuevaSalidaGuia($detalle, $comprobante, $id_sucursal);
-                    }
                     echo "
                        <div class='contenedor-print'>
                       <form id='printC' name='printC' method='post' action='vistas/print/printguia/' target='_blank'>
