@@ -720,9 +720,7 @@ if ($esBorrador) {
                           <label for="enviar">Enviar a SUNAT ahora mismo</label>
                         </div>
                       </div>
-
                     </div>
-
 
                     <div class="box-footer contenedor-btns-carrito">
 

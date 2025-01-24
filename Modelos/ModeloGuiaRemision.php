@@ -278,8 +278,8 @@ class ModeloGuiaRemision
     public static function mdlGuardarGuiaSinEnviarSunat($id_sucursal, $datosGuia)
     {
         $transportistaNom = (string) $datosGuia['transportista']['nombreRazon'] . ' ' . $datosGuia['transportista']['apellidosRazon'];
-        $stmt = Conexion::conectar()->prepare("INSERT INTO guia(id, id_sucursal, id_cliente, id_conductor, cli_tipodoc, tipodoc, serie, correlativo, fecha_emision, hora, comp_ref, baja_numdoc, baja_tipodoc, rel_numdoc, rel_tipodoc, terceros_tipodoc, terceros_numdoc, terceros_nombrerazon, cod_traslado, uniPeso, pesoTotal, numBultos, indTransbordo, modTraslado, fechaTraslado, transp_tipoDoc, transp_numDoc, transp_nombreRazon, transp_placa, tipoDocChofer, numDocChofer, observacion, ubigeoPartida, direccionPartida, ubigeoLlegada, direccionLlegada, tipovehiculo, descripcion, series, nombrexml) VALUES (NULL, :id_sucursal, :id_cliente, :id_conductor, :cli_tipodoc, :tipodoc, :serie, :correlativo, :fecha_emision, :hora, :comp_ref, :baja_numdoc, :baja_tipodoc, :rel_numdoc, :rel_tipodoc, :terceros_tipodoc, :terceros_numdoc, :terceros_nombrerazon, :cod_traslado, :uniPeso, :pesoTotal, :numBultos, :indTransbordo, :modTraslado, :fechaTraslado, :transp_tipoDoc, :transp_numDoc, :transp_nombreRazon, :transp_placa, :tipoDocChofer, :numDocChofer, :observacion, :ubigeoPartida, :direccionPartida, :ubigeoLlegada, :direccionLlegada, :tipovehiculo, :descripcion, :series, :nombrexml)");
-
+        $stmt = Conexion::conectar()->prepare("INSERT INTO guia(id, id_sucursal, id_cliente, id_conductor, cli_tipodoc, tipodoc, serie, correlativo, fecha_emision, hora, comp_ref, baja_numdoc, baja_tipodoc, rel_numdoc, rel_tipodoc, terceros_tipodoc, terceros_numdoc, terceros_nombrerazon, cod_traslado, uniPeso, pesoTotal, numBultos, indTransbordo, modTraslado, fechaTraslado, transp_tipoDoc, transp_numDoc, transp_nombreRazon, transp_placa, tipoDocChofer, numDocChofer, observacion, ubigeoPartida, direccionPartida, ubigeoLlegada, direccionLlegada, tipovehiculo, descripcion, series, nombrexml, borrador) VALUES (NULL, :id_sucursal, :id_cliente, :id_conductor, :cli_tipodoc, :tipodoc, :serie, :correlativo, :fecha_emision, :hora, :comp_ref, :baja_numdoc, :baja_tipodoc, :rel_numdoc, :rel_tipodoc, :terceros_tipodoc, :terceros_numdoc, :terceros_nombrerazon, :cod_traslado, :uniPeso, :pesoTotal, :numBultos, :indTransbordo, :modTraslado, :fechaTraslado, :transp_tipoDoc, :transp_numDoc, :transp_nombreRazon, :transp_placa, :tipoDocChofer, :numDocChofer, :observacion, :ubigeoPartida, :direccionPartida, :ubigeoLlegada, :direccionLlegada, :tipovehiculo, :descripcion, :series, :nombrexml, :borrador)");
+        $borrador = 'S';
         $stmt->bindParam(":id_sucursal", $id_sucursal, PDO::PARAM_INT);
         $stmt->bindParam(":id_cliente", $datosGuia['id_cliente'], PDO::PARAM_INT);
         $stmt->bindParam(":id_conductor", $datosGuia['id_conductor'], PDO::PARAM_INT);
@@ -324,6 +324,7 @@ class ModeloGuiaRemision
         /* $stmt->bindParam(":ticket", $ticket, PDO::PARAM_STR); */
         $stmt->bindParam(":series", $datosGuia['guia']['series'], PDO::PARAM_STR);
         $stmt->bindParam(":nombrexml", $datosGuia['nombrexml'], PDO::PARAM_STR);
+        $stmt->bindParam(":borrador", $borrador, PDO::PARAM_STR);
 
         if ($stmt->execute()) {
             return   'ok';

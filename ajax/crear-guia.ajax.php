@@ -253,7 +253,6 @@ class AjaxGuia
             'id' => $guia['id'],
             'retorno' => 's'
         );
-        var_dump($datos);
         $desactivarRetornoGuia = ControladorGuiaRemision::ctrDesactivarRetorno($datos);
     }
 
@@ -322,8 +321,22 @@ class AjaxGuia
                 "xmlbase64"  => $obtenerCdr->xmlb64,
                 "cdrbase64"  => $obtenerCdr->cdrb64,
             );
+            if (isset($codigosSunat['feestado'])) {
+                ControladorGuiaRemision::ctrActualizarCDR($idGuia, $codigosSunat);
+            }
+        } else {
+            $codigosSunat = array(
+                "feestado" => 3,
+                "fecodigoerror"  => '',
+                "femensajesunat"  => '',
+                "nombrexml"  => $api->xml,
+                "xmlbase64"  => "R-" . $nombre . '.xml',
+                "cdrbase64"  => "R-" . $nombre . '.zip',
+            );
+            if (isset($codigosSunat['feestado'])) {
+                ControladorGuiaRemision::ctrActualizarCDR($idGuia, $codigosSunat);
+            }
         }
-        ControladorGuiaRemision::ctrActualizarCDR($idGuia, $codigosSunat);
     }
 
     public function ajaxEliminarGuia()
