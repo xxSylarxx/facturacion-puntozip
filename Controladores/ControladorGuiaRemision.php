@@ -342,6 +342,11 @@ class ControladorGuiaRemision
                     $api->EnviarGuiaRemision($emisor, $nombre, $ruta_archivo_xml, $ruta_archivo_cdr, "../");
                     $token = $api->token;
                     $ticket = $api->ticketS;
+                    if (self::$esBorrador && !empty($ticket)) {
+                        $datosGuia['borrador'] = 'N';
+                    } else {
+                        $datosGuia['borrador'] = 'S';
+                    }
                     $nombre_archivo = $nombre . '.zip';
                     // CONSULTAR TICKET=============================
                     $obtenerCdr = new ApiFacturacion();

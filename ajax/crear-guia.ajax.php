@@ -9,6 +9,7 @@ use Controladores\ControladorVentas;
 use Controladores\ControladorEmpresa;
 use Controladores\ControladorSucursal;
 use api\ApiFacturacion;
+use Modelos\ModeloGastos;
 use Modelos\ModeloGuiaRemision;
 
 class AjaxGuia
@@ -282,7 +283,7 @@ class AjaxGuia
         }
 
         $emisor = ControladorEmpresa::ctrEmisor();
-    
+
         $token_result = ApiFacturacion::ObtenerToken($emisor);
         // Verificar si la respuesta es un objeto y si tiene la propiedad 'access_token'
         if (is_object($token_result) && isset($token_result->access_token)) {
@@ -307,15 +308,19 @@ class AjaxGuia
             $nombre_archivo = $nombre . '.zip';
             if ($ticket) {
                 ModeloGuiaRemision::mdlActualizarGuiaTicket($valor, $ticket);
+                ModeloGuiaRemision::mdlActualizarGuiaEstado($valor, ['feestado' => 1]);
             }
             $nombreXML = $api->xml;
         } else {
             $ticket = $guia['ticket'];
             $nombreXML = isset($guia['nombrexml']) ? $guia['nombrexml'] : '';
             $nombre_archivo = $nombre . '.zip';
+            if (!empty($ticket)) {
+                ModeloGuiaRemision::mdlActualizarGuiaEstado($valor, ['feestado' => 1]);
+            }
         }
         $obtenerCdr = new ApiFacturacion();
-        $obtenerCdr->ConsultarTicketGuiaRemision($emisor, $ticket, $token, $nombre_archivo, $nombre, $ruta_archivo_cdr);
+        $obtenerCdr->ConsultarTicketGuiaRemision($emisor, $ticket, $token, $nombre_archivo, $nombre, $ruta_archivo_cdr, $valor);
         if (!empty($obtenerCdr)) {
             $codigosSunat = array(
                 "feestado" => $obtenerCdr->codrespuesta,

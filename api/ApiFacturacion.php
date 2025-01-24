@@ -3,6 +3,7 @@
 namespace api;
 
 use api\Signature;
+use Modelos\ModeloGuiaRemision;
 
 class ApiFacturacion
 {
@@ -440,7 +441,7 @@ class ApiFacturacion
 
 		// var_dump($response);
 	}
-	public function ConsultarTicketGuiaRemision($emisor, $ticket, $token, $nombre_archivo, $nombre, $ruta_archivo_cdr)
+	public function ConsultarTicketGuiaRemision($emisor, $ticket, $token, $nombre_archivo, $nombre, $ruta_archivo_cdr, $guia = null)
 	{
 
 		//echo '<pre>';
@@ -532,10 +533,13 @@ class ApiFacturacion
 				// $DOM->loadXML($xml_decode);
 				// $codigo = $DOM->getElementsByTagName("faultcode")->item(0)->nodeValue;
 				// $mensaje = $DOM->getElementsByTagName("faultstring")->item(0)->nodeValue;
-				// echo "error " . $codigo . ": " . $mensaje;
-				// $this->coderror = $cdrDecode->error->numError;
-				// $this->mensajeError = $cdrDecode->error->desError;
-				// $this->codrespuesta = $estadofe;
+				echo  '<div class="btnsuccess">Aceptada por sunat</div>';
+				$this->coderror = $cdrDecode->error->numError;
+				$this->mensajeError = $cdrDecode->error->desError;
+				$this->codrespuesta = $estadofe;
+				if (!empty($guia)) {
+					ModeloGuiaRemision::mdlActualizarGuiaEstado($guia, 1);
+				}
 			}
 		} else {
 			// var_dump($response);
