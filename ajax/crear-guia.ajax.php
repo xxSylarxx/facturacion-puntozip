@@ -257,14 +257,14 @@ class AjaxGuia
         $desactivarRetornoGuia = ControladorGuiaRemision::ctrDesactivarRetorno($datos);
     }
 
-    public function comprobarMayorDe24Horas($fecha_emision, $hora)
+    public function comprobarMayorDe48Horas($fecha_emision, $hora)
     {
         $fechaHora = $fecha_emision . ' ' . $hora;
         $fechaHoraDateTime = new DateTime($fechaHora);
         $fechaActual = new DateTime();
         $intervalo = $fechaActual->diff($fechaHoraDateTime);
         $horasDeDiferencia = $intervalo->h + ($intervalo->days * 24);
-        return $horasDeDiferencia >= 24 ? true : false;
+        return $horasDeDiferencia >= 48 ? true : false;
     }
 
     public function ajaxGetCDR()
@@ -274,10 +274,10 @@ class AjaxGuia
         $item = 'id';
         $valor = $_POST['idgetGuia'];
         $guia = ControladorGuiaRemision::ctrMostrar($tabla, $item, $valor);
-        // VERIFICAR SI PASO MAS DE 24 HORAS
-        $mayor_24_horas = $this->comprobarMayorDe24Horas($guia['fecha_emision'], $guia['hora']);
+        // VERIFICAR SI PASO MAS DE 48 HORAS
+        $mayor_48_horas = $this->comprobarMayorDe48Horas($guia['fecha_emision'], $guia['hora']);
 
-        if ($mayor_24_horas) {
+        if ($mayor_48_horas) {
             ControladorGuiaRemision::ctrActualizarEstado($idGuia);
             return 'GUIA RECHAZADA';
         }
