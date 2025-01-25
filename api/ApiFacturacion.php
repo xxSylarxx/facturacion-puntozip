@@ -533,7 +533,7 @@ class ApiFacturacion
 				// $DOM->loadXML($xml_decode);
 				// $codigo = $DOM->getElementsByTagName("faultcode")->item(0)->nodeValue;
 				// $mensaje = $DOM->getElementsByTagName("faultstring")->item(0)->nodeValue;
-				echo  '<div class="btnsuccess">Aceptada por sunat</div>';
+				echo  '<div class="btnwarning">NO SE OBTIENE RESPUESTA DE SUNAT, INTENTE MÁS TARDE</div>';
 				$this->coderror = $cdrDecode->error->numError;
 				$this->mensajeError = $cdrDecode->error->desError;
 				$this->codrespuesta = $estadofe;

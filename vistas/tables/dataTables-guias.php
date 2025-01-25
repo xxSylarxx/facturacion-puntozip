@@ -123,19 +123,18 @@ class DataTablesGuias
         } */
         switch ($v['feestado']) {
           case '1':
-            $botonEstado = "<button class='s-success'></button>";
-            break;
+              $botonEstado = "<button class='s-success'></button>";
+              break;
           case '2':
-            $botonEstado = "<button class='s-rechazo'></button>";
-            break;
+              $botonEstado = "<button class='s-rechazo'></button>";
+              break;
           case '3':
           case '':
-            $botonEstado = "<button class='s-getcdr' id='getcdr-guia' idGuia='" . $v['id'] . "'></button>";
-            break;
           default:
-            $botonEstado = "<button class='s-getcdr' id='getcdr-guia' idGuia='" . $v['id'] . "'></button>";
-            break;
-        }
+              $botonEstado = "<button class='s-getcdr' id='getcdr-guia' idGuia='" . $v['id'] . "'></button>";
+              break;
+      }
+      
         $tablaGuias = '<tr>
                 <td>' . ++$k . '</td>
                 <td ' . ($v['anulado'] == 'S' ? 'style="text-decoration: line-through; color: red;"' : '') . '>' . $v['fecha_emision'] . '</td>
