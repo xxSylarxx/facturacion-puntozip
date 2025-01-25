@@ -100,7 +100,7 @@ class DataTables
 
                <button class='btn btn-warning btnEditarCliente'  idCliente=" . $value['id'] . "  data-toggle='modal' data-target='#modalEditarCliente'><i class='fas fa-user-edit'></i></button>";
 
-        if ($perfilUsuario == 'Administrador') {
+        if ($perfilUsuario == 'Administrador' || $perfilUsuario == 'Guias') {
 
           echo "<button class='btn btn-danger btnEliminarCliente' idCliente=" . $value['id'] . "><i class='fas fa-trash-alt'></i></button>";
         }
@@ -147,7 +147,7 @@ class DataTables
       $sTable = 'productos';
       $sWhere = "";
 
-      if ($_SESSION['perfil'] == 'Administrador') {
+      if ($_SESSION['perfil'] == 'Administrador'|| $_SESSION['perfil'] == 'Guias') {
         if (isset($selectSucursal) && !empty($selectSucursal)) {
           $id_sucursal = "id_sucursal =  $selectSucursal  AND";
         } else {
@@ -222,7 +222,7 @@ class DataTables
 
     <button class="btn btn-warning btnEditarProducto" idProducto="' . $value["id"] . '" data-toggle="modal" data-target="#modalEditarProducto"><i class="fas fa-user-edit"></i></button>';
 
-        if ($perfilUsuario == 'Administrador') {
+        if ($perfilUsuario == 'Administrador' || $perfilUsuario == 'Guias') {
 
           echo '<button class="btn btn-danger btnEliminarProducto" idProducto="' . $value["id"] . '" codigo="' . $value["codigo"] . '" imagen="' . $value["imagen"] . '" ><i class="fas fa-trash-alt"></i></button>';
         }
@@ -281,7 +281,7 @@ class DataTables
       $sTable = 'productos';
       $sWhere = "";
       if ($emisor['multialmacen'] == 's') {
-        if ($_SESSION['perfil'] == 'Administrador') {
+        if ($_SESSION['perfil'] == 'Administrador' || $_SESSION['perfil'] == 'Guias') {
           if (isset($selectSucursal) && !empty($selectSucursal)) {
             $id_sucursal = "id_sucursal =  $selectSucursal  AND";
           } else {
@@ -489,7 +489,7 @@ class DataTables
       $sWhere = "";
 
       if ($emisor['multialmacen'] == 's') {
-        if ($_SESSION['perfil'] == 'Administrador') {
+        if ($_SESSION['perfil'] == 'Administrador' || $_SESSION['perfil'] == 'Guias') {
           if (isset($selectSucursal) && !empty($selectSucursal)) {
             $id_sucursal = "id_sucursal =  $selectSucursal  AND";
           } else {
@@ -600,7 +600,7 @@ class DataTables
       $sTable = 'venta';
       $sWhere = "";
 
-      if ($_SESSION['perfil'] == 'Administrador') {
+      if ($_SESSION['perfil'] == 'Administrador' || $_SESSION['perfil'] == 'Guias') {
         if (isset($selectSucursal) && !empty($selectSucursal)) {
           $id_sucursal = "id_sucursal =  $selectSucursal  AND";
         } else {
@@ -1181,7 +1181,7 @@ class DataTables
       $aColumns = array('correlativo'); //Columnas de busqueda
       $sTable = 'envio_resumen';
       $sWhere = "";
-      if ($_SESSION['perfil'] == 'Administrador') {
+      if ($_SESSION['perfil'] == 'Administrador' || $_SESSION['perfil'] == 'Guias') {
         if (isset($selectSucursal) && !empty($selectSucursal)) {
           $id_sucursal = "id_sucursal =  $selectSucursal  AND";
         } else {
@@ -1305,7 +1305,7 @@ class DataTables
       $sTable2 = 'venta';
       $sWhere = "";
 
-      if ($_SESSION['perfil'] == 'Administrador') {
+      if ($_SESSION['perfil'] == 'Administrador' || $_SESSION['perfil'] == 'Guias') {
         if (isset($selectSucursal) && !empty($selectSucursal)) {
           $id_sucursal = "id_sucursal =  $selectSucursal  AND";
         } else {

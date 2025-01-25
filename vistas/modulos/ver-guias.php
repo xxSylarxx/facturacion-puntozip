@@ -67,7 +67,7 @@ use Controladores\ControladorSucursal;
               <option value="100">100</option>
             </select>
             <?php
-            if ($_SESSION['perfil'] == 'Administrador') {
+            if ($_SESSION['perfil'] == 'Administrador' || $_SESSION['perfil'] == 'Guias') {
               echo '
                     <select class="form-control select2" name="selectSucursal" id="selectSucursal" style="margin-left: 4px;" onchange="loadGuiasR(1)">
                     <option value="">SUCURSAL</option>';

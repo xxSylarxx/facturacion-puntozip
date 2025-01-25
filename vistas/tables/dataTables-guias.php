@@ -44,7 +44,7 @@ class DataTablesGuias
       $sWhere = "";
 
 
-      if ($_SESSION['perfil'] == 'Administrador') {
+      if ($_SESSION['perfil'] == 'Administrador' || $_SESSION['perfil'] == 'Guias') {
         if (
           isset($selectSucursal) && !empty($selectSucursal)
         ) {

@@ -75,7 +75,7 @@ $sucursal = ControladorSucursal::ctrSucursal();
              
             </select>                
                   <?php
-                  if ($_SESSION['perfil'] == 'Administrador') {
+                    if ($_SESSION['perfil'] == 'Administrador' || $_SESSION['perfil'] == 'Guias') {
                     echo '
                     <select class="form-control select2" name="selectSucursal" id="selectSucursal" style="margin-left: 14px;" onchange="loadProductos(1)">
                     <option value="">MOSTRAR EN TODOS LOS ALMACENES</option>';
@@ -194,7 +194,7 @@ $sucursal = ControladorSucursal::ctrSucursal();
                     <select class="select2" name="nuevaSucursal" id="nuevaSucursal" style="width: 100%">
 
                       <?php
-                      if ($_SESSION['perfil'] == 'Administrador') {
+                      if ($_SESSION['perfil'] == 'Administrador' || $_SESSION['perfil'] == 'Guias') {
                         echo '<option value="">SELECCIONE UN ALMACEN</option>';
                         $item = null;
                         $valor = null;
@@ -566,7 +566,7 @@ $sucursal = ControladorSucursal::ctrSucursal();
 
                     <select class="form-control select2" name="editarSucursal" id="editarSucursal" style="width: 100%">
                       <?php
-                      if ($_SESSION['perfil'] == 'Administrador') {
+                      if ($_SESSION['perfil'] == 'Administrador' || $_SESSION['perfil'] == 'Guias') {
                         // echo '<option value="">SELECCIONE UN ALMACEN</option>';
                         $item = null;
                         $valor = null;
