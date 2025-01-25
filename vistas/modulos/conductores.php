@@ -40,12 +40,14 @@ use Controladores\Controlador;
             <div class="box-header ">
                 <h3 class="box-title">Administración de Conductores</h3>
 
-                <?php
-                if ($_SESSION['perfil'] == 'Administrador') {
+                <!-- <//?php
+                if ($_SESSION['perfil'] == 'Administrador' ) {
                 ?>
                     <button class="btn btn-success  pull-right btn-radius btn-no-user" data-toggle="modal" data-target="#modalAgregarConductor"><i class="fas fa-plus-square"></i>Nuevo conductor <i class="fas fa-user-plus"></i>
                     </button>
-                <?php } ?>
+                <//?php } ?> -->
+                <button class="btn btn-success  pull-right btn-radius btn-no-user" data-toggle="modal" data-target="#modalAgregarConductor"><i class="fas fa-plus-square"></i>Nuevo conductor <i class="fas fa-user-plus"></i>
+                </button>
 
             </div>
             <!-- /.box-header -->

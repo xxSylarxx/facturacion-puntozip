@@ -223,6 +223,7 @@ class AjaxUsuarios
             $valor2 = $_POST['nuevolink'];
             $respuestaAccesos = ControladorUsuarios::ctrMostrarAccesos($item, $valor,  $valor2);
 
+
             if ($respuestaAccesos) {
                 echo  'ok';
             } else {

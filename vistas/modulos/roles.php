@@ -51,7 +51,7 @@ $roles = ControladorUsuarios::ctrMostrarRoles($item, $valor);
 
                 </div>
 
-                
+
             </div>
 
         </div>
@@ -139,7 +139,7 @@ $roles = ControladorUsuarios::ctrMostrarRoles($item, $valor);
 
 <!-- MODAL AGREGAR ACCESOS A ROLES -->
 <!-- Modal -->
-<div id="modalAgregarAccesoRol" class="modal fade modal-forms fullscreen-modal"" role=" dialog">
+<div id="modalAgregarAccesoRol" class="modal fade modal-forms fullscreen-modal" role=" dialog">
     <div class="modal-dialog">
 
         <!-- Modal content-->
@@ -244,14 +244,16 @@ $roles = ControladorUsuarios::ctrMostrarRoles($item, $valor);
                                         Acceso Roles</label>
                                     <label class="custom-control-label" for="pos30"><input type="checkbox" class="custom-control-input" id="pos30" name="accesoroles[]" value="ver-guias-retorno">
                                         Guias Retorno</label>
-                                     <label class="custom-control-label" for="pos31"><input type="checkbox" class="custom-control-input" id="pos31" name="accesoroles[]" value="accesos">
+                                    <label class="custom-control-label" for="pos31"><input type="checkbox" class="custom-control-input" id="pos31" name="accesoroles[]" value="accesos">
                                         ACCESOS</label>
-                                        
-                                        <label class="custom-control-label" for="pos32"><input type="checkbox" class="custom-control-input" id="pos32" name="accesoroles[]" value="cambio-precio">
+
+                                    <label class="custom-control-label" for="pos32"><input type="checkbox" class="custom-control-input" id="pos32" name="accesoroles[]" value="cambio-precio">
                                         CAMBIAR PRECIO</label>
-                                        
-                                        <label class="custom-control-label" for="pos33"><input type="checkbox" class="custom-control-input" id="pos33" name="accesoroles[]" value="cuentas-bancarias">
+
+                                    <label class="custom-control-label" for="pos33"><input type="checkbox" class="custom-control-input" id="pos33" name="accesoroles[]" value="cuentas-bancarias">
                                         CUENTAS BANCARIAS</label>
+                                    <label class="custom-control-label" for="pos34"><input type="checkbox" class="custom-control-input" id="pos34" name="accesoroles[]" value="conductores">
+                                        CONDUCTORES</label>
                                 </div>
 
 
@@ -273,7 +275,7 @@ $roles = ControladorUsuarios::ctrMostrarRoles($item, $valor);
 
                 <div class="modal-footer">
 
-                    <button type="button" class="btn btn-danger btn-amg pull-left" data-dismiss="modal"><i class="far fa-times-circle fa-lg"></i> Salir</button>
+                    <button type="button" class="btn btn-danger btn-amg pull-left" data-dismiss="modal"><i class="far fa-times-circle fa-lg"></i>Salir</button>
 
                     <button type="submit" class="btn btn-primary btnrol btn-agm">Guardar</button>
 
@@ -295,7 +297,7 @@ $roles = ControladorUsuarios::ctrMostrarRoles($item, $valor);
 
 <!-- MODAL AGREGAR ACCESOS A ROLES -->
 <!-- Modal -->
-<div id="modalAgregarEditarRol" class="modal fade modal-forms fullscreen-modal"" role=" dialog">
+<div id="modalAgregarEditarRol" class="modal fade modal-forms fullscreen-modal" role=" dialog">
     <div class="modal-dialog">
 
         <!-- Modal content-->
@@ -351,7 +353,7 @@ $roles = ControladorUsuarios::ctrMostrarRoles($item, $valor);
                                         <?php
                                         }
                                         if ($a['activo'] == 'n') {
-                                            // echo $a['id_rol'];
+                                             //echo $a['id_rol'];
 
 
                                         ?>
