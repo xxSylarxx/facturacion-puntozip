@@ -55,7 +55,7 @@ if ($esBorrador) {
         <!-- <h3 class="box-title">Crear venta</h3> -->
         <div class="col-md-6 row-sucursal">
           <?php
-          if ($_SESSION['perfil'] == 'Administrador') {
+            if ($_SESSION['perfil'] == 'Administrador' || $_SESSION['perfil'] == 'Guias') {
             echo '
                     <select class="form-control select2" name="idcSucursal" id="idcSucursal" style="width: 100%;" onchange="loadProductosG(1)">';
 
