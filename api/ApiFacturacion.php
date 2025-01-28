@@ -427,7 +427,7 @@ class ApiFacturacion
 		curl_close($ch);
 
 		$obt_ticket = json_decode($response);
-	
+
 		if (is_object($obt_ticket)) {
 			$this->ticketS = $obt_ticket->numTicket;
 		} else {
@@ -534,8 +534,19 @@ class ApiFacturacion
 				// $codigo = $DOM->getElementsByTagName("faultcode")->item(0)->nodeValue;
 				// $mensaje = $DOM->getElementsByTagName("faultstring")->item(0)->nodeValue;
 				echo  '<div class="btnwarning">NO SE OBTIENE RESPUESTA DE SUNAT, INTENTE MÁS TARDE</div>';
-				$this->coderror = $cdrDecode->error->numError;
+				/* $this->coderror = $cdrDecode->error->numError;
 				$this->mensajeError = $cdrDecode->error->desError;
+				$this->codrespuesta = $estadofe; */
+				// Verifica si la propiedad 'error' existe en el objeto $cdrDecode
+				if (isset($cdrDecode->error)) {
+					$this->coderror = $cdrDecode->error->numError;
+					$this->mensajeError = $cdrDecode->error->desError;
+				} else {
+					// Si la propiedad 'error' no existe, asigna valores predeterminados
+					$this->coderror = 'No disponible';
+					$this->mensajeError = 'No se recibió respuesta de error';
+				}
+
 				$this->codrespuesta = $estadofe;
 				if (!empty($guia)) {
 					ModeloGuiaRemision::mdlActualizarGuiaEstado($guia, 1);
