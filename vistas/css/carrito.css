@@ -334,6 +334,18 @@ body::-webkit-scrollbar-thumb {
   margin-bottom: 3px !important;
   padding: 10px !important;
 }
+.btnwarning {
+  background-color: #EFB036 !important;
+  border-radius: 7.5px !important;
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+  color: #fff !important;
+  text-transform: uppercase !important;
+  font-size: 1em !important;
+  font-weight: 600;
+  margin-bottom: 3px !important;
+  padding: 10px !important;
+}
 /* BOTONES CARRO GUARDAR ELIMINAR */
 .contenedor-btns-carrito {
   display: flex !important;
