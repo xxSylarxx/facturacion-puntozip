@@ -399,7 +399,8 @@ class GeneradorXML
          $xml .= '<cbc:HandlingInstructions>' . $datosGuia['datosEnvio']['descTraslado'] . '</cbc:HandlingInstructions>';
       endif;
 
-      $xml .= '<cbc:GrossWeightMeasure unitCode="' . $datosGuia['datosEnvio']['uniPesoTotal'] . '">' . $datosGuia['datosEnvio']['pesoTotal'] . '</cbc:GrossWeightMeasure>';
+      $xml .= '<cbc:GrossWeightMeasure unitCode="' . $datosGuia['datosEnvio']['uniPesoTotal'] . '">' . round($datosGuia['datosEnvio']['pesoTotal'], 2) . '</cbc:GrossWeightMeasure>';
+
 
       if ($datosGuia['datosEnvio']['tipoVehiculo'] != 'otros') :
 
