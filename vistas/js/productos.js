@@ -260,6 +260,7 @@ $(document).on("click", ".btnEditarProducto", function () {
       $("#editarCodigo").val(respuesta["codigo"]);
       $("#editarSerie").val(respuesta["serie"]);
       $("#editarDescripcion").val(respuesta["descripcion"]);
+      $("#editarCaracteristica").val(respuesta["caracteristica"]);
       $("#editarStock").val(respuesta["stock"]);
       $("#editarPrecioCompra").val(respuesta["precio_compra"]);
       $("#editarPrecioUnitario").val(respuesta["precio_unitario"]);
