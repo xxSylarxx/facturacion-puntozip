@@ -270,6 +270,7 @@ class ModeloGuiaRemision
         $stmt->bindParam(":ticket", $ticket, PDO::PARAM_STR);
         $stmt->bindParam(":series", $datosGuia['guia']['series'], PDO::PARAM_STR);
         $stmt->bindParam(":borrador", $borrador, PDO::PARAM_STR);
+        $stmt->bindParam(":id_guia", $idGuia, PDO::PARAM_INT);
         if ($stmt->execute()) {
             return 'ok';
         } else {
