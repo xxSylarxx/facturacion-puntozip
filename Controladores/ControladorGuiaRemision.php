@@ -399,6 +399,7 @@ class ControladorGuiaRemision
                     $guiaCodigo = $_POST['guiaEditar'];
                     ModeloGuiaRemision::mdlEliminarGuiaDetalle($guiaCodigo);
                     ModeloGuiaRemision::mdlInsertarDetallesGuia($guiaCodigo, $detalle);
+                    $idGuia = $guiaCodigo;
                 } else {
                     $guiaid = ModeloGuiaRemision::mdlObtenerUltimoComprobanteIdGuia();
                     $idGuia = $guiaid['id'];
