@@ -238,7 +238,7 @@ exit(); */
                     <tr>
                         <td width="50" style="text-align: center; vertical-align: middle;"><?php echo $fila['codigo']; ?></td>
                         <td width="40" style="text-align: center; vertical-align: middle;"><?php echo $fila['cantidad']; ?></td>
-                        <td width="40" style="text-align: center; vertical-align: middle;"><?php echo $fila['codunidad']; ?></td>
+                        <td width="40" style="text-align: center; vertical-align: middle;"><?php echo $fila['guia_unidad']; ?></td>
                         <td width="445">
                             <b>SERVICIO : <?php echo $fila['servicio']; ?></b><br>
                             <?php echo $fila['categoria_des']; ?> :

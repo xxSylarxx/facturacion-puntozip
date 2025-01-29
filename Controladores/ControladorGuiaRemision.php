@@ -186,16 +186,14 @@ class ControladorGuiaRemision
 
         $destinatario = array(
             'tipoDoc' => isset($datosForm['tipoDoc']) ? $datosForm['tipoDoc'] : '6',
-            'numDoc' => $datosForm['docIdentidad'],
-            'nombreRazon' => $datosForm['razon_social']
-
+            'numDoc'  => $datosForm['docIdentidad'],
+            'nombreRazon' => $datosForm['razon_social'],
         );
         $terceros = array(
             'tipoDoc' => '',
             'numDoc' => '',
             'nombreRazon' => ''
         );
-
         $fecha = $_POST['fechaInicialTraslado'];
         $fecha2 = str_replace('/', '-', $fecha);
         $fechaTraslado = date('Y-m-d', strtotime($fecha2));
@@ -397,12 +395,15 @@ class ControladorGuiaRemision
                         $actualizarSerie = ControladorSunat::ctrActualizarCorrelativo($datos);
                     }
                 }
-                $guiaid = ModeloGuiaRemision::mdlObtenerUltimoComprobanteIdGuia();
-                $idGuia = $guiaid['id'];
                 if (self::$esBorrador) {
-                    ModeloGuiaRemision::mdlEliminarGuiaDetalle($idGuia);
+                    $guiaCodigo = $_POST['guiaEditar'];
+                    ModeloGuiaRemision::mdlEliminarGuiaDetalle($guiaCodigo);
+                    ModeloGuiaRemision::mdlInsertarDetallesGuia($guiaCodigo, $detalle);
+                } else {
+                    $guiaid = ModeloGuiaRemision::mdlObtenerUltimoComprobanteIdGuia();
+                    $idGuia = $guiaid['id'];
+                    ModeloGuiaRemision::mdlInsertarDetallesGuia($idGuia, $detalle);
                 }
-                ModeloGuiaRemision::mdlInsertarDetallesGuia($idGuia, $detalle);
                 if ($guardarGuia == 'ok') {
                     $valor = null;
                     /* $actualizarStock = ControladorProductos::ctrActualizarStock($detalle, $valor); */

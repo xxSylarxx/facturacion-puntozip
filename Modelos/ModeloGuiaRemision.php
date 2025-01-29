@@ -135,8 +135,8 @@ class ModeloGuiaRemision
     // GUARDAR DETALLES VENTA CARRITO EN LA BD
     public static function mdlInsertarDetallesGuia($idGuia, $detalle)
     {
-        $stmt = Conexion::conectar()->prepare("INSERT INTO guia_detalle(id_guia, indexg, id_producto, codSunat, cantidad, peso, bultos, PO, color, partida, adicional, servicio, caracteristica)
-        VALUES (:id_guia, :indexg, :id_producto, :codSunat, :cantidad, :peso, :bultos, :PO, :color, :partida, :adicional, :servicio, :caracteristica)");
+        $stmt = Conexion::conectar()->prepare("INSERT INTO guia_detalle(id_guia, indexg, id_producto, codSunat, cantidad, peso, bultos, PO, color, partida, adicional, servicio, caracteristica, unidad)
+        VALUES (:id_guia, :indexg, :id_producto, :codSunat, :cantidad, :peso, :bultos, :PO, :color, :partida, :adicional, :servicio, :caracteristica, :unidad)");
         foreach ($detalle as $k => $v) {
             $stmt->bindParam(":id_guia", $idGuia, PDO::PARAM_INT);
             $stmt->bindParam(":indexg", $v['index'], PDO::PARAM_INT);
@@ -151,6 +151,7 @@ class ModeloGuiaRemision
             $stmt->bindParam(":adicional", $v['adicional'], PDO::PARAM_STR);
             $stmt->bindParam(":servicio", $v['servicio'], PDO::PARAM_STR);
             $stmt->bindParam(":caracteristica", $v['caracteristica'], PDO::PARAM_STR);
+            $stmt->bindParam(":unidad", $v['unidad'], PDO::PARAM_STR);
             $stmt->execute();
         }
     }
@@ -399,7 +400,7 @@ class ModeloGuiaRemision
     // MOSTRAR DETALLES Y PRODUCTOS DE LA GUIA
     public static function mdlMostrarDetallesProductosGuia($item, $valor)
     {
-        $stmt = Conexion::conectar()->prepare("SELECT t1.id_producto, t1.cantidad, t2.descripcion, t2.id, t2.codunidad, t2.codigo, t2.id, t1.cantidad, t1.peso, t1.bultos, t1.color, t1.PO, t1.partida, t1.adicional, t1.servicio, t1.caracteristica, c.categoria as categoria_des FROM guia_detalle t1 INNER JOIN productos t2 ON t1.id_producto=t2.id LEFT JOIN categorias c ON c.id = t2.id_categoria WHERE $item=:$item ORDER BY t1.indexg");
+        $stmt = Conexion::conectar()->prepare("SELECT t1.id_producto, t1.cantidad, t2.descripcion, t2.id, t2.codunidad, t2.codigo, t2.id, t1.cantidad, t1.peso, t1.bultos, t1.color, t1.PO, t1.partida, t1.adicional, t1.servicio, t1.caracteristica, c.categoria as categoria_des, t1.unidad as guia_unidad FROM guia_detalle t1 INNER JOIN productos t2 ON t1.id_producto=t2.id LEFT JOIN categorias c ON c.id = t2.id_categoria WHERE $item=:$item ORDER BY t1.indexg");
         $stmt->bindParam(":" . $item, $valor, PDO::PARAM_STR);
         $stmt->execute();
         return $stmt->fetchall();
