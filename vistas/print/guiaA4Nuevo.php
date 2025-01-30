@@ -27,8 +27,9 @@ $trasladoDesc = '';
 if (is_array($tipoTraslado)) {
     $trasladoDesc = $tipoTraslado['descripcion'];
 }
-/* var_dump($sucursal);
-exit(); */
+
+$cantProductos = count($detalle);
+
 ?>
 <style>
     #tabla-fechas,
@@ -108,10 +109,10 @@ exit(); */
         width: 60%;
         left: -56px;
         text-align: center;
-        margin-top: 32px;
+        margin-top: 30px;
     }
 </style>
-<page backtop="7mm" backbottom="7mm" backleft="10mm" backright="10mm">
+<page backtop="7mm" backbottom="8mm" backleft="10mm" backright="10mm">
     <page_header>
     </page_header>
     <page_footer>
@@ -226,20 +227,20 @@ exit(); */
         <div>
             <table id="tabla-productos">
                 <tr>
-                    <th width="50" style="text-align: center;">CÓDIGO</th>
-                    <th width="40" style="text-align: center;">CANTIDAD</th>
-                    <th width="40" style="text-align: center;">UNIDAD</th>
-                    <th width="445" style="text-align: center;">PRODUCTO</th>
+                    <th width="40" style="text-align: center;">CÓDIGO</th>
+                    <th width="35" style="text-align: center;">CANTIDAD</th>
+                    <th width="25" style="text-align: center;">UNIDAD</th>
+                    <th width="475" style="text-align: center;">PRODUCTO</th>
                 </tr>
                 <?php
                 $series = array();
                 foreach ($detalle as $key => $fila) {
                 ?>
                     <tr>
-                        <td width="50" style="text-align: center; vertical-align: middle;"><?php echo $fila['codigo']; ?></td>
-                        <td width="40" style="text-align: center; vertical-align: middle;"><?php echo $fila['cantidad']; ?></td>
-                        <td width="40" style="text-align: center; vertical-align: middle;"><?php echo $fila['guia_unidad']; ?></td>
-                        <td width="445">
+                        <td width="40" style="text-align: center; vertical-align: middle;"><?php echo $fila['codigo']; ?></td>
+                        <td width="35" style="text-align: center; vertical-align: middle;"><?php echo $fila['cantidad']; ?></td>
+                        <td width="25" style="text-align: center; vertical-align: middle;"><?php echo $fila['guia_unidad']; ?></td>
+                        <td width="475">
                             <b>SERVICIO : <?php echo $fila['servicio']; ?></b><br>
                             <?php echo $fila['categoria_des']; ?> :
                             <?php echo $fila['descripcion'] . ' ' . $fila['caracteristica'] . ' - COLOR: (' . $fila['color'] . ') - PO: (' . $fila['PO'] . ') - PARTIDA: (' . $fila['partida'] . ') - ' . $fila['adicional'] . ' - PESO: (' . $fila['peso'] . ') - BULTOS: (' . $fila['bultos'] . ')'; ?>
@@ -281,8 +282,31 @@ exit(); */
                 </tr>
             </table>
         </div>
+        <?php
+        if ($cantProductos <= 5 || $cantProductos >= 12) { ?>
+            <div id="pie">
+                <br>
+                <div class="bar-code">
+                    <qrcode class="barcode" value="<?php echo $dominio; ?>/vistas/print/printguia/?idCo=<?php echo $guia['id'] ?>" style="width: 20mm; background-color: white; color: #000; border: none; padding:none"></qrcode>
+                </div>
+                <div style="font-size: 10px; text-align: center;">
+                    <p style="line-height: 12px;">
+                        Representación impresa de la Guía de Remisión Remitente Electrónica.
+                    </p>
+                </div>
+            </div>
+        <?php } ?>
+    </div>
+</page>
+<?php
+if ($cantProductos > 5 && $cantProductos <= 10) { ?>
+    <page backtop="7mm" backbottom="7mm" backleft="10mm" backright="10mm">
+        <page_header>
+        </page_header>
+        <page_footer>
+        </page_footer>
         <div id="pie">
-            <br><br>
+            <br>
             <div class="bar-code">
                 <qrcode class="barcode" value="<?php echo $dominio; ?>/vistas/print/printguia/?idCo=<?php echo $guia['id'] ?>" style="width: 20mm; background-color: white; color: #000; border: none; padding:none"></qrcode>
             </div>
@@ -292,5 +316,5 @@ exit(); */
                 </p>
             </div>
         </div>
-    </div>
-</page>
+    </page>
+<?php } ?>
