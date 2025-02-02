@@ -23,8 +23,8 @@ if ($stmt->rowCount() == 0) {
 
     <div class="login-box">
       <div class="button-container">
-        <a  class="btn1" id="button1">PUNTOZIP 1</a>
-        <a  class="btn2" id="button2">PUNTOZIP 2</a>
+        <a href="#" class="btn1" id="button1">PUNTOZIP</a>
+        <a href="http://preproduccion-guias-puntogap.demo/" class="btn2" id="button2">PUNTOGAP</a>
       </div>
 
       <!-- <div class="login-logo">

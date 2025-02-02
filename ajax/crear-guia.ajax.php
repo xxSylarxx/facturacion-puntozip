@@ -263,7 +263,7 @@ class AjaxGuia
         $fechaHoraDateTime = new DateTime($fechaHora);
         $fechaActual = new DateTime();
         $intervalo = $fechaActual->diff($fechaHoraDateTime);
-        $horasDeDiferencia = $intervalo->h + ($intervalo->days * 48);
+        $horasDeDiferencia = ($intervalo->days * 24) + $intervalo->h;
         return $horasDeDiferencia >= 48 ? true : false;
     }
 
