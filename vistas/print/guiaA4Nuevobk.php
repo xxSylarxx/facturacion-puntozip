@@ -28,16 +28,10 @@ if (is_array($tipoTraslado)) {
     $trasladoDesc = $tipoTraslado['descripcion'];
 }
 
-
 $cantProductos = count($detalle);
 
 ?>
 <style>
-    .no-break {
-        page-break-inside: avoid;
-    }
-
-
     #tabla-fechas,
     #tabla-cabecera,
     #tabla-llegada,
@@ -230,8 +224,8 @@ $cantProductos = count($detalle);
             </table>
         </div>
         <p style="font-size: 11px;"><b>REMITIMOS A UD.(ES) EN BUENAS CONDICIONES LO SIGUIENTE</b></p>
-        
-            <table id="tabla-productos" class="no-break">
+        <div>
+            <table id="tabla-productos">
                 <tr>
                     <th width="40" style="text-align: center;">CÓDIGO</th>
                     <th width="35" style="text-align: center;">CANTIDAD</th>
@@ -241,9 +235,6 @@ $cantProductos = count($detalle);
                 <?php
                 $series = array();
                 foreach ($detalle as $key => $fila) {
-                    if ($key == 9) {
-                        echo '</table><div style="page-break-after: always;"></div><table id="tabla-productos" class="no-break">';
-                    }
                 ?>
                     <tr>
                         <td width="40" style="text-align: center; vertical-align: middle;"><?php echo $fila['codigo']; ?></td>
@@ -263,12 +254,13 @@ $cantProductos = count($detalle);
                     <td colspan="4">Numero de Bultos: <?php echo $guia['numBultos'] ?></td>
                 </tr>
             </table>
-            <p style="font-size: 11px; margin-bottom: 5px;"><b>INFORMACIÓN ADICIONAL</b></p>
-            <div style="width: 100%; border-radius: 3px; border: 1px solid black; padding: 6px; font-size: 11px;">
-                <?php echo $guia['observacion']; ?>
-            </div>
-            <br>
-            <br><br>
+        </div>
+        <p style="font-size: 11px; margin-bottom: 5px;"><b>INFORMACIÓN ADICIONAL</b></p>
+        <div style="width: 100%; border-radius: 3px; border: 1px solid black; padding: 6px; font-size: 11px;">
+            <?php echo $guia['observacion']; ?>
+        </div>
+        <br>
+        <br><br>
         <div>
             <table id="tabla-firmas">
                 <tr>
@@ -290,6 +282,29 @@ $cantProductos = count($detalle);
                 </tr>
             </table>
         </div>
+        <?php
+        if ($cantProductos <= 5 || $cantProductos >= 12) { ?>
+            <div id="pie">
+                <br>
+                <div class="bar-code">
+                    <qrcode class="barcode" value="<?php echo $dominio; ?>/vistas/print/printguia/?idCo=<?php echo $guia['id'] ?>" style="width: 20mm; background-color: white; color: #000; border: none; padding:none"></qrcode>
+                </div>
+                <div style="font-size: 10px; text-align: center;">
+                    <p style="line-height: 12px;">
+                        Representación impresa de la Guía de Remisión Remitente Electrónica.
+                    </p>
+                </div>
+            </div>
+        <?php } ?>
+    </div>
+</page>
+<?php
+if ($cantProductos > 5 && $cantProductos <= 10) { ?>
+    <page backtop="7mm" backbottom="7mm" backleft="10mm" backright="10mm">
+        <page_header>
+        </page_header>
+        <page_footer>
+        </page_footer>
         <div id="pie">
             <br>
             <div class="bar-code">
@@ -301,39 +316,5 @@ $cantProductos = count($detalle);
                 </p>
             </div>
         </div>
-        <!-- <//?php
-        if ($cantProductos <= 9 || $cantProductos >= 12) { ?>
-            <div id="pie">
-                <br>
-                <div class="bar-code">
-                    <qrcode class="barcode" value="<//?php echo $dominio; ?>/vistas/print/printguia/?idCo=<?php echo $guia['id'] ?>" style="width: 20mm; background-color: white; color: #000; border: none; padding:none"></qrcode>
-                </div>
-                <div style="font-size: 10px; text-align: center;">
-                    <p style="line-height: 12px;">
-                        Representación impresa de la Guía de Remisión Remitente Electrónica.
-                    </p>
-                </div>
-            </div>
-        <//?php } ?> -->
-    </div>
-</page>
-<!-- <//?php
-if ($cantProductos > 9 && $cantProductos <= 10) { ?>
-    <page backtop="7mm" backbottom="7mm" backleft="10mm" backright="10mm">
-        <page_header>
-        </page_header>
-        <page_footer>
-        </page_footer>
-        <div id="pie">
-            <br>
-            <div class="bar-code">
-                <qrcode class="barcode" value="<//?php echo $dominio; ?>/vistas/print/printguia/?idCo=<?php echo $guia['id'] ?>" style="width: 20mm; background-color: white; color: #000; border: none; padding:none"></qrcode>
-            </div>
-            <div style="font-size: 10px; text-align: center;">
-                <p style="line-height: 12px;">
-                    Representación impresa de la Guía de Remisión Remitente Electrónica.
-                </p>
-            </div>
-        </div>
     </page>
-<//?php } ?> -->
+<?php } ?>
