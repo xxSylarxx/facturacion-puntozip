@@ -1,4 +1,7 @@
 <?php
+ob_start(); // Captura el contenido generado hasta ahora
+?>
+<?php
 $dominio = $_SERVER['HTTP_HOST'];
 $uri = rtrim($_SERVER['REQUEST_URI'], '/');
 
@@ -32,10 +35,13 @@ if (is_array($tipoTraslado)) {
 $cantProductos = count($detalle);
 
 ?>
+
+
 <style>
     .no-break {
         page-break-inside: avoid;
     }
+
 
 
     #tabla-fechas,
@@ -118,7 +124,7 @@ $cantProductos = count($detalle);
         margin-top: 30px;
     }
 </style>
-<page backtop="7mm" backbottom="8mm" backleft="10mm" backright="10mm">
+<page backtop="8mm" backbottom="8mm" backleft="10mm" backright="10mm">
     <page_header>
     </page_header>
     <page_footer>
@@ -230,45 +236,58 @@ $cantProductos = count($detalle);
             </table>
         </div>
         <p style="font-size: 11px;"><b>REMITIMOS A UD.(ES) EN BUENAS CONDICIONES LO SIGUIENTE</b></p>
-        
-            <table id="tabla-productos" class="no-break">
+        <table id="tabla-productos" class="no-break">
+            <tr>
+                <th width="40" style="text-align: center;">CÓDIGO</th>
+                <th width="35" style="text-align: center;">CANTIDAD</th>
+                <th width="25" style="text-align: center;">UNIDAD</th>
+                <th width="475" style="text-align: center;">PRODUCTO</th>
+            </tr>
+            <?php
+            $series = array();
+            foreach ($detalle as $key => $fila) {
+                if ($key == 9) {
+                    echo '</table><div style="page-break-after: always;"></div><table id="tabla-productos" class="no-break">';
+                }
+            ?>
                 <tr>
-                    <th width="40" style="text-align: center;">CÓDIGO</th>
-                    <th width="35" style="text-align: center;">CANTIDAD</th>
-                    <th width="25" style="text-align: center;">UNIDAD</th>
-                    <th width="475" style="text-align: center;">PRODUCTO</th>
+                    <td width="40" style="text-align: center; vertical-align: middle;"><?php echo $fila['codigo']; ?></td>
+                    <td width="35" style="text-align: center; vertical-align: middle;"><?php echo $fila['cantidad']; ?></td>
+                    <td width="25" style="text-align: center; vertical-align: middle;"><?php echo $fila['guia_unidad']; ?></td>
+                    <td width="475">
+                        <b>SERVICIO : <?php echo $fila['servicio']; ?></b><br>
+                        <?php echo $fila['categoria_des']; ?> :
+                        <?php echo $fila['descripcion'] . ' ' . $fila['caracteristica'] . ' - COLOR: (' . $fila['color'] . ') - PO: (' . $fila['PO'] . ') - PARTIDA: (' . $fila['partida'] . ') - ' . $fila['adicional'] . ' - PESO: (' . $fila['peso'] . ') - BULTOS: (' . $fila['bultos'] . ')'; ?>
+                    </td>
                 </tr>
-                <?php
-                $series = array();
-                foreach ($detalle as $key => $fila) {
-                    if ($key == 9) {
-                        echo '</table><div style="page-break-after: always;"></div><table id="tabla-productos" class="no-break">';
-                    }
-                ?>
-                    <tr>
-                        <td width="40" style="text-align: center; vertical-align: middle;"><?php echo $fila['codigo']; ?></td>
-                        <td width="35" style="text-align: center; vertical-align: middle;"><?php echo $fila['cantidad']; ?></td>
-                        <td width="25" style="text-align: center; vertical-align: middle;"><?php echo $fila['guia_unidad']; ?></td>
-                        <td width="475">
-                            <b>SERVICIO : <?php echo $fila['servicio']; ?></b><br>
-                            <?php echo $fila['categoria_des']; ?> :
-                            <?php echo $fila['descripcion'] . ' ' . $fila['caracteristica'] . ' - COLOR: (' . $fila['color'] . ') - PO: (' . $fila['PO'] . ') - PARTIDA: (' . $fila['partida'] . ') - ' . $fila['adicional'] . ' - PESO: (' . $fila['peso'] . ') - BULTOS: (' . $fila['bultos'] . ')'; ?>
-                        </td>
-                    </tr>
-                <?php } ?>
-                <tr>
-                    <td colspan="4">Peso Bruto (KGM): <?php echo $guia['pesoTotal'] ?></td>
-                </tr>
-                <tr>
-                    <td colspan="4">Numero de Bultos: <?php echo $guia['numBultos'] ?></td>
-                </tr>
-            </table>
-            <p style="font-size: 11px; margin-bottom: 5px;"><b>INFORMACIÓN ADICIONAL</b></p>
-            <div style="width: 100%; border-radius: 3px; border: 1px solid black; padding: 6px; font-size: 11px;">
-                <?php echo $guia['observacion']; ?>
-            </div>
-            <br>
-            <br><br>
+            <?php } ?>
+            <tr>
+                <td colspan="4">Peso Bruto (KGM): <?php echo $guia['pesoTotal'] ?></td>
+            </tr>
+            <tr>
+                <td colspan="4">Numero de Bultos: <?php echo $guia['numBultos'] ?></td>
+            </tr>
+        </table>
+
+        <?php
+        $contenido_generado = ob_get_contents(); // Captura el contenido generado
+        $altura_maxima_a4 = 10000; // Ajusta según pruebas (A4 en px)
+
+        // Verificar si ya existe un salto de página antes de la tabla de productos
+        $salto_ya_existe = strpos($contenido_generado, '</table><div style="page-break-after: always;"></div><table id="tabla-productos"') !== false;
+
+        // Si el contenido supera la altura máxima y NO existe un salto de página previo, añadirlo
+        if (strlen($contenido_generado) > $altura_maxima_a4 && !$salto_ya_existe) {
+            echo '<div style="page-break-after: always;"></div>';
+        }
+        ?>
+
+        <p style="font-size: 11px; margin-bottom: 5px;"><b>INFORMACIÓN ADICIONAL</b></p>
+        <div style="width: 100%; border-radius: 3px; border: 1px solid black; padding: 6px; font-size: 11px;">
+            <?php echo $guia['observacion']; ?>
+        </div>
+        <br>
+        <br><br>
         <div>
             <table id="tabla-firmas">
                 <tr>
@@ -290,7 +309,7 @@ $cantProductos = count($detalle);
                 </tr>
             </table>
         </div>
-        <div id="pie">
+        <div id="pie" class="no-break">
             <br>
             <div class="bar-code">
                 <qrcode class="barcode" value="<?php echo $dominio; ?>/vistas/print/printguia/?idCo=<?php echo $guia['id'] ?>" style="width: 20mm; background-color: white; color: #000; border: none; padding:none"></qrcode>
@@ -317,6 +336,7 @@ $cantProductos = count($detalle);
         <//?php } ?> -->
     </div>
 </page>
+
 <!-- <//?php
 if ($cantProductos > 9 && $cantProductos <= 10) { ?>
     <page backtop="7mm" backbottom="7mm" backleft="10mm" backright="10mm">

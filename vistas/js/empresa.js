@@ -76,9 +76,9 @@ $(".modo").change(function () {
           title: "",
           text: "",
           showConfirmButton: false,
-          html: `<a href="https://apifacturacion.com" target="_blank">Api Facturación</a>`,
+          html: `<a href="https://wa.me/+51985413078" target="_blank">Administrador</a>`,
           footer:
-            '<a href="https://apifacturacion.com" target="_blank">Api Facturación</a>',
+            '<a href="https://wa.me/+51985413078" target="_blank">Administrador</a>',
         });
         $("#sim").addClass("prod");
         $("#sim").html("Producción");
