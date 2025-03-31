@@ -1,0 +1,196 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@200&display=swap'); */
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@200&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Urbanist:wght@200&display=swap");
+[data-theme="light"] {
+  --primary: #2a83d6;
+  --background: rgb(32, 32, 32);
+  --backgroundbox: rgb(255, 255, 255);
+  --backgroundfond: rgb(240, 240, 240);
+  --backgroundthead: rgb(113, 113, 113);
+  --text: #4d4d4d;
+  --textable: #707070;
+  --texth: #efefef;
+  --infobox: #424242;
+  --buton: #555555;
+}
+
+[data-theme="dark"] {
+  --primary: #e9833e;
+  --background: rgb(32, 32, 32);
+  --backgroundbox: rgb(32, 32, 32);
+  --backgroundfond: rgb(39, 39, 39);
+  --backgroundthead: rgb(113, 113, 113);
+  --text: #eeeeee;
+  --textable: #707070;
+  --texth: #efefef;
+  --infobox: #424242;
+  --buton: #555555;
+}
+[data-theme="green"] {
+  --primary: #e9833e;
+  --background: #60994d;
+  --backgroundbox: rgb(255, 255, 255);
+  --backgroundfond: rgb(243, 243, 243);
+  --backgroundthead: rgb(113, 113, 113);
+  --text: #535353;
+  --textable: #707070;
+  --texth: #efefef;
+  --infobox: #424242;
+  --button: #2f9c84;
+}
+
+.cabecera-m {
+  background-color: var(--background) !important;
+}
+.cabecera-m .logo {
+  background-color: var(--background) !important;
+}
+
+.content-wrapper {
+  background-color: var(--backgroundfond) !important;
+  color: var(--text) !important;
+}
+
+.main-sidebar {
+  background-color: var(--backgroundbox) !important;
+  color: var(--text) !important;
+}
+.main-sidebar .sidebar-menu li {
+  color: var(--text) !important;
+}
+.main-sidebar .sidebar {
+  background-color: var(--backgroundbox) !important;
+  color: var(--text) !important;
+}
+
+.box {
+  background-color: var(--backgroundbox) !important;
+  color: var(--text) !important;
+  border-right-style: none;
+  border-left-style: none;
+  box-shadow: none !important;
+}
+.box label,
+.box h3 {
+  /* background-color: var(--backgroundbox) !important; */
+  color: var(--text) !important;
+}
+legend {
+  color: var(--text) !important;
+}
+.main-footer,
+.main-footer * {
+  background-color: var(--backgroundbox);
+  color: var(--text) !important;
+  border-style: none;
+}
+.user-panel2 .info p {
+  color: var(--text) !important;
+}
+
+.main-sidebar .sidebar p,
+.main-sidebar .sidebar span {
+  color: var(--text) !important;
+  letter-spacing: 1px !important;
+}
+.main-sidebar .sidebar i {
+  color: var(--text) !important;
+}
+.sidebar-menu li > a:hover {
+  background-color: rgb(245, 245, 245) !important;
+}
+.sidebar-menu > li:hover {
+  background-color: rgb(230, 230, 230) !important;
+}
+.sidebar-menu .treeview > ul {
+  background-color: rgb(255, 255, 255) !important;
+  color: #000;
+}
+/* .sidebar-menu .treeview > ul:hover {
+    background-color:rgb(230, 230, 230) !important;
+} */
+.sidebar-menu .treeview .treeview-menu > li {
+  padding: 0.5em !important;
+  background-color: var(--backgroundbox) !important;
+  color: var(--text) !important;
+}
+.sidebar-menu .treeview .treeview-menu li > a {
+  color: #cbcbcb !important;
+  background-color: rgb(231, 231, 231, 0) !important;
+}
+.sidebar-menu .treeview .treeview-menu li > a:hover {
+  color: #000;
+}
+.sidebar-menu .treeview .treeview-menu > li:hover {
+  background-color: rgb(233, 233, 233) !important;
+}
+
+.contenedor-btns-carrito {
+  background-color: var(--backgroundbox) !important;
+}
+
+.contenedor-widget .info-box {
+  color: var(--infobox) !important;
+}
+.pro-mas-v ul li a {
+  color: var(--text) !important;
+}
+
+.contenedor-selva {
+  background-color: var(--backgroundbox) !important;
+}
+table thead tr{
+  background-color: var(--background) !important;
+}
+table thead tr th{
+
+border-style: none !important;
+color: var(--texth) !important;
+}
+.modo-contenedor-email label, .contenedor-selva .toggle-group label{
+  color: white !important;
+}
+#themecolor {
+  position: fixed;
+  padding: 5px;
+  z-index: 10000;
+  top: 110px;
+  right: -5px;
+  background-color: #ffffffb7;
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  border-radius: 15px;
+}
+#themecolor button {
+  border-style: none;
+  outline: 0;
+  margin: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 60%;
+  position: relative;
+  overflow: hidden;
+}
+#themecolor button:nth-child(1) {
+  background-color: #545454;
+}
+#themecolor button:nth-child(2) {
+  background-color: #000;
+}
+#themecolor button:nth-child(3) {
+  background-color: #1fab67;
+}
+#themecolor button span {
+  position: absolute;
+  background-color: #efefef;
+  width: 11px;
+  height: 20px;
+
+  z-index: 1;
+  top: 0;
+  right: 0;
+}

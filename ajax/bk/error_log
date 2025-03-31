@@ -1,0 +1,22 @@
+[05-Aug-2023 15:57:23 America/Lima] PHP Fatal error:  Uncaught Error: Undefined constant Backup_Database::HOST in /home/techmuti/sistem.apifacturacion.com/ajax/bk/bk.php:106
+Stack trace:
+#0 /home/techmuti/sistem.apifacturacion.com/ajax/bk/bk.php(496): Backup_Database->__construct()
+#1 {main}
+  thrown in /home/techmuti/sistem.apifacturacion.com/ajax/bk/bk.php on line 106
+[13-Aug-2023 17:25:30 America/Lima] PHP Fatal error:  Uncaught Error: Call to undefined function mysqli_connect() in /home/techmuti/sistem.apifacturacion.com/ajax/bk/bk.php:123
+Stack trace:
+#0 /home/techmuti/sistem.apifacturacion.com/ajax/bk/bk.php(111): Backup_Database->initializeDatabase()
+#1 /home/techmuti/sistem.apifacturacion.com/ajax/bk/bk.php(497): Backup_Database->__construct()
+#2 {main}
+  thrown in /home/techmuti/sistem.apifacturacion.com/ajax/bk/bk.php on line 123
+[14-Aug-2023 04:25:33 UTC] PHP Warning:  Undefined array key "id_sucursal" in /home/techmuti/sistem.apifacturacion.com/Controladores/ControladorEmpresa.php on line 16
+[13-Aug-2023 23:25:33 America/Lima] PHP Warning:  Trying to access array offset on value of type bool in /home/techmuti/sistem.apifacturacion.com/ajax/bk/bk.php on line 541
+[13-Aug-2023 23:25:33 America/Lima] PHP Warning:  Trying to access array offset on value of type bool in /home/techmuti/sistem.apifacturacion.com/ajax/bk/bk.php on line 544
+[13-Aug-2023 23:25:33 America/Lima] PHP Warning:  Trying to access array offset on value of type bool in /home/techmuti/sistem.apifacturacion.com/ajax/bk/bk.php on line 547
+[13-Aug-2023 23:25:33 America/Lima] PHP Warning:  Trying to access array offset on value of type bool in /home/techmuti/sistem.apifacturacion.com/ajax/bk/bk.php on line 549
+[13-Aug-2023 23:25:33 America/Lima] PHP Warning:  Trying to access array offset on value of type bool in /home/techmuti/sistem.apifacturacion.com/ajax/bk/bk.php on line 550
+[13-Aug-2023 23:25:33 America/Lima] PHP Warning:  Trying to access array offset on value of type bool in /home/techmuti/sistem.apifacturacion.com/ajax/bk/bk.php on line 551
+[13-Aug-2023 23:25:33 America/Lima] PHP Warning:  Trying to access array offset on value of type bool in /home/techmuti/sistem.apifacturacion.com/ajax/bk/bk.php on line 552
+[13-Aug-2023 23:25:33 America/Lima] PHP Warning:  Trying to access array offset on value of type bool in /home/techmuti/sistem.apifacturacion.com/ajax/bk/bk.php on line 555
+[13-Aug-2023 23:25:33 America/Lima] PHP Warning:  Trying to access array offset on value of type bool in /home/techmuti/sistem.apifacturacion.com/ajax/bk/bk.php on line 555
+[13-Aug-2023 23:25:33 America/Lima] PHP Deprecated:  trim(): Passing null to parameter #1 ($string) of type string is deprecated in /home/techmuti/sistem.apifacturacion.com/ajax/bk/vendor/phpmailer/phpmailer/src/PHPMailer.php on line 1265

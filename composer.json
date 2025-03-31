@@ -1,0 +1,21 @@
+{
+    "name": "gvi/sistemafacturacion2",
+    "authors": [
+        {
+            "name": "codigo1105",
+            "email": "iberico1105@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Conect\\":"Conect",
+            "Controladores\\":"Controladores",
+            "Modelos\\":"Modelos",
+            "api\\":"api",
+            "Gvi\\Sistemafacturacion2\\": "src/"
+        }
+    },
+    "require": {
+        "tecnickcom/tcpdf": "^6.8"
+    }
+}
