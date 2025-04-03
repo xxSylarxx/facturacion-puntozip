@@ -30,7 +30,7 @@ class ModeloProductos
         $stmt->close();
         $stmt = null;
     }
-     public static function mdlMostrarProductos($tabla, $item, $valor, $idsucursal)
+    public static function mdlMostrarProductos($tabla, $item, $valor, $idsucursal)
     {
 
         if ($item != null) {
@@ -212,6 +212,57 @@ class ModeloProductos
             return 'ok';
         }
     }
+
+
+    // REGISTRO DE PRODUCTOS (v2)
+    public static function mdlCrearProductoIntegracion($tabla, $datos)
+    {
+        $item = null;
+        $valor = null;
+        $respuesta = ControladorSucursal::ctrSucursalPrincipal($item, $valor);
+        $stmt = Conexion::conectar()->prepare("INSERT INTO $tabla (id_categoria, id_sucursal, codigo, serie, descripcion, caracteristica, stock, codigoafectacion, codunidad) VALUES (:id_categoria, :id_sucursal, :codigo, :serie, :descripcion, :caracteristica, :stock, :codigoafectacion, :codunidad)");
+
+        if (isset($datos['id_sucursal']) && $datos['id_sucursal']  != 'todos') {
+            $stmt->bindParam(":id_categoria", $datos['id_categoria'], PDO::PARAM_INT);
+            $stmt->bindParam(":id_sucursal", $datos['id_sucursal'], PDO::PARAM_INT);
+            $stmt->bindParam(":codigo", $datos['codigo'], PDO::PARAM_STR);
+            $stmt->bindParam(":serie", $datos['serie'], PDO::PARAM_STR);
+            $stmt->bindParam(":descripcion", $datos['descripcion'], PDO::PARAM_STR);
+            $stmt->bindParam(':caracteristica', $datos['caracteristica'], PDO::PARAM_STR);
+            // $stmt->bindParam(":imagen", $datos['imagen'], PDO::PARAM_STR);
+            $stmt->bindParam(":stock", $datos['stock'], PDO::PARAM_STR);
+            $stmt->bindParam(":codigoafectacion", $datos['codigoafectacion'], PDO::PARAM_STR);
+            $stmt->bindParam(":codunidad", $datos['unidad'], PDO::PARAM_STR);
+
+            if ($stmt->execute()) {
+                return   'ok';
+            } else {
+                return  'error';
+            }
+
+            $stmt = null;
+        } else {
+
+            foreach ($respuesta as $k => $value) {
+                $stmt->bindParam(":id_categoria", $datos['id_categoria'], PDO::PARAM_INT);
+                $stmt->bindParam(":id_sucursal", $value['id'], PDO::PARAM_INT);
+                $stmt->bindParam(":codigo", $datos['codigo'], PDO::PARAM_STR);
+                $stmt->bindParam(":serie", $datos['serie'], PDO::PARAM_STR);
+                $stmt->bindParam(":descripcion", $datos['descripcion'], PDO::PARAM_STR);
+                $stmt->bindParam(':caracteristica', $datos['caracteristica'], PDO::PARAM_STR);
+                // $stmt->bindParam(":imagen", $datos['imagen'], PDO::PARAM_STR);
+                $stmt->bindParam(":stock", $datos['stock'], PDO::PARAM_STR);
+                $stmt->bindParam(":codigoafectacion", $datos['codigoafectacion'], PDO::PARAM_STR);
+                $stmt->bindParam(":codunidad", $datos['unidad'], PDO::PARAM_STR);
+
+                $stmt->execute();
+            }
+            return 'ok';
+        }
+    }
+
+
+
     // EDITAR PRODUCTO
     public static function mdlEditarProducto($tabla, $datos)
     {
@@ -435,89 +486,89 @@ class ModeloProductos
         $stmt = null;
     }
 
-        // OBTENER EL ULTIMO ID PRODUCTO
-        public static function mdlObtenerUltimoProductoId()
-        {
-            $stmt = Conexion::conectar()->prepare("SELECT * FROM productos ORDER BY id DESC LIMIT 1");
-    
-            $stmt->execute();
-    
-            return $stmt->fetch();
-        }
-        public static function mdlCrearSeries($tabla, $datosSeries, $idProducto){
-            $stmt = Conexion::conectar()->prepare("INSERT INTO $tabla(id_producto, serie) VALUES (:id_producto, :serie) ");
-            foreach($datosSeries as $value){
-         if(!empty($value) && strlen($value) >= 3){
-            $stmt->bindParam(":id_producto", $idProducto, PDO::PARAM_INT);
-            $stmt->bindParam(":serie", $value, PDO::PARAM_STR);
-        
-           $stmt->execute();
-               
-        }else{
-                    return 'error';
-                }
-        }
-        }
-    
-        public static function mdlMostrarSeriesProductos($tabla, $item, $valor)
-        {
-    
-            if ($item != null) {
-    
-                $stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla  WHERE  $item = :$item ORDER BY id DESC");
-                $stmt->bindParam(":" . $item, $valor, PDO::PARAM_STR);
-    
+    // OBTENER EL ULTIMO ID PRODUCTO
+    public static function mdlObtenerUltimoProductoId()
+    {
+        $stmt = Conexion::conectar()->prepare("SELECT * FROM productos ORDER BY id DESC LIMIT 1");
+
+        $stmt->execute();
+
+        return $stmt->fetch();
+    }
+    public static function mdlCrearSeries($tabla, $datosSeries, $idProducto)
+    {
+        $stmt = Conexion::conectar()->prepare("INSERT INTO $tabla(id_producto, serie) VALUES (:id_producto, :serie) ");
+        foreach ($datosSeries as $value) {
+            if (!empty($value) && strlen($value) >= 3) {
+                $stmt->bindParam(":id_producto", $idProducto, PDO::PARAM_INT);
+                $stmt->bindParam(":serie", $value, PDO::PARAM_STR);
+
                 $stmt->execute();
-                return $stmt->fetch();
             } else {
-                $stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla");
-                //$stmt->bindParam(":".$item, $valor, PDO::PARAM_STR);    
-                $stmt->execute();
-                return $stmt->fetchall();
+                return 'error';
             }
-    
-    
-            $stmt->close();
-            $stmt = null;
         }
-        public static function mdlMostrarSeriesProductosActualizar($tabla, $item, $valor)
-        {
-    
-            if ($item != null) {
-    
-                $stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla  WHERE  $item = :$item ORDER BY id DESC");
-                $stmt->bindParam(":" . $item, $valor, PDO::PARAM_STR);
-    
-                $stmt->execute();
-                return $stmt->fetchAll();
-            }    
-            $stmt->close();
-            $stmt = null;
-        }
-        public static function mdlMostrarSeriesProductosGuias($tabla, $item, $valor)
-        {
-    
-            if ($item != null) {
-    
-                $stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla  WHERE  $item = :$item AND disponible = 's' ORDER BY id DESC");
-                $stmt->bindParam(":" . $item, $valor, PDO::PARAM_STR);
-    
-                $stmt->execute();
-                return $stmt->fetchAll();
-            }
-    
-            $stmt->close();
-            $stmt = null;
+    }
+
+    public static function mdlMostrarSeriesProductos($tabla, $item, $valor)
+    {
+
+        if ($item != null) {
+
+            $stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla  WHERE  $item = :$item ORDER BY id DESC");
+            $stmt->bindParam(":" . $item, $valor, PDO::PARAM_STR);
+
+            $stmt->execute();
+            return $stmt->fetch();
+        } else {
+            $stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla");
+            //$stmt->bindParam(":".$item, $valor, PDO::PARAM_STR);    
+            $stmt->execute();
+            return $stmt->fetchall();
         }
 
-         // EDITAR PRODUCTO
+
+        $stmt->close();
+        $stmt = null;
+    }
+    public static function mdlMostrarSeriesProductosActualizar($tabla, $item, $valor)
+    {
+
+        if ($item != null) {
+
+            $stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla  WHERE  $item = :$item ORDER BY id DESC");
+            $stmt->bindParam(":" . $item, $valor, PDO::PARAM_STR);
+
+            $stmt->execute();
+            return $stmt->fetchAll();
+        }
+        $stmt->close();
+        $stmt = null;
+    }
+    public static function mdlMostrarSeriesProductosGuias($tabla, $item, $valor)
+    {
+
+        if ($item != null) {
+
+            $stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla  WHERE  $item = :$item AND disponible = 's' ORDER BY id DESC");
+            $stmt->bindParam(":" . $item, $valor, PDO::PARAM_STR);
+
+            $stmt->execute();
+            return $stmt->fetchAll();
+        }
+
+        $stmt->close();
+        $stmt = null;
+    }
+
+    // EDITAR PRODUCTO
     public static function mdlActualizarSerie($tabla, $idSerie, $item, $valor)
     {
 
         $stmt = Conexion::conectar()->prepare("UPDATE $tabla set $item = :$item WHERE id = :id");
 
         $stmt->bindParam(":id", $idSerie, PDO::PARAM_INT);
-        $stmt->bindParam(":".$item, $valor, PDO::PARAM_STR);
+        $stmt->bindParam(":" . $item, $valor, PDO::PARAM_STR);
 
 
         if ($stmt->execute()) {
@@ -530,19 +581,19 @@ class ModeloProductos
         $stmt = null;
     }
 
-     // ELIMINAR PRODUCTO
-     public static function mdlEliminarSerie($tabla, $idSerie)
-     {
- 
-         $stmt = Conexion::conectar()->prepare("DELETE FROM $tabla  WHERE id=:id");
-         $stmt->bindParam(":id", $idSerie, PDO::PARAM_INT);
- 
-         if ($stmt->execute()) {
-             return 'ok';
-         } else {
-             return 'error';
-         }
-         $stmt->close();
-         $stmt = null;
-     }
+    // ELIMINAR PRODUCTO
+    public static function mdlEliminarSerie($tabla, $idSerie)
+    {
+
+        $stmt = Conexion::conectar()->prepare("DELETE FROM $tabla  WHERE id=:id");
+        $stmt->bindParam(":id", $idSerie, PDO::PARAM_INT);
+
+        if ($stmt->execute()) {
+            return 'ok';
+        } else {
+            return 'error';
+        }
+        $stmt->close();
+        $stmt = null;
+    }
 }

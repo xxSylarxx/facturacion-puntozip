@@ -12,7 +12,7 @@ class Conexion
     const HOST = 'localhost';
     const USER = 'root';
     const PASSWORD = '';
-    const BDNAME = 'facturacion';
+    const BDNAME = 'db_puntozip';
     public static function conectar()
     {
         try {

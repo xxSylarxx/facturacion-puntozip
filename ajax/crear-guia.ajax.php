@@ -204,12 +204,71 @@ class AjaxGuia
 
     public function ajaxCrearGuia()
     {
+        // $datosForm = $_POST;
+        // // var_dump($datosForm);
+        // // exit();
+        // $respuesta =  ControladorGuiaRemision::ctrCrearGuia($datosForm);
+        // return $respuesta;
 
-        $datosForm = $_POST;
-        // var_dump($datosForm);
-        // exit();
-        $respuesta =  ControladorGuiaRemision::ctrCrearGuia($datosForm);
-        return $respuesta;
+        try {
+            if (!isset($_SESSION['carritoG']) || empty($_SESSION['carritoG'])) {
+                throw new Exception("No hay productos en el carrito");
+            }
+
+            foreach ($_SESSION['carritoG'] as $key => $producto) {
+                $existeProducto = ControladorProductos::ctrMostrarProductos('codigo', $producto['codigo'], $_POST['idSucursal']);
+
+                // echo '<script>
+                //     alert("existeProducto: ' . json_encode($_SESSION['id_guia_integracion'] ?? "no entra") . '");
+                // </script>';
+
+                if (!$existeProducto) {
+                    // Crear nuevo producto
+                    $datosProducto = array(
+                        'id_categoria' => null,
+                        'codigo' => $producto['codigo'],
+                        'descripcion' => $producto['descripcion'],
+                        'unidad' => $producto['unidad'] ?? 'NIU',
+                        'stock' => $producto['cantidad'] ?? 0,
+                        'caracteristica' => $producto['caracteristica'] ?? '',
+                        'tipo_precio' => '01',
+                        'id_sucursal' => $_POST['idSucursal']
+                    );
+
+                    $resultado = ControladorProductos::ctrCrearProductoIntegración($datosProducto);
+
+                    if ($resultado) {
+                        $nuevoProducto = ControladorProductos::ctrMostrarProductos('codigo', $producto['codigo'], $_POST['idSucursal']);
+                        if ($nuevoProducto) {
+                            $_SESSION['carritoG'][$key]['id'] = $nuevoProducto['id'];
+                        }
+                    }
+                } else {
+                    $_SESSION['carritoG'][$key]['id'] = $existeProducto['id'];
+                }
+            }
+
+
+            $datosForm = $_POST;
+
+            // guardamos id guia integracion
+            if (isset($_SESSION['id_guia_integracion'])) {
+                $datosForm['id_guia_integracion'] = $_SESSION['id_guia_integracion'];
+            }
+
+            $respuesta = ControladorGuiaRemision::ctrCrearGuia($datosForm);
+
+            // Limpiar el ID de integración
+            if (isset($_SESSION['id_guia_integracion'])) {
+                unset($_SESSION['id_guia_integracion']);
+            }
+
+            echo $respuesta;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+
+            // throw new Exception("Error al crear la guía");
+        }
     }
     public function ajaxRetornarAlmacen()
     {
@@ -288,6 +347,10 @@ class AjaxGuia
         // Verificar si la respuesta es un objeto y si tiene la propiedad 'access_token'
         if (is_object($token_result) && isset($token_result->access_token)) {
             $token = $token_result->access_token;
+
+            // si existe $$token_result se gnera el xml
+
+
         } else {
             // Manejar el error
             error_log("Error al obtener el token de acceso: " . print_r($token_result, true));
@@ -331,6 +394,9 @@ class AjaxGuia
             );
             if (isset($codigosSunat['feestado'])) {
                 ControladorGuiaRemision::ctrActualizarCDR($idGuia, $codigosSunat);
+
+                // en caso que el estado feestado sea 1, se ejecua una api
+
             }
             ModeloGuiaRemision::mdlActualizarCDRName($idGuia, [
                 'xmlbase64' => $codigosSunat['xmlbase64'],

@@ -53,7 +53,7 @@ use Controladores\ControladorClientes;
             </select>
             <select class="selectpicker show-tick" data-style="btn-select" data-width="70px" id="activos" name="activos" onchange="loadClientes(1)">
               <option value="s">Activos</option>
-              <option value="n"">inactivos</option>
+              <option value="n">inactivos</option>
              
             </select>
             <div class=" input-search">
@@ -355,7 +355,7 @@ PIE DEL MODAL
 
                   <div class="input-group">
 
-                    <span class="input-group-addon"><i class="fa fa-address-card""></i></span> 
+                    <span class="input-group-addon"><i class="fa fa-address-card"></i></span> 
 
                     <input type=" number" maxlength="11" class="form-control " name="nuevonumdoc" id="nuevonumdoc" placeholder=" Ingresar número">
 

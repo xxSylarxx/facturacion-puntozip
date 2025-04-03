@@ -8,7 +8,7 @@ class ControladorClientes
 {
 
     // MOSTRAR CLIENTES
-    public static  function ctrMostrarClientes($item, $valor)
+    public static  function  ctrMostrarClientes($item, $valor)
     {
 
         $tabla = "clientes";

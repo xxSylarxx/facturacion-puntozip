@@ -12,6 +12,7 @@ use Controladores\ControladorSucursal;
 use Controladores\ControladorSunat;
 use api\GeneradorXML;
 use api\ApiFacturacion;
+use Exception;
 
 class ControladorGuiaRemision
 {
@@ -68,7 +69,7 @@ class ControladorGuiaRemision
             echo "<tr class='id-eliminar" . $k . "'>";
             $response =  "<td>" . $v['codigo'] . "</td>
                 <td>" . $v['descripcion'] . "<br/>
-                    <input type='text' class='datos-adicionales-item-guia input-prod' id='descripcion' name='descripcion[]' idcar='" . $k . "' cod='" . $v['codigo'] . "' campo='adicional' value='". $v['adicional'] ."' placeholder='DATOS ADICIONALES'>
+                    <input type='text' class='datos-adicionales-item-guia input-prod' id='descripcion' name='descripcion[]' idcar='" . $k . "' cod='" . $v['codigo'] . "' campo='adicional' value='" . $v['adicional'] . "' placeholder='DATOS ADICIONALES'>
                 </td>
                 <td><input type='text' class='form-control input-prod' idcar='" . $k . "' cod='" . $v['codigo'] . "' campo='servicio' value='" . $v['servicio'] . "' placeholder='Servicio'></td>
                 <td><input type='text' class='form-control input-prod' idcar='" . $k . "' cod='" . $v['codigo'] . "' campo='caracteristica' value='" . $v['caracteristica'] . "' placeholder='Característica'></td>
@@ -130,6 +131,8 @@ class ControladorGuiaRemision
         $valor = $datosForm['serie'];
         $seriex = ControladorSunat::ctrMostrarCorrelativo($item, $valor);
         self::$esBorrador = isset($_POST['esBorrador']) ? $_POST['esBorrador'] == 'S' : false;
+
+
         if (isset($datosForm))
             $fecha = $_POST['fechaEmision'];
         $fecha2 = str_replace('/', '-', $fecha);
@@ -266,7 +269,10 @@ class ControladorGuiaRemision
             'comp_ref'   => null,
             'id_cliente' => $datosForm['idCliente'],
             'id_conductor' => $datosForm['listConductores'],
-            'borrador'   => $datosForm['envioSunat'] == 'enviar' ? 'N' : 'S'
+            'borrador'   => $datosForm['envioSunat'] == 'enviar' ? 'N' : 'S',
+
+            // id_guia_integracion
+            'id_guia_integracion' => $datosForm['id_guia_integracion'] ?? null
         );
         if (!isset($_SESSION['carritoG'])) {
             $_SESSION['carritoG'] = array();
@@ -322,7 +328,7 @@ class ControladorGuiaRemision
                     echo "<script>
                             Swal.fire({
                                 icon: 'error',
-                                title: 'LA SERIE Y CORRELATIVO ". ($seriex['serie'] . '-' . $guia['correlativo']) . " YA EXISTE' ,
+                                title: 'LA SERIE Y CORRELATIVO " . ($seriex['serie'] . '-' . $guia['correlativo']) . " YA EXISTE' ,
                                 text: '',
                                 html: `Debes ingresar otro correlativo`
                             })
@@ -330,16 +336,61 @@ class ControladorGuiaRemision
                     die();
                 }
             }
-            
+
             // if (($datosForm['modalidadTraslado'] == '02' && !empty($datosForm['placa'])  && !empty($datosForm['numBrevete'])) || ($datosForm['modalidadTraslado'] == '01' && empty($datosForm['placa']))) {
             if (!empty($detalle)) {
                 if ($datosForm['envioSunat'] == 'enviar') {
+
+                    // echo '<script>
+                    //     alert("existeProducto: ' . json_encode($_SESSION['id_guia_integracion'] ?? "no entra") . '");
+                    // </script>';
+
+                    // if (isset($datosGuia['id_guia_integracion'])) {
+                    //     try {
+                    //         // Preparar datos para la API de integración
+                    //         $serieCorrelativo = $seriex['serie'] . '-' . $guia['correlativo'];
+                    //         $idGuiaIntegracion = $datosGuia['id_guia_integracion'];
+
+                    //         // Llamar a la API de actualización
+                    //         $apiUrlUpdate = "http://89.117.145.178:8081/api/v1/guias-system/update-guia/{$idGuiaIntegracion}";
+
+                    //         // Preparar datos para enviar
+                    //         $dataUpdate = json_encode([
+                    //             'serie_correlativo' => $serieCorrelativo
+                    //         ]);
+
+                    //         // Configurar y ejecutar la solicitud POST
+                    //         $ch = curl_init();
+                    //         curl_setopt($ch, CURLOPT_URL, $apiUrlUpdate);
+                    //         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    //         curl_setopt($ch, CURLOPT_POST, true);
+                    //         curl_setopt($ch, CURLOPT_POSTFIELDS, $dataUpdate);
+                    //         curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                    //             'Content-Type: application/json',
+                    //             'Content-Length: ' . strlen($dataUpdate)
+                    //         ]);
+
+                    //         $response = curl_exec($ch);
+                    //         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                    //         curl_close($ch);
+
+                    //         if ($httpCode != 200) {
+                    //             error_log("Error actualizando guía de integración: " . $response);
+                    //         }
+                    //     } catch (Exception $e) {
+                    //         error_log("Error en la actualización de la guía de integración: " . $e->getMessage());
+                    //     }
+                    // }
+
+                    // exit;
+
                     $generadoXML = new GeneradorXML();
                     $generadoXML->CrearXMLGuiaRemision($ruta . $nombre, $emisor, $datosGuia, $detalle);
                     $api = new ApiFacturacion();
                     $api->EnviarGuiaRemision($emisor, $nombre, $ruta_archivo_xml, $ruta_archivo_cdr, "../");
                     $token = $api->token;
                     $ticket = $api->ticketS;
+
                     if (self::$esBorrador && !empty($ticket)) {
                         $datosGuia['borrador'] = 'N';
                     } else {
@@ -349,7 +400,50 @@ class ControladorGuiaRemision
                     // CONSULTAR TICKET=============================
                     $obtenerCdr = new ApiFacturacion();
                     $obtenerCdr->ConsultarTicketGuiaRemision($emisor, $ticket, $token, $nombre_archivo, $nombre, $ruta_archivo_cdr);
+
+
                     if (!empty($obtenerCdr)) {
+
+
+                        // if (isset($datosGuia['id_guia_integracion'])) {
+                        //     try {
+                        //         // Preparar datos para la API de integración
+                        //         $serieCorrelativo = $seriex['serie'] . '-' . $guia['correlativo'];
+                        //         $idGuiaIntegracion = $datosGuia['id_guia_integracion'];
+
+                        //         // Llamar a la API de actualización
+                        //         $apiUrlUpdate = "http://89.117.145.178:8081/api/v1/guias-system/update-guia/{$idGuiaIntegracion}";
+
+                        //         // Preparar datos para enviar
+                        //         $dataUpdate = json_encode([
+                        //             'serie_correlativo' => $serieCorrelativo
+                        //         ]);
+
+                        //         // Configurar y ejecutar la solicitud POST
+                        //         $ch = curl_init();
+                        //         curl_setopt($ch, CURLOPT_URL, $apiUrlUpdate);
+                        //         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                        //         curl_setopt($ch, CURLOPT_POST, true);
+                        //         curl_setopt($ch, CURLOPT_POSTFIELDS, $dataUpdate);
+                        //         curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                        //             'Content-Type: application/json',
+                        //             'Content-Length: ' . strlen($dataUpdate)
+                        //         ]);
+
+                        //         $response = curl_exec($ch);
+                        //         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                        //         curl_close($ch);
+
+                        //         if ($httpCode != 200) {
+                        //             error_log("Error actualizando guía de integración: " . $response);
+                        //         }
+                        //     } catch (Exception $e) {
+                        //         error_log("Error en la actualización de la guía de integración: " . $e->getMessage());
+                        //     }
+                        // }
+
+
+
                         $codigosSunat = array(
                             "feestado" => $obtenerCdr->codrespuesta,
                             "fecodigoerror"  => $obtenerCdr->coderror,
@@ -389,12 +483,15 @@ class ControladorGuiaRemision
                     $id_sucursal = $datosForm['idSucursal'];
                     $datosGuia['nombrexml'] = $nombre . '.xml';
                     if (self::$esBorrador) {
+
                         $guardarGuia = ControladorGuiaRemision::ctrActualizarGuiaSinSunat($id_sucursal, $datosGuia, $_POST['guiaEditar']);
                     } else {
                         $guardarGuia = ControladorGuiaRemision::ctrGuardarGuiaSinSunat($id_sucursal, $datosGuia);
                         $actualizarSerie = ControladorSunat::ctrActualizarCorrelativo($datos);
                     }
                 }
+
+
                 if (self::$esBorrador) {
                     $guiaCodigo = $_POST['guiaEditar'];
                     ModeloGuiaRemision::mdlEliminarGuiaDetalle($guiaCodigo);
@@ -458,6 +555,9 @@ class ControladorGuiaRemision
                             </script>";
         }
     }
+
+
+
     // MOSTRAR VENTAS DETALLES PRODUCTOS
     public static function ctrMostrarDetallesProductosGuia($item, $valor)
     {
@@ -550,18 +650,21 @@ class ControladorGuiaRemision
         }
     }
 
-    public static function ctrEliminarGuia($id) {
+    public static function ctrEliminarGuia($id)
+    {
         ModeloGuiaRemision::mdlEliminarGuiaDetalle($id);
         ModeloGuiaRemision::mdlEliminarGuia($id);
         return 'ok';
     }
 
-    public static function ctrAnularGuia($id) {
+    public static function ctrAnularGuia($id)
+    {
         ModeloGuiaRemision::mdlAnularGuia($id);
         return 'ok';
     }
 
-    public static function ctrActualizarEstado($id) {
+    public static function ctrActualizarEstado($id)
+    {
         ModeloGuiaRemision::mdlActualizarGuiaEstado($id, 2);
     }
 }

@@ -14,7 +14,7 @@ class ControladorProductos
         $respuesta = ModeloProductos::mdlMostrarTodosProductos($tabla, $item, $valor);
         return $respuesta;
     }
-    
+
     // MOSTRAR ProductoS|
     public static function ctrMostrarProductos($item, $valor, $idsucursal)
     {
@@ -62,6 +62,7 @@ class ControladorProductos
         $respuesta = ModeloProductos::mdlMostrarProductos($tabla, $item, $valor, null);
         return $respuesta;
     }
+
     // CREAR PRODUCTO
     public static function ctrCrearProducto($productos, $file)
     {
@@ -86,7 +87,6 @@ class ControladorProductos
                             }
 
                             if ($file["nuevaImagen"]["type"] == "image/jpeg") {
-
                                 $aleatorio = mt_rand(100, 999);
                                 $ruta = dirname(__FILE__) . "/../vistas/img/productos/" . $productos['nuevoCodigo'] . "/" . $aleatorio . ".jpeg";
                                 $rutabd = "vistas/img/productos/" . $productos['nuevoCodigo'] . "/" . $aleatorio . ".jpeg";
@@ -170,6 +170,32 @@ class ControladorProductos
                     </script>";
         }
     }
+
+
+    public static function ctrCrearProductoIntegración($productos)
+    {
+        $tabla = "productos";
+        $datos = array(
+            "id_categoria" => $productos['id_categoria'] ?? null,
+            "codigo" => $productos['codigo'],
+            "serie" => $productos['serie'] ?? null,
+            "codigoafectacion" => $productos['codigoafectacion'] ?? null,
+            "unidad" => $productos['unidad'] ?? null,
+            "descripcion" => $productos['descripcion'] ?? null,
+            "stock" => $productos['stock'] ?? null,
+            'caracteristica' => $productos['caracteristica'] ?? null,
+            "tipo_precio" => '01',
+            "imagen" => null,
+            "id_sucursal"  => $productos['id_sucursal'] ?? null
+        );
+
+        $respuesta = ModeloProductos::mdlCrearProductoIntegracion($tabla, $datos);
+
+        return $respuesta;
+    }
+
+
+
     // EDITAR PRODUCTO
     public  function ctrEditarProducto()
     {
@@ -263,10 +289,10 @@ class ControladorProductos
             $tabla = "productos";
             $datos = $datosEliminar['idProducto'];
             if (isset($datosEliminar['imagen']) && $datosEliminar['imagen'] != "vistas/img/productos/default/anonymous.png") {
-                
-                if(file_exists($datosEliminar['imagen'])){
-                unlink($datosEliminar['imagen']);
-                rmdir("vistas/img/productos/" . $datosEliminar['codigo']);
+
+                if (file_exists($datosEliminar['imagen'])) {
+                    unlink($datosEliminar['imagen']);
+                    rmdir("vistas/img/productos/" . $datosEliminar['codigo']);
                 }
             }
 
@@ -349,53 +375,57 @@ class ControladorProductos
         return $respuesta;
     }
 
-    public static function ctrObtenerUltimoProductoId(){
+    public static function ctrObtenerUltimoProductoId()
+    {
         $respuesta = ModeloProductos::mdlObtenerUltimoProductoId();
         return $respuesta;
     }
 
-    public static function ctrCrearSeries($datosSeries, $idProducto){
+    public static function ctrCrearSeries($datosSeries, $idProducto)
+    {
         $tabla = 'series_productos';
         $respuesta = ModeloProductos::mdlCrearSeries($tabla, $datosSeries, $idProducto);
         return $respuesta;
     }
 
-       // MOSTRAR SERIES PRODUCTOS
-       public static function ctrMostrarSeriesProductos($item, $valor)
-       {
-   
-           $tabla = 'series_productos';
-           $respuesta = ModeloProductos::mdlMostrarSeriesProductos($tabla, $item, $valor);
-           return $respuesta;
-       }
-        public static function ctrMostrarSeriesProductosActualizar($item, $valor)
-       {
-   
-           $tabla = 'series_productos';
-           $respuesta = ModeloProductos::mdlMostrarSeriesProductosActualizar($tabla, $item, $valor);
-           return $respuesta;
-       }
-          
-       
-       public static function ctrMostrarSeriesProductosGuias($item, $valor)
-       {
-   
-           $tabla = 'series_productos';
-           $respuesta = ModeloProductos::mdlMostrarSeriesProductosGuias($tabla, $item, $valor);
-           return $respuesta;
-       }
+    // MOSTRAR SERIES PRODUCTOS
+    public static function ctrMostrarSeriesProductos($item, $valor)
+    {
 
-       public static function ctrActualizarSerie($idSerie, $item, $valor){
+        $tabla = 'series_productos';
+        $respuesta = ModeloProductos::mdlMostrarSeriesProductos($tabla, $item, $valor);
+        return $respuesta;
+    }
+    public static function ctrMostrarSeriesProductosActualizar($item, $valor)
+    {
+
+        $tabla = 'series_productos';
+        $respuesta = ModeloProductos::mdlMostrarSeriesProductosActualizar($tabla, $item, $valor);
+        return $respuesta;
+    }
+
+
+    public static function ctrMostrarSeriesProductosGuias($item, $valor)
+    {
+
+        $tabla = 'series_productos';
+        $respuesta = ModeloProductos::mdlMostrarSeriesProductosGuias($tabla, $item, $valor);
+        return $respuesta;
+    }
+
+    public static function ctrActualizarSerie($idSerie, $item, $valor)
+    {
 
         $tabla = 'series_productos';
         $respuesta = ModeloProductos::mdlActualizarSerie($tabla, $idSerie, $item, $valor);
         return $respuesta;
-       }
+    }
 
-       public static function ctrEliminrSerie($idSerie){
+    public static function ctrEliminrSerie($idSerie)
+    {
 
         $tabla = 'series_productos';
         $respuesta = ModeloProductos::mdlEliminarSerie($tabla, $idSerie);
         return $respuesta;
-       }
+    }
 }

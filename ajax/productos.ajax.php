@@ -164,13 +164,12 @@ class AjaxProductos
     {
         // var_dump($_POST);
         // exit();
-       
+
         $idProducto = $_POST['idproductoSnuevo'];
         $datosSeriesU = array_map('mb_strtoupper', $_POST['seriepn']);
         $datosSeries = array_map('trim', $datosSeriesU);
 
-       echo $creatSeriesProductos = ControladorProductos::ctrCrearSeries($datosSeries, $idProducto);
-        
+        echo $creatSeriesProductos = ControladorProductos::ctrCrearSeries($datosSeries, $idProducto);
     }
     public function ajaxActualizarSerie()
     {
@@ -190,7 +189,8 @@ class AjaxProductos
         echo $resultado;
     }
 
-    public function ajaxEliminarSerie(){
+    public function ajaxEliminarSerie()
+    {
 
         $idSerie = $_POST['idSerieEliminar'];
 

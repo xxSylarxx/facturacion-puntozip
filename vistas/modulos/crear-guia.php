@@ -4,7 +4,9 @@ use Controladores\ControladorSunat;
 use Controladores\ControladorGuiaRemision;
 use Controladores\ControladorClientes;
 use Controladores\ControladorConductores;
+use Controladores\ControladorProductos;
 use Controladores\ControladorSucursal;
+use Modelos\ModeloProductos;
 
 $sucursal = ControladorSucursal::ctrSucursal();
 $id_sucursal = isset($_POST['idSucursal']) ? $_POST['idSucursal'] : $sucursal['id'];
@@ -21,7 +23,98 @@ if ($esBorrador) {
   $id_sucursal = $guiaDatos['id_sucursal'];
   ControladorGuiaRemision::ctrLlenarGuiaRemisionDetalle($id_sucursal, $guiaDetalle);
 }
+
+
+
+// ====================================================
+function ajaxGenerarCodigoBarra($cantidad, $longitud, $incluyeNum = true)
+{ {
+    $caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    if ($incluyeNum)
+      $caracteres .= "1234567890";
+
+    $arrPassResult = array();
+    $index = 0;
+    while ($index < $cantidad) {
+      $tmp = "";
+      for ($i = 0; $i < $longitud; $i++) {
+        $tmp .= $caracteres[rand(0, strlen($caracteres) - 1)];
+      }
+      if (!in_array($tmp, $arrPassResult)) {
+        $arrPassResult[] = $tmp;
+        $index++;
+      }
+    }
+    return $tmp;
+  }
+}
+
+
+$idGuiaIntegracion = isset($_GET['idGuiaIntegracion']) ? $_GET['idGuiaIntegracion'] : null;
+$procesoProveedor =  null;
+if ($idGuiaIntegracion !== null) {
+
+  try {
+    $apiUrl = "http://89.117.145.178:8081/api/v1/guias-system/guias/{$idGuiaIntegracion}";
+    $response = file_get_contents($apiUrl);
+    $guiaDatos = json_decode($response, true);
+
+    // echo
+    // '<script>
+    //    alert(' . var_dump($guiaDatos) . ');
+    // </script>';
+
+
+    $_SESSION['carritoG'] = array();
+    if (!empty($guiaDatos)) {
+
+      $_SESSION['id_guia_integracion'] = $idGuiaIntegracion ?? null;
+
+      // $_SESSION['proceso_proveedor_descripcion'] = $guiaDatos['proceso_proveedor_descripcion'] ?? '';
+      $procesoProveedor = $guiaDatos['proveedor_destino_descripcion'] ?? '';
+
+      $carritoG = $_SESSION['carritoG'];
+
+      $guiaDetalle = $guiaDatos['guia_detalles'];
+
+
+      foreach ($guiaDetalle as $key => $value) {
+        $item = $key;
+
+        $codigoBarra = ajaxGenerarCodigoBarra(1, 7);
+
+        $carritoG[$item] = array(
+          'id' => $value['id'],
+          'codigo' => $codigoBarra,
+          'descripcion' => $value['articulo_descripcion'] ?? "",
+          'unidad' => '',
+          'cantidad' => $value['proceso_cantidad_kg_real'] ?? "",
+          'peso' =>  $value['proceso_cantidad_kg_real'] ?? "",
+          'bultos' => '',
+          'color' => $value['color_descripcion'] ?? "",
+          'PO' =>  $value['orden_cliente_descripcion'],
+          'partida' =>  $value['ordenproduccion_partida'] ?? "",
+          'adicional' => '',
+          'servicio' => $value['proceso_servicio_descripcion'] ?? "",
+          'caracteristica' => ''
+        );
+      }
+
+      $_SESSION['carritoG'] = $carritoG;
+    }
+
+    // $respuesta = ControladorProductos::ctrCrearProductoIntegración();
+  } catch (Exception $e) {
+    echo $e->getMessage();
+  }
+}
+// ====================================================
+
+
 ?>
+
+
+
 <div class="content-wrapper panel-medio-principal">
   <?php
   // $emisor = ControladorEmpresa::ctrEmisor();
@@ -55,7 +148,7 @@ if ($esBorrador) {
         <!-- <h3 class="box-title">Crear venta</h3> -->
         <div class="col-md-6 row-sucursal">
           <?php
-            if ($_SESSION['perfil'] == 'Administrador' || $_SESSION['perfil'] == 'Guias') {
+          if ($_SESSION['perfil'] == 'Administrador' || $_SESSION['perfil'] == 'Guias') {
             echo '
                     <select class="form-control select2" name="idcSucursal" id="idcSucursal" style="width: 100%;" onchange="loadProductosG(1)">';
 
@@ -63,7 +156,7 @@ if ($esBorrador) {
             $valor = null;
             $sucursal = ControladorSucursal::ctrMostrarSucursalTotal($item, $valor);
             foreach ($sucursal as $k => $v) {
-              echo '<option value="' . $v['id'] . '" data-direccion="' . $v['direccion'] . '" data-ubigeo="' . $v['ubigeo'] . '" ' . (isset($guiaDatos['id_sucursal']) ? ($guiaDatos['id_sucursal'] == $v['id'] ? 'selected' : '') : '') .' >' . $v['nombre_sucursal'] . ' - Sede: ' . $v['direccion'] . '</option>';
+              echo '<option value="' . $v['id'] . '" data-direccion="' . $v['direccion'] . '" data-ubigeo="' . $v['ubigeo'] . '" ' . (isset($guiaDatos['id_sucursal']) ? ($guiaDatos['id_sucursal'] == $v['id'] ? 'selected' : '') : '') . ' >' . $v['nombre_sucursal'] . ' - Sede: ' . $v['direccion'] . '</option>';
             }
 
             echo '</select>';
@@ -89,8 +182,8 @@ if ($esBorrador) {
 
               <form role="form" method="post" class="formGuia" id="formGuia">
                 <input type="hidden" name="ruta_comprobante" id="ruta_comprobante" value="<?php echo  $_GET["ruta"] ?>">
-                <input type="hidden" name="esBorrador" value="<?php echo $esBorrador ? 'S' : 'N'; ?>" >
-                <input type="hidden" name="guiaEditar" value="<?php echo isset($_POST['id_guia_edit']) ? $_POST['id_guia_edit'] : ''; ?>" >
+                <input type="hidden" name="esBorrador" value="<?php echo $esBorrador ? 'S' : 'N'; ?>">
+                <input type="hidden" name="guiaEditar" value="<?php echo isset($_POST['id_guia_edit']) ? $_POST['id_guia_edit'] : ''; ?>">
 
                 <div class="box-body" style="border: 0px; padding-top:0px; ">
 
@@ -125,7 +218,7 @@ if ($esBorrador) {
                               $id_sucursal = $id_sucursal;
                               $serieComprobante = ControladorSunat::ctrMostrarSerie($valor, $id_sucursal);
                               foreach ($serieComprobante as $key => $value) {
-                                echo '<option value=' . $value['id'] . ' data-correlativo="' . $value['correlativo'] .'" >' . $value['serie'] . '</option>';
+                                echo '<option value=' . $value['id'] . ' data-correlativo="' . $value['correlativo'] . '" >' . $value['serie'] . '</option>';
                               }
                             }
                             ?>
@@ -170,9 +263,22 @@ if ($esBorrador) {
                                 <option value="">SELECCIONAR CLIENTE</option>
                                 <?php
                                 $clientes = ControladorClientes::ctrMostrarClientes(null, null);
+
+                                // echo '<script>
+                                // alert("' . print_r($clientes) . '");
+                                // </script>';
+
                                 foreach ($clientes as $v) {
-                                  echo '<option value="' . $v['id'] . '" data-ruc="' . $v['ruc'] . '" data-razonsocial="' . $v['razon_social'] . '" data-direccion="' . $v['direccion'] . '" data-ubigeo="' . $v['ubigeo'] . '" ' . (isset($guiaDatos['id_cliente']) ? ($guiaDatos['id_cliente'] == $v['id'] ? 'selected' : '') : '') . '>' . $v['ruc'] . ' - ' . $v['razon_social'] . '</option>';
+                                  echo '<option value="' . $v['id']
+                                    . '" data-ruc="' . $v['ruc']
+                                    . '" data-razonsocial="' . $v['razon_social']
+                                    . '" data-direccion="' . $v['direccion']
+                                    . '" data-ubigeo="' . $v['ubigeo'] . '"'
+                                    . (isset($guiaDatos['id_cliente']) ? ($guiaDatos['id_cliente'] == $v['id'] ? 'selected' : '') : '')
+                                    . (isset($procesoProveedor) ? ($procesoProveedor == $v['razon_social'] ? 'selected' : '') : '')
+                                    . '>' . $v['ruc'] . ' - ' . $v['razon_social'] . '</option>';
                                 }
+
                                 ?>
                               </select>
                             </div>
@@ -491,7 +597,7 @@ if ($esBorrador) {
 
                                     foreach ($productos as $k => $v) {
 
-                                      echo '<option value="' . $v['ubigeo'] . '" '. (isset($guiaDatos['ubigeoPartida']) ? ($guiaDatos['ubigeoPartida'] == $v['ubigeo'] ? 'selected' : '') : '') . '>' . $v['ubigeo'] . ' ' . $v['nombre_distrito'] . ' - ' . $v['nombre_provincia'] . ' - ' . $v['name'] . '</option>
+                                      echo '<option value="' . $v['ubigeo'] . '" ' . (isset($guiaDatos['ubigeoPartida']) ? ($guiaDatos['ubigeoPartida'] == $v['ubigeo'] ? 'selected' : '') : '') . '>' . $v['ubigeo'] . ' ' . $v['nombre_distrito'] . ' - ' . $v['nombre_provincia'] . ' - ' . $v['name'] . '</option>
                                                         ';
                                     }
 
@@ -564,7 +670,7 @@ if ($esBorrador) {
                         <div class="form-group">
                           <div class="input-group">
                             <label for="">Serie Correlativo</label>
-                            <input type="text" class="form-control" name="serieCorrelativoReferencial" id="serieCorrelativoReferencial" value="<?php echo !$esBorrador ? (isset($dataSerie['correlativo']) ? (intval($dataSerie['correlativo']) + 1) : '') : $guiaDatos['correlativo']; ?>" <?php echo $esBorrador ? 'readonly' : ''; ?> >
+                            <input type="text" class="form-control" name="serieCorrelativoReferencial" id="serieCorrelativoReferencial" value="<?php echo !$esBorrador ? (isset($dataSerie['correlativo']) ? (intval($dataSerie['correlativo']) + 1) : '') : $guiaDatos['correlativo']; ?>" <?php echo $esBorrador ? 'readonly' : ''; ?>>
                             <div class="resultado-serie"></div>
 
 
@@ -604,7 +710,7 @@ if ($esBorrador) {
                             </tr>
                           </thead>
                           <tbody id="itemsPG">
-                            <?php if ($esBorrador) {
+                            <?php if ($esBorrador || $idGuiaIntegracion) {
                               ControladorGuiaRemision::ctrLlenarCarritoGuia($_SESSION['carritoG']);
                             } ?>
                           </tbody>
@@ -725,7 +831,7 @@ if ($esBorrador) {
                     <div class="box-footer contenedor-btns-carrito">
 
                       <button type="button" class="btnGuardarGuia"><i class="far fa-save"></i></button>
-                      <div class='muestras'></div>
+                      <!-- <div class='muestras'></div> -->
                       <!-- BOTÓN PARA ELIMINAR CARRO-->
                       <button type="button" class="btnEliminarCarro"><i class="fas fa-trash-alt"></i></button>
                     </div>
