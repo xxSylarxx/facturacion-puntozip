@@ -5,6 +5,7 @@ require_once "../vendor/autoload.php";
 use Controladores\ControladorEmpresa;
 use Controladores\ControladorClientes;
 use Controladores\ControladorUsuarios;
+use Controladores\ControladorGuiaRemision;
 
 class AjaxEmpresa
 {
@@ -106,6 +107,12 @@ class AjaxEmpresa
         $valorbs = $_POST['serviciosSelva'];
         $respuesta = ControladorEmpresa::ctrBienesServiciosSelva($item, $valor, $itembs, $valorbs);
     }
+
+    public function ajaxGuiasPorEmitir() {
+        $empresa = 'puntozip';
+        $respuesta = ControladorGuiaRemision::ctrObtenerGuiasPorEmitir($empresa);
+        echo $respuesta;
+    }
 }
 if (isset($_POST['modo'])) {
     $objModo = new AjaxEmpresa();
@@ -115,35 +122,32 @@ if (isset($_POST['pp'])) {
     $objMostrar = new AjaxEmpresa();
     $objMostrar->ajaxMostrarModo();
 }
-
 if (isset($_POST['rucEmpresa'])) {
-
     $objRuc = new AjaxEmpresa();
     $objRuc->rucEmpresa = $_POST['rucEmpresa'];
     $objRuc->ajaxBuscarRucEmpresa();
 }
 if (isset($_POST['logoActual'])) {
-
     $objLogo = new AjaxEmpresa();
     $objLogo->ajaxCambiarLogo();
 }
 if (isset($_POST['idEmpresa'])) {
-
     $objLogo = new AjaxEmpresa();
     $objLogo->ajaxEliminarLogo();
 }
 if (isset($_POST['plantilla'])) {
-
     $objLogo = new AjaxEmpresa();
     $objLogo->ajaxCambiarPlantilla();
 }
 if (isset($_POST['bienesSelva'])) {
-
     $objbSelva = new AjaxEmpresa();
     $objbSelva->ajaxBienesSelva();
 }
 if (isset($_POST['serviciosSelva'])) {
-
     $objbSelva = new AjaxEmpresa();
     $objbSelva->ajaxServiciosSelva();
+}
+if (isset($_POST['guiasPorEmitir'])) {
+    $objEmpresa = new AjaxEmpresa();
+    $objEmpresa->ajaxGuiasPorEmitir();
 }

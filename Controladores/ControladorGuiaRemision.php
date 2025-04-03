@@ -12,11 +12,18 @@ use Controladores\ControladorSucursal;
 use Controladores\ControladorSunat;
 use api\GeneradorXML;
 use api\ApiFacturacion;
+use api\ApiGuiasPuntozip;
 
 class ControladorGuiaRemision
 {
 
     public static $esBorrador = false;
+
+    public static function ctrObtenerGuiasPorEmitir(string $empresa)
+    {
+        $guiasPorEmitir = (new ApiGuiasPuntozip)->listarGuiasPorEmitir($empresa);
+        return $guiasPorEmitir;
+    }
 
     public static function ctrMostrar($tabla, $item, $valor)
     {
@@ -68,7 +75,7 @@ class ControladorGuiaRemision
             echo "<tr class='id-eliminar" . $k . "'>";
             $response =  "<td>" . $v['codigo'] . "</td>
                 <td>" . $v['descripcion'] . "<br/>
-                    <input type='text' class='datos-adicionales-item-guia input-prod' id='descripcion' name='descripcion[]' idcar='" . $k . "' cod='" . $v['codigo'] . "' campo='adicional' value='". $v['adicional'] ."' placeholder='DATOS ADICIONALES'>
+                    <input type='text' class='datos-adicionales-item-guia input-prod' id='descripcion' name='descripcion[]' idcar='" . $k . "' cod='" . $v['codigo'] . "' campo='adicional' value='" . $v['adicional'] . "' placeholder='DATOS ADICIONALES'>
                 </td>
                 <td><input type='text' class='form-control input-prod' idcar='" . $k . "' cod='" . $v['codigo'] . "' campo='servicio' value='" . $v['servicio'] . "' placeholder='Servicio'></td>
                 <td><input type='text' class='form-control input-prod' idcar='" . $k . "' cod='" . $v['codigo'] . "' campo='caracteristica' value='" . $v['caracteristica'] . "' placeholder='Característica'></td>
@@ -322,7 +329,7 @@ class ControladorGuiaRemision
                     echo "<script>
                             Swal.fire({
                                 icon: 'error',
-                                title: 'LA SERIE Y CORRELATIVO ". ($seriex['serie'] . '-' . $guia['correlativo']) . " YA EXISTE' ,
+                                title: 'LA SERIE Y CORRELATIVO " . ($seriex['serie'] . '-' . $guia['correlativo']) . " YA EXISTE' ,
                                 text: '',
                                 html: `Debes ingresar otro correlativo`
                             })
@@ -330,7 +337,7 @@ class ControladorGuiaRemision
                     die();
                 }
             }
-            
+
             // if (($datosForm['modalidadTraslado'] == '02' && !empty($datosForm['placa'])  && !empty($datosForm['numBrevete'])) || ($datosForm['modalidadTraslado'] == '01' && empty($datosForm['placa']))) {
             if (!empty($detalle)) {
                 if ($datosForm['envioSunat'] == 'enviar') {
@@ -550,18 +557,21 @@ class ControladorGuiaRemision
         }
     }
 
-    public static function ctrEliminarGuia($id) {
+    public static function ctrEliminarGuia($id)
+    {
         ModeloGuiaRemision::mdlEliminarGuiaDetalle($id);
         ModeloGuiaRemision::mdlEliminarGuia($id);
         return 'ok';
     }
 
-    public static function ctrAnularGuia($id) {
+    public static function ctrAnularGuia($id)
+    {
         ModeloGuiaRemision::mdlAnularGuia($id);
         return 'ok';
     }
 
-    public static function ctrActualizarEstado($id) {
+    public static function ctrActualizarEstado($id)
+    {
         ModeloGuiaRemision::mdlActualizarGuiaEstado($id, 2);
     }
 }
