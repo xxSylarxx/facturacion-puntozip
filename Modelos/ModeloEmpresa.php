@@ -8,6 +8,19 @@ use PDO;
 
 class ModeloEmpresa
 {
+
+    public static function mdlEmpresaNombre()
+    {
+        $stmt = Conexion::conectar()->prepare("SELECT nombre_comercial FROM emisor");
+        $stmt->execute();
+        $data = $stmt->fetch();
+        $nombre = '';
+        if (!empty($data)) {
+            $nombre = mb_strtolower($data['nombre_comercial'], 'UTF-8');
+        }
+        return $nombre;
+    }
+
     // MOSTRAR EMISOR
     public static function mdlMostrarEmisor($tabla, $item, $valor)
     {
@@ -266,7 +279,7 @@ class ModeloEmpresa
         }
     }
 
-    
+
     public static function mdlCambiarSeguridad()
     {
         $stmt = Conexion::conectar()->prepare("UPDATE emisor SET conexion='n'");

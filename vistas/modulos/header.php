@@ -6,6 +6,44 @@
 
   ?>
 
+ <style>
+   .navbar-nav>.guiasIntegracion-notifications-menu>.dropdown-menu>li.header {
+     border-top-left-radius: 4px;
+     border-top-right-radius: 4px;
+     border-bottom-right-radius: 0;
+     border-bottom-left-radius: 0;
+     background-color: #ffffff;
+     padding: 7px 10px;
+     border-bottom: 1px solid #f4f4f4;
+     color: #444444;
+     font-size: 14px;
+   }
+
+   .navbar-nav>.guiasIntegracion-notifications-menu>.dropdown-menu>li .menu {
+     max-height: 200px;
+     margin: 0;
+     padding: 0;
+     list-style: none;
+     overflow-x: hidden;
+   }
+
+   .navbar-nav>.guiasIntegracion-notifications-menu>.dropdown-menu>li .menu>li>a:hover {
+     background: #f4f4f4;
+     text-decoration: none;
+   }
+
+   .nav .guiasIntegracion-notifications-menu.open>a,
+   .nav .guiasIntegracion-notifications-menu.open>a:focus,
+   .nav .guiasIntegracion-notifications-menu.open>a:hover {
+     background-color: #0c75ff !important;
+     z-index: 0;
+   }
+
+   .label-guiasIntegracion-recepcion {
+     background-color: #f39c12 !important;
+   }
+ </style>
+
  <header class="main-header cabecera-m">
 
    <!-- Logo -->
@@ -31,6 +69,7 @@
      <div class="navbar-custom-menu">
        <ul class="nav navbar-nav">
 
+         <!--  notification ===================== -->
          <li class="dropdown notifications-menu">
            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
              <i class="far fa-bell"></i>
@@ -47,27 +86,6 @@
                      <span class="no-enviados-items"></span>
                    </a>
                  </li>
-                 <!-- <li>
-                    <a href="#">
-                      <i class="fa fa-warning text-yellow"></i> Very long description here that may not fit into the
-                      page and may cause design problems
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-users text-red"></i> 5 new members joined
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-shopping-cart text-green"></i> 25 sales made
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-user text-red"></i> You changed your username
-                    </a>
-                  </li> -->
                </ul>
              </li>
              <li class="footer">
@@ -83,6 +101,29 @@
            </ul>
          </li>
          <!-- fin notification ===================== -->
+
+
+         <!-- ==================================================== -->
+         <li class="dropdown guiasIntegracion-notifications-menu">
+           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+             <i class="fa-solid fa-file-import"></i>
+             <span class="label guiasIntegracion-label-warning guiasIntegracion-recepcion label-guiasIntegracion-recepcion">
+             </span>
+           </a>
+           <ul class="dropdown-menu guiasIntegracion-dropdown-menu">
+             <li class="header guiasIntegracion-no-enviados-text">
+               Guías por emitir
+             </li>
+             <li>
+               <ul class="menu guiasIntegracion-menu">
+                 <!-- Aquí se cargarán las guías mediante AJAX -->
+               </ul>
+             </li>
+           </ul>
+         </li>
+         <!-- ==================================================== -->
+
+
 
          <!-- User Account: style can be found in dropdown.less -->
          <li class="dropdown user user-menu">
@@ -131,4 +172,6 @@
        </ul>
      </div>
    </nav>
+
+   <script src="https://kit.fontawesome.com/760e3cbc52.js" crossorigin="anonymous"></script>
  </header>

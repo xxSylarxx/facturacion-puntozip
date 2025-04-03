@@ -109,8 +109,7 @@ class AjaxEmpresa
     }
 
     public function ajaxGuiasPorEmitir() {
-        $empresa = 'puntozip';
-        $respuesta = ControladorGuiaRemision::ctrObtenerGuiasPorEmitir($empresa);
+        $respuesta = ControladorGuiaRemision::ctrObtenerGuiasPorEmitir();
         echo $respuesta;
     }
 }

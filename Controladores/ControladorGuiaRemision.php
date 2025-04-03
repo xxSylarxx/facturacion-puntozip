@@ -13,14 +13,16 @@ use Controladores\ControladorSunat;
 use api\GeneradorXML;
 use api\ApiFacturacion;
 use api\ApiGuiasPuntozip;
+use Modelos\ModeloEmpresa;
 
 class ControladorGuiaRemision
 {
 
     public static $esBorrador = false;
 
-    public static function ctrObtenerGuiasPorEmitir(string $empresa)
+    public static function ctrObtenerGuiasPorEmitir()
     {
+        $empresa = ModeloEmpresa::mdlEmpresaNombre();
         $guiasPorEmitir = (new ApiGuiasPuntozip)->listarGuiasPorEmitir($empresa);
         return $guiasPorEmitir;
     }

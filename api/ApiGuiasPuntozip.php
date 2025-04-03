@@ -23,8 +23,7 @@ class ApiGuiasPuntozip
             return null;
         }
         curl_close($ch);
-        $data = json_decode($response, true);
-        return $data;
+        return $response;
     }
 
     public function actualizarEstadoGuia() {}
