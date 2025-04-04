@@ -19,10 +19,14 @@ class ControladorGuiaRemision
 {
 
     public static $esBorrador = false;
+    public static $esIntegracion = false;
 
-    public static function ctrObtenerGuiasPorEmitir()
+    public static function ctrObtenerGuiasPorEmitir($id = null)
     {
         $empresa = ModeloEmpresa::mdlEmpresaNombre();
+        if (!empty($id)) {
+            return (array) (new ApiGuiasPuntozip)->obtenerGuia($id);
+        }
         $guiasPorEmitir = (new ApiGuiasPuntozip)->listarGuiasPorEmitir($empresa);
         return $guiasPorEmitir;
     }
@@ -132,13 +136,13 @@ class ControladorGuiaRemision
 
     public static function ctrCrearGuia($datosForm)
     {
-
         $emisor = ControladorEmpresa::ctrEmisor();
         $sucursal = ControladorSucursal::ctrSucursal();
         $item = 'id';
         $valor = $datosForm['serie'];
         $seriex = ControladorSunat::ctrMostrarCorrelativo($item, $valor);
         self::$esBorrador = isset($_POST['esBorrador']) ? $_POST['esBorrador'] == 'S' : false;
+        self::$esIntegracion = isset($_POST['esIntegracion']) ? $_POST['esIntegracion'] == 'S' : false;
         if (isset($datosForm))
             $fecha = $_POST['fechaEmision'];
         $fecha2 = str_replace('/', '-', $fecha);
@@ -169,7 +173,7 @@ class ControladorGuiaRemision
             'nroDoc' => '',
             'tipoDoc' => ''
         );
-        $tipocomp = ''; // substr($datosForm['serieCorrelativoReferencial'], 0, 1);
+        $tipocomp = '';
         $seriecomp = '';
         if ($tipocomp == 'F') {
             $seriecomp = '01';
@@ -177,22 +181,15 @@ class ControladorGuiaRemision
         if ($tipocomp == 'B') {
             $seriecomp = '03';
         }
-        /* $relDoc = array(
-            'nroDoc' => $datosForm['serieCorrelativoReferencial'],
-            'tipoDoc' => $seriecomp
-        ); */
         $relDoc = array(
             'nroDoc' => '',
             'tipoDoc' => ''
         );
-
-
         $remitente = array(
             'ruc' => $emisor['ruc'],
             'razonsocial' => $emisor['razon_social'],
 
         );
-
         $destinatario = array(
             'tipoDoc' => isset($datosForm['tipoDoc']) ? $datosForm['tipoDoc'] : '6',
             'numDoc'  => $datosForm['docIdentidad'],
@@ -216,7 +213,6 @@ class ControladorGuiaRemision
             'modTraslado' => $datosForm['modalidadTraslado'],
             'fechaTraslado' => $fechaTraslado,
             'tipoVehiculo' => isset($datosForm['tipoVehiculo']) ? $datosForm['tipoVehiculo'] : ''
-
         );
         if ($datosForm['modalidadTraslado'] == '02') {
             $transportista = array(
@@ -281,10 +277,11 @@ class ControladorGuiaRemision
             $_SESSION['carritoG'] = array();
         }
         $carritoG = $_SESSION['carritoG'];
-        //extract($_REQUEST);
         $detalle = array();
         $carritoG = array_values($carritoG);
-
+        if (self::$esIntegracion) {
+            ModeloProductos::mdlInsertaProductosOrigenApi($carritoG, $datosForm['idSucursal']);
+        }
         foreach ($carritoG as $k => $v) {
             $itemx = array(
                 'index' => ++$k,
@@ -367,6 +364,14 @@ class ControladorGuiaRemision
                             "xmlbase64"  => $obtenerCdr->xmlb64,
                             "cdrbase64"  => $obtenerCdr->cdrb64,
                         );
+                        if ($obtenerCdr->codrespuesta == '1') {
+                            $dataActualizaEstado = [
+                                'id' => $datosForm['guiaIntegracionId'],
+                                'serie' => $seriex['serie'],
+                                'correlativo' => $guia['correlativo']
+                            ];
+                            (new ApiGuiasPuntozip)->actualizarEstadoGuia($dataActualizaEstado);
+                        }
                     } else {
                         $codigosSunat = array(
                             "feestado" => 3,
@@ -556,6 +561,41 @@ class ControladorGuiaRemision
                 }
             }
             $_SESSION['carritoG'] = $carritoG;
+        }
+    }
+
+    public static function ctrLlenarGuiaRemisionDetalleApi($guiaEmitir)
+    {
+        try {
+            $_SESSION['carritoG'] = array();
+            if (!empty($guiaEmitir)) {
+                $carritoG = $_SESSION['carritoG'];
+                $item = 'id';
+                $guiasEmitirDet = (array) $guiaEmitir['guia_detalles'];
+                foreach ($guiasEmitirDet as $key => $value) {
+                    $item = $key;
+                    $cantFormat = !empty($value['proceso_cantidad_kg_real']) ? number_format((float) $value['proceso_cantidad_kg_real'], 2, '.', '') : '0.0';
+                    $carritoG[$item] = [
+                        'id' => $value['id'],
+                        'codigo' => $value['articulo_codigo'],
+                        'descripcion' => $value['articulo_descripcion'],
+                        'unidad' => '',
+                        'cantidad' => $cantFormat,
+                        'peso' => $cantFormat,
+                        'bultos' => '',
+                        'color' => $value['color_descripcion'],
+                        'PO' => $value['po_descripcion'],
+                        'partida' => $value['ordenproduccion_partida'],
+                        'adicional' => '',
+                        'servicio' => $value['proceso_servicio_descripcion'],
+                        'caracteristica' => '',
+                        'tipo_categoria' => $value['tipo_articulo']
+                    ];
+                }
+                $_SESSION['carritoG'] = $carritoG;
+            }
+        } catch (\Exception $th) {
+            die($th->getMessage());
         }
     }
 

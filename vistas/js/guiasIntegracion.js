@@ -14,10 +14,13 @@ $(document).ready(function () {
         dataGuias?.forEach(function (guia) {
           var listItem = `
             <li class="guiasIntegracion-item">
-              <a href="crear-guia?idGuiaIntegracion=${guia.id}" class="guias-link">
-                <i class="fa-regular fa-file-lines guiasIntegracion-icon"></i>
-                <span class="guiasIntegracion-item-text">${guia.id} - ${guia.proveedor_descripcion}</span>
-              </a>
+              <form action="./crear-guia" method="POST">
+                <input type="hidden" name="idGuiaIntegracion" value="${guia.id}">
+                <a href="#" class="guias-link" onclick="this.closest('form').submit();">
+                  <i class="fa-regular fa-file-lines guiasIntegracion-icon"></i>
+                  <span class="guiasIntegracion-item-text">${guia.id} - ${guia.proveedor_descripcion}</span>
+                </a>
+              </form>
             </li>
             `;
           guiasMenu.append(listItem);

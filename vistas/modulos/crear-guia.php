@@ -9,17 +9,25 @@ use Controladores\ControladorSucursal;
 $sucursal = ControladorSucursal::ctrSucursal();
 $id_sucursal = isset($_POST['idSucursal']) ? $_POST['idSucursal'] : $sucursal['id'];
 $borradorId = isset($_POST['id_guia_edit']) ? $_POST['id_guia_edit'] : null;
+
+$guiaIntegracionId = isset($_POST['idGuiaIntegracion']) ? $_POST['idGuiaIntegracion'] : null;
+$esIntegracion = !empty($guiaIntegracionId) && is_numeric($guiaIntegracionId);
 $esBorrador = !empty($borradorId) && is_numeric($borradorId);
+
 $valor = "09";
 $dataCorrelativo = ControladorSunat::ctrMostrarSerie($valor, $id_sucursal);
 $dataSerie = !empty($dataCorrelativo) ? $dataCorrelativo[0] : [];
 
 $guiaDatos = [];
-if ($esBorrador) {
+if ($esBorrador && !$esIntegracion) {
   $guiaDatos = ControladorGuiaRemision::ctrObtenerGuiaById($borradorId);
   $guiaDetalle = ControladorGuiaRemision::ctrObtenerGuiaDetalleById($borradorId);
   $id_sucursal = $guiaDatos['id_sucursal'];
   ControladorGuiaRemision::ctrLlenarGuiaRemisionDetalle($id_sucursal, $guiaDetalle);
+}
+if ($esIntegracion && !$esBorrador) {
+  $dataGuiaEmitir = ControladorGuiaRemision::ctrObtenerGuiasPorEmitir($guiaIntegracionId);
+  ControladorGuiaRemision::ctrLlenarGuiaRemisionDetalleApi($dataGuiaEmitir);
 }
 ?>
 <div class="content-wrapper panel-medio-principal">
@@ -55,7 +63,7 @@ if ($esBorrador) {
         <!-- <h3 class="box-title">Crear venta</h3> -->
         <div class="col-md-6 row-sucursal">
           <?php
-            if ($_SESSION['perfil'] == 'Administrador' || $_SESSION['perfil'] == 'Guias') {
+          if ($_SESSION['perfil'] == 'Administrador' || $_SESSION['perfil'] == 'Guias') {
             echo '
                     <select class="form-control select2" name="idcSucursal" id="idcSucursal" style="width: 100%;" onchange="loadProductosG(1)">';
 
@@ -63,7 +71,7 @@ if ($esBorrador) {
             $valor = null;
             $sucursal = ControladorSucursal::ctrMostrarSucursalTotal($item, $valor);
             foreach ($sucursal as $k => $v) {
-              echo '<option value="' . $v['id'] . '" data-direccion="' . $v['direccion'] . '" data-ubigeo="' . $v['ubigeo'] . '" ' . (isset($guiaDatos['id_sucursal']) ? ($guiaDatos['id_sucursal'] == $v['id'] ? 'selected' : '') : '') .' >' . $v['nombre_sucursal'] . ' - Sede: ' . $v['direccion'] . '</option>';
+              echo '<option value="' . $v['id'] . '" data-direccion="' . $v['direccion'] . '" data-ubigeo="' . $v['ubigeo'] . '" ' . (isset($guiaDatos['id_sucursal']) ? ($guiaDatos['id_sucursal'] == $v['id'] ? 'selected' : '') : '') . ' >' . $v['nombre_sucursal'] . ' - Sede: ' . $v['direccion'] . '</option>';
             }
 
             echo '</select>';
@@ -89,8 +97,10 @@ if ($esBorrador) {
 
               <form role="form" method="post" class="formGuia" id="formGuia">
                 <input type="hidden" name="ruta_comprobante" id="ruta_comprobante" value="<?php echo  $_GET["ruta"] ?>">
-                <input type="hidden" name="esBorrador" value="<?php echo $esBorrador ? 'S' : 'N'; ?>" >
-                <input type="hidden" name="guiaEditar" value="<?php echo isset($_POST['id_guia_edit']) ? $_POST['id_guia_edit'] : ''; ?>" >
+                <input type="hidden" name="esBorrador" value="<?php echo $esBorrador ? 'S' : 'N'; ?>">
+                <input type="hidden" name="esIntegracion" value="<?php echo $esIntegracion ? 'S' : 'N' ?>">
+                <input type="hidden" name="guiaEditar" value="<?php echo isset($_POST['id_guia_edit']) ? $_POST['id_guia_edit'] : ''; ?>">
+                <input type="hidden" name="guiaIntegracionId" value="<?php $guiaIntegracionId ?>">
 
                 <div class="box-body" style="border: 0px; padding-top:0px; ">
 
@@ -125,7 +135,7 @@ if ($esBorrador) {
                               $id_sucursal = $id_sucursal;
                               $serieComprobante = ControladorSunat::ctrMostrarSerie($valor, $id_sucursal);
                               foreach ($serieComprobante as $key => $value) {
-                                echo '<option value=' . $value['id'] . ' data-correlativo="' . $value['correlativo'] .'" >' . $value['serie'] . '</option>';
+                                echo '<option value=' . $value['id'] . ' data-correlativo="' . $value['correlativo'] . '" >' . $value['serie'] . '</option>';
                               }
                             }
                             ?>
@@ -171,7 +181,11 @@ if ($esBorrador) {
                                 <?php
                                 $clientes = ControladorClientes::ctrMostrarClientes(null, null);
                                 foreach ($clientes as $v) {
-                                  echo '<option value="' . $v['id'] . '" data-ruc="' . $v['ruc'] . '" data-razonsocial="' . $v['razon_social'] . '" data-direccion="' . $v['direccion'] . '" data-ubigeo="' . $v['ubigeo'] . '" ' . (isset($guiaDatos['id_cliente']) ? ($guiaDatos['id_cliente'] == $v['id'] ? 'selected' : '') : '') . '>' . $v['ruc'] . ' - ' . $v['razon_social'] . '</option>';
+                                  if ($esIntegracion) {
+                                    echo '<option value="' . $v['id'] . '" data-ruc="' . $v['ruc'] . '" data-razonsocial="' . $v['razon_social'] . '" data-direccion="' . $v['direccion'] . '" data-ubigeo="' . $v['ubigeo'] . '" ' . (isset($dataGuiaEmitir['proveedor_ruc']) ? ($dataGuiaEmitir['proveedor_ruc'] == $v['ruc'] ? 'selected' : '') : '') . '>' . $v['ruc'] . ' - ' . $v['razon_social'] . '</option>';
+                                  } else {
+                                    echo '<option value="' . $v['id'] . '" data-ruc="' . $v['ruc'] . '" data-razonsocial="' . $v['razon_social'] . '" data-direccion="' . $v['direccion'] . '" data-ubigeo="' . $v['ubigeo'] . '" ' . (isset($guiaDatos['id_cliente']) ? ($guiaDatos['id_cliente'] == $v['id'] ? 'selected' : '') : '') . '>' . $v['ruc'] . ' - ' . $v['razon_social'] . '</option>';
+                                  }
                                 }
                                 ?>
                               </select>
@@ -491,7 +505,7 @@ if ($esBorrador) {
 
                                     foreach ($productos as $k => $v) {
 
-                                      echo '<option value="' . $v['ubigeo'] . '" '. (isset($guiaDatos['ubigeoPartida']) ? ($guiaDatos['ubigeoPartida'] == $v['ubigeo'] ? 'selected' : '') : '') . '>' . $v['ubigeo'] . ' ' . $v['nombre_distrito'] . ' - ' . $v['nombre_provincia'] . ' - ' . $v['name'] . '</option>
+                                      echo '<option value="' . $v['ubigeo'] . '" ' . (isset($guiaDatos['ubigeoPartida']) ? ($guiaDatos['ubigeoPartida'] == $v['ubigeo'] ? 'selected' : '') : '') . '>' . $v['ubigeo'] . ' ' . $v['nombre_distrito'] . ' - ' . $v['nombre_provincia'] . ' - ' . $v['name'] . '</option>
                                                         ';
                                     }
 
@@ -564,7 +578,7 @@ if ($esBorrador) {
                         <div class="form-group">
                           <div class="input-group">
                             <label for="">Serie Correlativo</label>
-                            <input type="text" class="form-control" name="serieCorrelativoReferencial" id="serieCorrelativoReferencial" value="<?php echo !$esBorrador ? (isset($dataSerie['correlativo']) ? (intval($dataSerie['correlativo']) + 1) : '') : $guiaDatos['correlativo']; ?>" <?php echo $esBorrador ? 'readonly' : ''; ?> >
+                            <input type="text" class="form-control" name="serieCorrelativoReferencial" id="serieCorrelativoReferencial" value="<?php echo !$esBorrador ? (isset($dataSerie['correlativo']) ? (intval($dataSerie['correlativo']) + 1) : '') : $guiaDatos['correlativo']; ?>" <?php echo $esBorrador ? 'readonly' : ''; ?>>
                             <div class="resultado-serie"></div>
 
 
@@ -604,7 +618,7 @@ if ($esBorrador) {
                             </tr>
                           </thead>
                           <tbody id="itemsPG">
-                            <?php if ($esBorrador) {
+                            <?php if ($esBorrador || $esIntegracion) {
                               ControladorGuiaRemision::ctrLlenarCarritoGuia($_SESSION['carritoG']);
                             } ?>
                           </tbody>

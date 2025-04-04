@@ -4,6 +4,9 @@ $(document).ready(function () {
     document.getElementById("modalidadTraslado").value = "02";
     document.getElementById("tipoDocTransporte").value = "1";
   }
+  setTimeout(() => {
+    $("#listaClientes").trigger('change');
+  }, 300);
 });
 
 $(".resultado-ubigeos-partida").hide();

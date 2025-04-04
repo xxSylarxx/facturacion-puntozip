@@ -1048,3 +1048,9 @@ $('body').on('change', '.input-prod', function () {
   const valor = $(this).val();
   actualizarGuiaProductos(idCar, idProducto, campo, valor);
 });
+
+$(document).ready(function () {
+  setTimeout(() => {
+    calcularPesoTotal();
+  }, 200);
+});
