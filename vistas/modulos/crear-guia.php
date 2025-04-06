@@ -10,7 +10,7 @@ $sucursal = ControladorSucursal::ctrSucursal();
 $id_sucursal = isset($_POST['idSucursal']) ? $_POST['idSucursal'] : $sucursal['id'];
 $borradorId = isset($_POST['id_guia_edit']) ? $_POST['id_guia_edit'] : null;
 
-$guiaIntegracionId = isset($_POST['idGuiaIntegracion']) ? $_POST['idGuiaIntegracion'] : null;
+$guiaIntegracionId = isset($_POST['idGuiaIntegracion']) ? $_POST['idGuiaIntegracion'] : '';
 $esIntegracion = !empty($guiaIntegracionId) && is_numeric($guiaIntegracionId);
 $esBorrador = !empty($borradorId) && is_numeric($borradorId);
 
@@ -23,6 +23,7 @@ if ($esBorrador && !$esIntegracion) {
   $guiaDatos = ControladorGuiaRemision::ctrObtenerGuiaById($borradorId);
   $guiaDetalle = ControladorGuiaRemision::ctrObtenerGuiaDetalleById($borradorId);
   $id_sucursal = $guiaDatos['id_sucursal'];
+  $guiaIntegracionId = !empty($guiaDatos['id_guia_integracion']) ? $guiaDatos['id_guia_integracion'] : '';
   ControladorGuiaRemision::ctrLlenarGuiaRemisionDetalle($id_sucursal, $guiaDetalle);
 }
 if ($esIntegracion && !$esBorrador) {
@@ -96,11 +97,11 @@ if ($esIntegracion && !$esBorrador) {
 
 
               <form role="form" method="post" class="formGuia" id="formGuia">
-                <input type="hidden" name="ruta_comprobante" id="ruta_comprobante" value="<?php echo  $_GET["ruta"] ?>">
+                <input type="hidden" name="ruta_comprobante" id="ruta_comprobante" value="<?php echo $_GET["ruta"] ?>">
                 <input type="hidden" name="esBorrador" value="<?php echo $esBorrador ? 'S' : 'N'; ?>">
                 <input type="hidden" name="esIntegracion" value="<?php echo $esIntegracion ? 'S' : 'N' ?>">
                 <input type="hidden" name="guiaEditar" value="<?php echo isset($_POST['id_guia_edit']) ? $_POST['id_guia_edit'] : ''; ?>">
-                <input type="hidden" name="guiaIntegracionId" value="<?php $guiaIntegracionId ?>">
+                <input type="hidden" name="guiaIntegracionId" value="<?php echo $guiaIntegracionId ?>">
 
                 <div class="box-body" style="border: 0px; padding-top:0px; ">
 

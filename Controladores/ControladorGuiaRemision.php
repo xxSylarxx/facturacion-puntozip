@@ -271,7 +271,8 @@ class ControladorGuiaRemision
             'comp_ref'   => null,
             'id_cliente' => $datosForm['idCliente'],
             'id_conductor' => $datosForm['listConductores'],
-            'borrador'   => $datosForm['envioSunat'] == 'enviar' ? 'N' : 'S'
+            'borrador'   => $datosForm['envioSunat'] == 'enviar' ? 'N' : 'S',
+            'id_guia_integracion' => !empty($datosForm['guiaIntegracionId']) ? $datosForm['guiaIntegracionId'] : null
         );
         if (!isset($_SESSION['carritoG'])) {
             $_SESSION['carritoG'] = array();
@@ -364,7 +365,7 @@ class ControladorGuiaRemision
                             "xmlbase64"  => $obtenerCdr->xmlb64,
                             "cdrbase64"  => $obtenerCdr->cdrb64,
                         );
-                        if ($obtenerCdr->codrespuesta == '1') {
+                        if ($obtenerCdr->codrespuesta == '1' && !empty($datosForm['guiaIntegracionId'])) {
                             $dataActualizaEstado = [
                                 'id' => $datosForm['guiaIntegracionId'],
                                 'serie' => $seriex['serie'],

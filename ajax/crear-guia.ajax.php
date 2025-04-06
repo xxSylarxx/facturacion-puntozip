@@ -9,6 +9,7 @@ use Controladores\ControladorVentas;
 use Controladores\ControladorEmpresa;
 use Controladores\ControladorSucursal;
 use api\ApiFacturacion;
+use api\ApiGuiasPuntozip;
 use Modelos\ModeloGastos;
 use Modelos\ModeloGuiaRemision;
 
@@ -331,6 +332,14 @@ class AjaxGuia
             );
             if (isset($codigosSunat['feestado'])) {
                 ControladorGuiaRemision::ctrActualizarCDR($idGuia, $codigosSunat);
+                if ($codigosSunat['feestado'] == '1' && !empty($guia['id_guia_integracion'])) {
+                    $dataActualizaEstado = [
+                        'id' => $guia['id_guia_integracion'],
+                        'serie' => $guia['serie'],
+                        'correlativo' => $guia['correlativo']
+                    ];
+                    (new ApiGuiasPuntozip)->actualizarEstadoGuia($dataActualizaEstado);
+                }
             }
             ModeloGuiaRemision::mdlActualizarCDRName($idGuia, [
                 'xmlbase64' => $codigosSunat['xmlbase64'],
