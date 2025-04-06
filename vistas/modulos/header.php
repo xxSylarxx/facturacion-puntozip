@@ -7,6 +7,9 @@
   ?>
 
  <style>
+  .navbar-nav>.guiasIntegracion-notifications-menu>.dropdown-menu {
+   width: 300px;
+  }
    .navbar-nav>.guiasIntegracion-notifications-menu>.dropdown-menu>li.header {
      border-top-left-radius: 4px;
      border-top-right-radius: 4px;
@@ -41,6 +44,10 @@
 
    .label-guiasIntegracion-recepcion {
      background-color: #f39c12 !important;
+   }
+
+   .guiasIntegracion-item {
+    padding: 1em;
    }
  </style>
 
